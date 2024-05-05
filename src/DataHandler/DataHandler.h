@@ -15,6 +15,10 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <cctype>
+#include <regex>
 
 class DataHandler {
     public:
@@ -48,12 +52,68 @@ class DataHandler {
 
     /// @brief Drops a column from a vector.
     /// @param data_vec The 2D vector from which to drop the column. Each inner vector represents a row of data, and each element of the inner vectors represents a field (e.g., a comma-separated value).
-    /// @param index The index of the column to drop from the vector.
+    /// @param col_index The index of the column to drop from the vector.
     /// @return A modified 2D vector with the specified column removed.
-    std::vector<std::vector<std::string>> vector_drop_value(std::vector<std::vector<std::string>> data_vec, int index) {
+    std::vector<std::vector<std::string>> vector_drop_column(std::vector<std::vector<std::string>> data_vec, int col_index) {
         for (auto& row : data_vec) {
-            if (index >= 0 && index < row.size()) {
-                row.erase(row.begin() + index); // Erase element at the specified index
+            if (col_index >= 0 && col_index < row.size()) {
+                row.erase(row.begin() + col_index); // Erase element at the specified index
+            }
+        }
+        return data_vec;
+    }
+
+    /// @brief Drops a row from a vector.
+    /// @param data_vec The 2D vector from which to drop the column. Each inner vector represents a row of data, and each element of the inner vectors represents a field (e.g., a comma-separated value).
+    /// @param row_index The index of the row to drop from the vector.
+    /// @return A modified 2D vector with the specified row removed.
+    std::vector<std::vector<std::string>> vector_drop_row(std::vector<std::vector<std::string>> data_vec, int row_index) {
+        std::cout << "Dropping row: " << row_index << std::endl;
+        if (row_index >= 0 && row_index < data_vec.size()) {
+            data_vec.erase(data_vec.begin() + row_index); // Erase row at the specified index
+        }
+        return data_vec;
+    }
+
+    /// @brief Cleans the dataset by removing strings from majority integer datasets and by removing integers from majority string datasets. This is intended to remove data entry mistakes.
+    /// @param data_vec The 2D vector dataset to be cleaned.
+    /// @return The 2D vector cleaned dataset.
+    std::vector<std::vector<std::string>> clean_vector_data(std::vector<std::vector<std::string>> data_vec) {
+        for(size_t col = 0; col < data_vec[0].size(); col++) {
+            int string_count = 0;
+            int integer_count = 0;
+            std::vector<int> integer_index_vector;
+            std::vector<int> string_index_vector;
+
+            for(size_t row = 1; row < data_vec.size(); row++) { // Skip the 0th row, since that just contains the column names
+                std::string cell = data_vec[row][col];
+                if(is_number(cell)) {
+                    integer_count++;
+                    integer_index_vector.push_back(row);
+                } else {
+                    string_count++;
+                    string_index_vector.push_back(row);
+                }
+            }
+
+            double total_count = string_count + integer_count;
+            if((integer_count > 0) && (double)integer_count/total_count < .05) {
+                std::cout << "Disparity found: " << data_vec[0][col] << std::endl;
+                std::cout << "integer_count: " << integer_count << " / total_count: " << total_count << " = " << (double)integer_count/total_count << std::endl;
+                for(int val : integer_index_vector) {
+                    if(data_vec[val][col] == "NULL") continue;
+                    std::cout << data_vec[val][col] << std::endl;
+                    vector_drop_row(data_vec, val);
+                }
+            }
+            if((string_count > 0) && (double)string_count/total_count < .05) {
+                std::cout << "Disparity found: " << data_vec[0][col] << std::endl;
+                std::cout << "string_count: " << string_count << " / total_count: " << total_count << " = " << (double)string_count/total_count << std::endl;
+                for(int val : string_index_vector) {
+                    if(data_vec[val][col] == "NULL") continue;
+                    std::cout << data_vec[val][col] << std::endl;
+                    vector_drop_row(data_vec, val);
+                }
             }
         }
         return data_vec;
@@ -63,10 +123,108 @@ class DataHandler {
     /// @param data_vec The 2D vector to generate the one-hot vector from.
     /// @param categorical_indexes The column indexes of the categorical values.
     /// @return The one_hot_vector
-    std::vector<std::vector<std::string>> one_hot_vector(std::vector<std::vector<std::string>> data_vec, std::vector<int> categorical_indexes) {
+    // std::vector<std::vector<std::string>> one_hot_vector(std::vector<std::vector<std::string>> data_vec, std::vector<int> categorical_indexes) {
+    //     auto col_names = data_vec.front();
+    //     for(const auto& name : col_names) {
+    //         std::cout << name << std::endl;
+    //     }
+
+    //     // declare and initialize the variable to store the one hot vector
+    //     std::vector<std::vector<std::string>> one_hot_vec;
+    //     std::vector<std::string> empty_row;
+    //     one_hot_vec.push_back(empty_row);
+
+    //     // create the new column names
+    //     // index 0 of the 2D vector contains all of the column names
         
-            
+    //     for(size_t i = 0; i < data_vec[0].size(); i++) {
+    //         std::string col_name = data_vec[0][i];
+    //         auto it = std::find(categorical_indexes.begin(), categorical_indexes.end(), static_cast<int>(i));
+    //         if(it != categorical_indexes.end()) {
+    //             // is categorical
+
+    //             // get unique category names for the selected column
+    //             std::vector<std::string> category_name_vector = unique_category_names(data_vec, i);
+    //             for(std::string category_name : category_name_vector) {
+    //                 /*
+    //                 create new header name with the category name appended to the column
+    //                 e.g: ColumnName_CategoryName
+    //                 */
+    //                 std::cout << "col_name: " << col_name << ", category_name: " << category_name << std::endl;
+    //                 one_hot_vec[0].push_back(col_name + "_" + category_name); 
+    //             }
+    //         } else {
+    //             // not categorical
+    //             one_hot_vec[0].push_back(col_name);
+    //         }
+    //     }
+    //     data_vec.erase(data_vec.begin()); // remove the header row so we can iterate through the rest of the contents easily
+    //     return one_hot_vec;
+    // }
+
+    /// @brief Creates a one-hot vector given a 2D vector and a vector containing the column indexes of all categorical values
+    /// @param data_vec The 2D vector to generate the one-hot vector from.
+    /// @param categorical_indexes The column indexes of the categorical values.
+    /// @return The one_hot_vector
+    std::vector<std::vector<std::string>> one_hot_vector(std::vector<std::vector<std::string>> data_vec, std::vector<int> categorical_indexes) {    
+        // declare and initialize the variable to store the one hot vector
+        std::vector<std::vector<std::string>> one_hot_vec;
+        std::vector<std::string> empty_row;
+        one_hot_vec.push_back(empty_row);
+
+        // create the new column names
+        // index 0 of the 2D vector contains all of the column names
+        
+        std::vector<std::string> col_names = data_vec.front();
+        int i = 0;
+        for(const auto& name : col_names) {
+            auto it = std::find(categorical_indexes.begin(), categorical_indexes.end(), static_cast<int>(i));
+            if(it != categorical_indexes.end()) {
+                // is categorical
+
+                // get unique category names for the selected column
+                std::vector<std::string> category_name_vector = unique_category_names(data_vec, i);
+                for(std::string category_name : category_name_vector) {
+                    /*
+                    create new header name with the category name appended to the column
+                    e.g: ColumnName_CategoryName
+                    */
+                    std::cout << "col_name: " << name << ", category_name: " << category_name << std::endl;
+                    one_hot_vec[0].push_back(name + "_" + category_name); 
+                }
+            } else {
+                // not categorical
+                one_hot_vec[0].push_back(name);
+            }
+            i++;
+        }
+        data_vec.erase(data_vec.begin()); // remove the header row so we can iterate through the rest of the contents easily
+        for(const auto& name : col_names) {
+            std::cout << name << std::endl;
+        }
+        return one_hot_vec;
     }
+
+    std::vector<std::string> unique_category_names(std::vector<std::vector<std::string>> data_vec, int column_index) {
+        std::unordered_set<std::string> unique_names;
+        for (const auto& row : data_vec) {
+            if (column_index >= 0 && column_index < row.size()) {
+                if(row[column_index] == "NULL") continue;
+                unique_names.insert(row[column_index]);
+            }
+        }
+
+        // Convert the set to a vector and return
+        return std::vector<std::string>(unique_names.begin(), unique_names.end());
+    }
+
+    /// @brief Splits a dataset into two 2D vectors, one for training and one for testing.
+    /// @param data_vec The 2D vector that contains the data.
+    /// @param test_size The percentage of the data that will be used for testing, by default it is 20% (0.2).
+    /// @return A pair containing the training and testing 2D vectors respectively.
+    // std::pair<std::vector<std::vector<std::string>>,std::vector<std::vector<std::string>>> split_data(std::vector<std::vector<std::string>> data_vec, double test_size = 0.2) {
+        
+    // }
 
     
     /// @brief Returns all column names of a 2D vector that was created from a csv.
@@ -97,10 +255,22 @@ class DataHandler {
     /// @return A vector<int> containing all column indexes where categorical values exist.
     std::vector<int> get_categorical_indexes(std::vector<std::vector<std::string>> data_vec) {
         std::vector<int> categorical_indexes;
-        for(size_t i = 0; i < data_vec[1].size(); i++) { // we use index 1 instead of index 0 because index 0 contains the names, not the data contents
-            const auto& cell = data_vec[1][i];
-            if(!is_number(cell)) { // if the cell is not a number, we assume that it is a categorical value
-                categorical_indexes.push_back(i);
+        // for(size_t i = 0; i < data_vec[1].size(); i++) { // we use index 1 instead of index 0 because index 0 contains the names, not the data contents
+        //     const auto& cell = data_vec[1][i];
+        //     if(!is_number(cell)) { // if the cell is not a number, we assume that it is a categorical value
+        //         categorical_indexes.push_back(i);
+        //     }
+        // }
+
+        for(size_t col = 0; col < data_vec[0].size(); col++) {
+            for(size_t row = 1; row < data_vec.size(); row++) { // Skip the 0th row, since that just contains the column names
+                std::string cell = data_vec[row][col];
+                if(cell == "NULL") continue;
+                if(!is_number(cell)) { // if a cell is found to not be a number, then we assume that it is a categorical value
+                    categorical_indexes.push_back(col);
+                    std::cout << "Is categorical: " << data_vec[row][col] << std::endl;
+                    break;
+                }
             }
         }
         return categorical_indexes;
@@ -111,13 +281,8 @@ class DataHandler {
     /// @param s The string to check.
     /// @return bool indicating whether the string represents a number or not. (True if it is a number)
     bool is_number(std::string s) {
-        try {
-            std::size_t pos = 0;
-            std::stoi(s, &pos);
-            return pos==s.size();
-        } catch(...) {
-            return false; // conversion failed
-        }
+        static const std::regex number_regex("^[-+]?[0-9]*\\.?[0-9]+$");
+        return std::regex_match(s, number_regex);
     }
 
 };

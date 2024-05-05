@@ -13,12 +13,22 @@ int main(int argc, char* argv[]) {
     training_data.close();
 
     //drop the 0th column, since the id is not necessary
-    training_vector = data_handler.vector_drop_value(training_vector, 0);
+    training_vector = data_handler.vector_drop_column(training_vector, 0);
+
+    // clean the dataset
+    training_vector = data_handler.clean_vector_data(training_vector);
 
     // get the column index of all categorical values
     std::vector<int> categorical_indexes = data_handler.get_categorical_indexes(training_vector);
 
     // create a one-hot vector for all of the categorical values
-    
+    std::vector<std::vector<std::string>> one_hot_vec = data_handler.one_hot_vector(training_vector, categorical_indexes);
+
+    // for(const auto& row : one_hot_vec) {
+    //     for(const auto& cell : row) {
+    //         std::cout << cell << std::endl;
+    //     }
+    // }
+
     return 0;
 }
