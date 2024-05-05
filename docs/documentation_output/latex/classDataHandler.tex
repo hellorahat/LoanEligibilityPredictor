@@ -1,0 +1,154 @@
+\hypertarget{classDataHandler}{}\doxysection{Data\+Handler Class Reference}
+\label{classDataHandler}\index{DataHandler@{DataHandler}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::vector$<$ std\+::string $>$ $>$ \mbox{\hyperlink{classDataHandler_a88d7d3129de68de6e97037183dd62690}{csv\+\_\+to\+\_\+vector}} (std\+::ifstream \&input\+\_\+csv)
+\begin{DoxyCompactList}\small\item\em Convert CSV into a 2D vector. More specifically, a vector containing a vector of strings. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ std\+::string $>$ $>$ \mbox{\hyperlink{classDataHandler_ad7905e7fcd1c2c95fbf85b8d9e720a5f}{vector\+\_\+drop\+\_\+value}} (std\+::vector$<$ std\+::vector$<$ std\+::string $>$$>$ data\+\_\+vec, int index)
+\begin{DoxyCompactList}\small\item\em Drops a column from a vector. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ std\+::string $>$ $>$ \mbox{\hyperlink{classDataHandler_a46ba9f65217c06442f6b82e7c9b42d60}{one\+\_\+hot\+\_\+vector}} (std\+::vector$<$ std\+::vector$<$ std\+::string $>$$>$ data\+\_\+vec, std\+::vector$<$ int $>$ categorical\+\_\+indexes)
+\begin{DoxyCompactList}\small\item\em Creates a one-\/hot vector given a 2D vector and a vector containing the column indexes of all categorical values. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{classDataHandler_a7e5155e2530005ad5325cccc2cb9aaac}{vector\+\_\+column\+\_\+names}} (std\+::vector$<$ std\+::vector$<$ std\+::string $>$$>$ data\+\_\+vec)
+\begin{DoxyCompactList}\small\item\em Returns all column names of a 2D vector that was created from a csv. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDataHandler_a943f59c3aa9605f60b337f551dbf8f61}{print\+\_\+vector\+\_\+data}} (std\+::vector$<$ std\+::vector$<$ std\+::string $>$$>$ data\+\_\+vec)
+\begin{DoxyCompactList}\small\item\em Prints the contents of a 2D vector that was created from a csv. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{classDataHandler_aa0093c86bd2f5f86cfebb77d148eb4cd}{get\+\_\+categorical\+\_\+indexes}} (std\+::vector$<$ std\+::vector$<$ std\+::string $>$$>$ data\+\_\+vec)
+\begin{DoxyCompactList}\small\item\em Returns a vector$<$int$>$ of the indexes of all categorical indexes found in a 2D vector. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classDataHandler_aeb5dfd72ffc12f0e1ec90c3e5030b3fa}{is\+\_\+number}} (std\+::string s)
+\begin{DoxyCompactList}\small\item\em Returns true if a string represents a number, false otherwise. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classDataHandler_a88d7d3129de68de6e97037183dd62690}\label{classDataHandler_a88d7d3129de68de6e97037183dd62690}} 
+\index{DataHandler@{DataHandler}!csv\_to\_vector@{csv\_to\_vector}}
+\index{csv\_to\_vector@{csv\_to\_vector}!DataHandler@{DataHandler}}
+\doxysubsubsection{\texorpdfstring{csv\_to\_vector()}{csv\_to\_vector()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$std\+::string$>$ $>$ Data\+Handler\+::csv\+\_\+to\+\_\+vector (\begin{DoxyParamCaption}\item[{std\+::ifstream \&}]{input\+\_\+csv }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Convert CSV into a 2D vector. More specifically, a vector containing a vector of strings. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+\_\+csv} & An input stream (std\+::ifstream) containing CSV data to be converted into a 2D vector. The CSV data should follow standard CSV format. The input stream should be open and ready for reading before calling this function. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A 2D vector containing the CSV data converted into a structured format. Each element of the outer vector represents a row of the CSV data, and each element of the inner vectors represents a field (comma-\/separated value) of the corresponding row. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataHandler_aa0093c86bd2f5f86cfebb77d148eb4cd}\label{classDataHandler_aa0093c86bd2f5f86cfebb77d148eb4cd}} 
+\index{DataHandler@{DataHandler}!get\_categorical\_indexes@{get\_categorical\_indexes}}
+\index{get\_categorical\_indexes@{get\_categorical\_indexes}!DataHandler@{DataHandler}}
+\doxysubsubsection{\texorpdfstring{get\_categorical\_indexes()}{get\_categorical\_indexes()}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ Data\+Handler\+::get\+\_\+categorical\+\_\+indexes (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ std\+::string $>$$>$}]{data\+\_\+vec }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns a vector$<$int$>$ of the indexes of all categorical indexes found in a 2D vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+vec} & The 2D vector to find any categorical values from. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector$<$int$>$ containing all column indexes where categorical values exist. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataHandler_aeb5dfd72ffc12f0e1ec90c3e5030b3fa}\label{classDataHandler_aeb5dfd72ffc12f0e1ec90c3e5030b3fa}} 
+\index{DataHandler@{DataHandler}!is\_number@{is\_number}}
+\index{is\_number@{is\_number}!DataHandler@{DataHandler}}
+\doxysubsubsection{\texorpdfstring{is\_number()}{is\_number()}}
+{\footnotesize\ttfamily bool Data\+Handler\+::is\+\_\+number (\begin{DoxyParamCaption}\item[{std\+::string}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns true if a string represents a number, false otherwise. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool indicating whether the string represents a number or not. (True if it is a number) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataHandler_a46ba9f65217c06442f6b82e7c9b42d60}\label{classDataHandler_a46ba9f65217c06442f6b82e7c9b42d60}} 
+\index{DataHandler@{DataHandler}!one\_hot\_vector@{one\_hot\_vector}}
+\index{one\_hot\_vector@{one\_hot\_vector}!DataHandler@{DataHandler}}
+\doxysubsubsection{\texorpdfstring{one\_hot\_vector()}{one\_hot\_vector()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$std\+::string$>$ $>$ Data\+Handler\+::one\+\_\+hot\+\_\+vector (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ std\+::string $>$$>$}]{data\+\_\+vec,  }\item[{std\+::vector$<$ int $>$}]{categorical\+\_\+indexes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Creates a one-\/hot vector given a 2D vector and a vector containing the column indexes of all categorical values. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+vec} & The 2D vector to generate the one-\/hot vector from. \\
+\hline
+{\em categorical\+\_\+indexes} & The column indexes of the categorical values. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The one\+\_\+hot\+\_\+vector 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataHandler_a943f59c3aa9605f60b337f551dbf8f61}\label{classDataHandler_a943f59c3aa9605f60b337f551dbf8f61}} 
+\index{DataHandler@{DataHandler}!print\_vector\_data@{print\_vector\_data}}
+\index{print\_vector\_data@{print\_vector\_data}!DataHandler@{DataHandler}}
+\doxysubsubsection{\texorpdfstring{print\_vector\_data()}{print\_vector\_data()}}
+{\footnotesize\ttfamily void Data\+Handler\+::print\+\_\+vector\+\_\+data (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ std\+::string $>$$>$}]{data\+\_\+vec }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Prints the contents of a 2D vector that was created from a csv. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+vec} & The 2D vector to print the contents of. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDataHandler_a7e5155e2530005ad5325cccc2cb9aaac}\label{classDataHandler_a7e5155e2530005ad5325cccc2cb9aaac}} 
+\index{DataHandler@{DataHandler}!vector\_column\_names@{vector\_column\_names}}
+\index{vector\_column\_names@{vector\_column\_names}!DataHandler@{DataHandler}}
+\doxysubsubsection{\texorpdfstring{vector\_column\_names()}{vector\_column\_names()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ Data\+Handler\+::vector\+\_\+column\+\_\+names (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ std\+::string $>$$>$}]{data\+\_\+vec }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns all column names of a 2D vector that was created from a csv. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+vec} & The 2D vector to obtain the column names from. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A std\+::vector$<$std\+::string$>$ containing the column names. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataHandler_ad7905e7fcd1c2c95fbf85b8d9e720a5f}\label{classDataHandler_ad7905e7fcd1c2c95fbf85b8d9e720a5f}} 
+\index{DataHandler@{DataHandler}!vector\_drop\_value@{vector\_drop\_value}}
+\index{vector\_drop\_value@{vector\_drop\_value}!DataHandler@{DataHandler}}
+\doxysubsubsection{\texorpdfstring{vector\_drop\_value()}{vector\_drop\_value()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$std\+::string$>$ $>$ Data\+Handler\+::vector\+\_\+drop\+\_\+value (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ std\+::string $>$$>$}]{data\+\_\+vec,  }\item[{int}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Drops a column from a vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+vec} & The 2D vector from which to drop the column. Each inner vector represents a row of data, and each element of the inner vectors represents a field (e.\+g., a comma-\/separated value). \\
+\hline
+{\em index} & The index of the column to drop from the vector. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A modified 2D vector with the specified column removed. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Data\+Handler/\mbox{\hyperlink{DataHandler_8h}{Data\+Handler.\+h}}\end{DoxyCompactItemize}
