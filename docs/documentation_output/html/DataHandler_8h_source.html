@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Loan Eligibility Prediction: src/DataHandler/DataHandler.h Source File</title>
+<title>Loan Eligibility Prediction: src/DataProcessing/DataHandler.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,7 +62,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_51e251686726dc94ae67c5a4d3f2e6c4.html">DataHandler</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b2a41d3ca0451c6c40fb073757360ca5.html">DataProcessing</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -71,109 +71,299 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <a href="DataHandler_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// Create header guard</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#ifndef DATAHANDLER_H</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#define DATAHANDLER_H</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;sstream&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classDataHandler.html">   21</a></span>&#160;<span class="keyword">class </span><a class="code" href="classDataHandler.html">DataHandler</a> {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classDataHandler.html#a88d7d3129de68de6e97037183dd62690">   27</a></span>&#160;    std::vector&lt;std::vector&lt;std::string&gt;&gt; <a class="code" href="classDataHandler.html#a88d7d3129de68de6e97037183dd62690">csv_to_vector</a>(std::ifstream&amp; input_csv) {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        std::vector&lt;std::vector&lt;std::string&gt;&gt; csv_data;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        std::string line;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keywordflow">while</span>(std::getline(input_csv, line)) {</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// Create header guard</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#ifndef DATAHANDLER_H</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#define DATAHANDLER_H</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;sstream&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;unordered_set&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;cctype&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;regex&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classDataHandler.html">   23</a></span>&#160;<span class="keyword">class </span><a class="code" href="classDataHandler.html">DataHandler</a> {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classDataHandler.html#a88d7d3129de68de6e97037183dd62690">   29</a></span>&#160;    std::vector&lt;std::vector&lt;std::string&gt;&gt; <a class="code" href="classDataHandler.html#a88d7d3129de68de6e97037183dd62690">csv_to_vector</a>(std::ifstream&amp; input_csv) {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        std::vector&lt;std::vector&lt;std::string&gt;&gt; csv_data;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        std::string line;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            <span class="comment">// split line into tokens using comma delimiter</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            std::istringstream iss(line);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            std::string token;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            std::vector&lt;std::string&gt; row;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <span class="keywordflow">while</span>(std::getline(iss, token, <span class="charliteral">&#39;,&#39;</span>)) {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                <span class="keywordflow">if</span>(token.empty()) { <span class="comment">// replace empty values with &quot;NULL&quot;</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                    row.push_back(<span class="stringliteral">&quot;NULL&quot;</span>);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                    row.push_back(token);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="comment">// add the row to the 2d vector</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            csv_data.push_back(row);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        }</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">return</span> csv_data;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    }</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classDataHandler.html#ad7905e7fcd1c2c95fbf85b8d9e720a5f">   55</a></span>&#160;    std::vector&lt;std::vector&lt;std::string&gt;&gt; <a class="code" href="classDataHandler.html#ad7905e7fcd1c2c95fbf85b8d9e720a5f">vector_drop_value</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec, <span class="keywordtype">int</span> index) {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; row : data_vec) {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keywordflow">if</span> (index &gt;= 0 &amp;&amp; index &lt; row.size()) {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                row.erase(row.begin() + index); <span class="comment">// Erase element at the specified index</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            }</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">return</span> data_vec;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    }</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classDataHandler.html#a46ba9f65217c06442f6b82e7c9b42d60">   68</a></span>&#160;    std::vector&lt;std::vector&lt;std::string&gt;&gt; <a class="code" href="classDataHandler.html#a46ba9f65217c06442f6b82e7c9b42d60">one_hot_vector</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec, std::vector&lt;int&gt; categorical_indexes) {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    </div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classDataHandler.html#a7e5155e2530005ad5325cccc2cb9aaac">   77</a></span>&#160;    std::vector&lt;std::string&gt; <a class="code" href="classDataHandler.html#a7e5155e2530005ad5325cccc2cb9aaac">vector_column_names</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec) {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">return</span> data_vec.front();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classDataHandler.html#a943f59c3aa9605f60b337f551dbf8f61">   83</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classDataHandler.html#a943f59c3aa9605f60b337f551dbf8f61">print_vector_data</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec) {</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; row : data_vec) {</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            <span class="keywordtype">bool</span> first_column = <span class="keyword">true</span>; <span class="comment">// comma won&#39;t be placed before first column</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; cell : row) {</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                <span class="keywordflow">if</span> (!first_column) {</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                    std::cout &lt;&lt; <span class="stringliteral">&quot;,&quot;</span>;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                }</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                std::cout &lt;&lt; cell;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                first_column = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            std::cout &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        }</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    }</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="classDataHandler.html#aa0093c86bd2f5f86cfebb77d148eb4cd">  100</a></span>&#160;    std::vector&lt;int&gt; <a class="code" href="classDataHandler.html#aa0093c86bd2f5f86cfebb77d148eb4cd">get_categorical_indexes</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec) {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        std::vector&lt;int&gt; categorical_indexes;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i = 0; i &lt; data_vec[1].size(); i++) { <span class="comment">// we use index 1 instead of index 0 because index 0 contains the names, not the data contents</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span>&amp; cell = data_vec[1][i];</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <span class="keywordflow">if</span>(!<a class="code" href="classDataHandler.html#aeb5dfd72ffc12f0e1ec90c3e5030b3fa">is_number</a>(cell)) { <span class="comment">// if the cell is not a number, we assume that it is a categorical value</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                categorical_indexes.push_back(i);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        }</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordflow">return</span> categorical_indexes;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    }</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="classDataHandler.html#aeb5dfd72ffc12f0e1ec90c3e5030b3fa">  115</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classDataHandler.html#aeb5dfd72ffc12f0e1ec90c3e5030b3fa">is_number</a>(std::string s) {</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            std::size_t pos = 0;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            std::stoi(s, &amp;pos);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            <span class="keywordflow">return</span> pos==s.size();</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        } <span class="keywordflow">catch</span>(...) {</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>; <span class="comment">// conversion failed</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        }</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    }</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;};</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// DATAHANDLER_H</span></div>
-<div class="ttc" id="aclassDataHandler_html"><div class="ttname"><a href="classDataHandler.html">DataHandler</a></div><div class="ttdef"><b>Definition:</b> DataHandler.h:21</div></div>
-<div class="ttc" id="aclassDataHandler_html_a46ba9f65217c06442f6b82e7c9b42d60"><div class="ttname"><a href="classDataHandler.html#a46ba9f65217c06442f6b82e7c9b42d60">DataHandler::one_hot_vector</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; std::string &gt; &gt; one_hot_vector(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, std::vector&lt; int &gt; categorical_indexes)</div><div class="ttdoc">Creates a one-hot vector given a 2D vector and a vector containing the column indexes of all categori...</div><div class="ttdef"><b>Definition:</b> DataHandler.h:68</div></div>
-<div class="ttc" id="aclassDataHandler_html_a7e5155e2530005ad5325cccc2cb9aaac"><div class="ttname"><a href="classDataHandler.html#a7e5155e2530005ad5325cccc2cb9aaac">DataHandler::vector_column_names</a></div><div class="ttdeci">std::vector&lt; std::string &gt; vector_column_names(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</div><div class="ttdoc">Returns all column names of a 2D vector that was created from a csv.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:77</div></div>
-<div class="ttc" id="aclassDataHandler_html_a88d7d3129de68de6e97037183dd62690"><div class="ttname"><a href="classDataHandler.html#a88d7d3129de68de6e97037183dd62690">DataHandler::csv_to_vector</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; std::string &gt; &gt; csv_to_vector(std::ifstream &amp;input_csv)</div><div class="ttdoc">Convert CSV into a 2D vector. More specifically, a vector containing a vector of strings.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:27</div></div>
-<div class="ttc" id="aclassDataHandler_html_a943f59c3aa9605f60b337f551dbf8f61"><div class="ttname"><a href="classDataHandler.html#a943f59c3aa9605f60b337f551dbf8f61">DataHandler::print_vector_data</a></div><div class="ttdeci">void print_vector_data(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</div><div class="ttdoc">Prints the contents of a 2D vector that was created from a csv.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:83</div></div>
-<div class="ttc" id="aclassDataHandler_html_aa0093c86bd2f5f86cfebb77d148eb4cd"><div class="ttname"><a href="classDataHandler.html#aa0093c86bd2f5f86cfebb77d148eb4cd">DataHandler::get_categorical_indexes</a></div><div class="ttdeci">std::vector&lt; int &gt; get_categorical_indexes(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</div><div class="ttdoc">Returns a vector&lt;int&gt; of the indexes of all categorical indexes found in a 2D vector.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:100</div></div>
-<div class="ttc" id="aclassDataHandler_html_ad7905e7fcd1c2c95fbf85b8d9e720a5f"><div class="ttname"><a href="classDataHandler.html#ad7905e7fcd1c2c95fbf85b8d9e720a5f">DataHandler::vector_drop_value</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; std::string &gt; &gt; vector_drop_value(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, int index)</div><div class="ttdoc">Drops a column from a vector.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:55</div></div>
-<div class="ttc" id="aclassDataHandler_html_aeb5dfd72ffc12f0e1ec90c3e5030b3fa"><div class="ttname"><a href="classDataHandler.html#aeb5dfd72ffc12f0e1ec90c3e5030b3fa">DataHandler::is_number</a></div><div class="ttdeci">bool is_number(std::string s)</div><div class="ttdoc">Returns true if a string represents a number, false otherwise.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:115</div></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordflow">while</span>(std::getline(input_csv, line)) {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="comment">// split line into tokens using comma delimiter</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            std::istringstream iss(line);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            std::string token;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            std::vector&lt;std::string&gt; row;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keywordflow">while</span>(std::getline(iss, token, <span class="charliteral">&#39;,&#39;</span>)) {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                <span class="keywordflow">if</span>(token.empty()) { <span class="comment">// replace empty values with &quot;NULL&quot;</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                    row.push_back(<span class="stringliteral">&quot;NULL&quot;</span>);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                    row.push_back(token);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="comment">// add the row to the 2d vector</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            csv_data.push_back(row);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        }</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordflow">return</span> csv_data;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classDataHandler.html#a332756991c658e56f6bbee847f8685d5">   57</a></span>&#160;    std::vector&lt;std::vector&lt;std::string&gt;&gt; <a class="code" href="classDataHandler.html#a332756991c658e56f6bbee847f8685d5">vector_drop_column</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec, <span class="keywordtype">int</span> col_index) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; row : data_vec) {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keywordflow">if</span> (col_index &gt;= 0 &amp;&amp; col_index &lt; row.size()) {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                row.erase(row.begin() + col_index); <span class="comment">// Erase element at the specified index</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            }</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        }</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">return</span> data_vec;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classDataHandler.html#a5868c3269b998d4fb48db1c34aa399c4">   70</a></span>&#160;    std::vector&lt;std::vector&lt;std::string&gt;&gt; <a class="code" href="classDataHandler.html#a5868c3269b998d4fb48db1c34aa399c4">vector_drop_row</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec, <span class="keywordtype">int</span> row_index) {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        std::cout &lt;&lt; <span class="stringliteral">&quot;Dropping row: &quot;</span> &lt;&lt; row_index &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">if</span> (row_index &gt;= 0 &amp;&amp; row_index &lt; data_vec.size()) {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            data_vec.erase(data_vec.begin() + row_index); <span class="comment">// Erase row at the specified index</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordflow">return</span> data_vec;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classDataHandler.html#a44c8846c951d3f42d027e70804c0992f">   81</a></span>&#160;    std::vector&lt;std::vector&lt;std::string&gt;&gt; <a class="code" href="classDataHandler.html#a44c8846c951d3f42d027e70804c0992f">clean_vector_data</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec) {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> col = 0; col &lt; data_vec[0].size(); col++) {</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <span class="keywordtype">int</span> string_count = 0;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keywordtype">int</span> integer_count = 0;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            std::vector&lt;int&gt; integer_index_vector;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            std::vector&lt;int&gt; string_index_vector;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> row = 1; row &lt; data_vec.size(); row++) { <span class="comment">// Skip the 0th row, since that just contains the column names</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                std::string cell = data_vec[row][col];</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                <span class="keywordflow">if</span>(is_number(cell)) {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                    integer_count++;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                    integer_index_vector.push_back(row);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                    string_count++;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                    string_index_vector.push_back(row);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            }</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <span class="keywordtype">double</span> total_count = string_count + integer_count;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">if</span>((integer_count &gt; 0) &amp;&amp; (<span class="keywordtype">double</span>)integer_count/total_count &lt; .05) {</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                std::cout &lt;&lt; <span class="stringliteral">&quot;Disparity found: &quot;</span> &lt;&lt; data_vec[0][col] &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                std::cout &lt;&lt; <span class="stringliteral">&quot;integer_count: &quot;</span> &lt;&lt; integer_count &lt;&lt; <span class="stringliteral">&quot; / total_count: &quot;</span> &lt;&lt; total_count &lt;&lt; <span class="stringliteral">&quot; = &quot;</span> &lt;&lt; (double)integer_count/total_count &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">int</span> val : integer_index_vector) {</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                    <span class="keywordflow">if</span>(data_vec[val][col] == <span class="stringliteral">&quot;NULL&quot;</span>) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                    <a class="code" href="classDataHandler.html#a5868c3269b998d4fb48db1c34aa399c4">vector_drop_row</a>(data_vec, val);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                }</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            <span class="keywordflow">if</span>((string_count &gt; 0) &amp;&amp; (<span class="keywordtype">double</span>)string_count/total_count &lt; .05) {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                std::cout &lt;&lt; <span class="stringliteral">&quot;Disparity found: &quot;</span> &lt;&lt; data_vec[0][col] &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                std::cout &lt;&lt; <span class="stringliteral">&quot;string_count: &quot;</span> &lt;&lt; string_count &lt;&lt; <span class="stringliteral">&quot; / total_count: &quot;</span> &lt;&lt; total_count &lt;&lt; <span class="stringliteral">&quot; = &quot;</span> &lt;&lt; (double)string_count/total_count &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">int</span> val : string_index_vector) {</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                    <span class="keywordflow">if</span>(data_vec[val][col] == <span class="stringliteral">&quot;NULL&quot;</span>) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                    <a class="code" href="classDataHandler.html#a5868c3269b998d4fb48db1c34aa399c4">vector_drop_row</a>(data_vec, val);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            }</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        }</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordflow">return</span> data_vec;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    }</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="classDataHandler.html#a46ba9f65217c06442f6b82e7c9b42d60">  126</a></span>&#160;    std::vector&lt;std::vector&lt;std::string&gt;&gt; <a class="code" href="classDataHandler.html#a46ba9f65217c06442f6b82e7c9b42d60">one_hot_vector</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec, std::vector&lt;int&gt; categorical_indexes) {</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="comment">// declare and initialize the variable to store the one hot vector</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        std::vector&lt;std::vector&lt;std::string&gt;&gt; one_hot_vec;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        std::vector&lt;std::string&gt; empty_row;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        one_hot_vec.push_back(empty_row);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="comment">// create the new column names</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="comment">// index 0 of the 2D vector contains all of the column names</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i = 0; i &lt; data_vec[0].size(); i++) {</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            std::string col_name = data_vec[0][i];</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            <span class="keyword">auto</span> it = std::find(categorical_indexes.begin(), categorical_indexes.end(), <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(i));</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            <span class="keywordflow">if</span>(it != categorical_indexes.end()) {</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;                <span class="comment">// is categorical</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;                <span class="comment">// get unique category names for the selected column</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;                std::vector&lt;std::string&gt; category_name_vector = <a class="code" href="classDataHandler.html#aa9d8466deb2bf2b2e29b896b437f3cc0">unique_category_names</a>(data_vec, i);</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;                <span class="keywordflow">for</span>(std::string category_name : category_name_vector) {</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                    <span class="comment">/*</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="comment">                    create new header name with the category name appended to the column</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="comment">                    e.g: ColumnName_CategoryName</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="comment">                    */</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                    one_hot_vec[0].push_back(trim_string(col_name) + <span class="stringliteral">&quot;_&quot;</span> + trim_string(category_name)); </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                }</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                <span class="comment">// not categorical</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                one_hot_vec[0].push_back(col_name);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            }</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        }</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="comment">// iterate through the data and fill in the one_hot_vector</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> col = 0; col &lt; data_vec[0].size(); col++) {</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> row = 1; row &lt; data_vec.size(); row++) { <span class="comment">// skip the first row, since that contains the header with column names, not the data contents</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            }</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        }</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keywordflow">return</span> one_hot_vec;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    }</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno"><a class="line" href="classDataHandler.html#a75c1ffc84df3fe18c288a9b3f86991d5">  169</a></span>&#160;    std::vector&lt;std::vector&lt;std::string&gt;&gt; <a class="code" href="classDataHandler.html#a75c1ffc84df3fe18c288a9b3f86991d5">impute_data</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec, std::vector&lt;int&gt; categorical_indexes) {</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> col = 0; col &lt; data_vec[0].size(); col++) {</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            <span class="keyword">auto</span> it = std::find(categorical_indexes.begin(), categorical_indexes.end(), <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(col));</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="keywordflow">if</span>(it != categorical_indexes.end()) { <span class="comment">// is categorical</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                <span class="comment">/*</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="comment">                    declare unordered_map to count occurrence, impute missing data with most occurring category</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="comment">                    e.g: occurrence_map[&quot;Yes&quot;] = 123, occurrence_map[&quot;No&quot;] = 432 || Missing values will be replaced with &quot;No&quot; since it occured more often.</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="comment">                */</span> </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                std::unordered_map&lt;std::string, int&gt; occurrence_map;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                <span class="comment">// count occurrences</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> row = 1; row &lt; data_vec.size(); row++) {</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                    std::string cell = data_vec[row][col];</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                    <span class="keywordflow">if</span>(cell == <span class="stringliteral">&quot;NULL&quot;</span>) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                    occurrence_map[cell]++;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                }</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                <span class="comment">// find the most occurring category</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                std::string most_occurring_category = most_occurred_key_in_map(occurrence_map);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                <span class="comment">// replace NULL values</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> row = 1; row &lt; data_vec.size(); row++) {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                    <span class="keywordflow">if</span>(data_vec[row][col] != <span class="stringliteral">&quot;NULL&quot;</span>) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                    data_vec[row][col] = most_occurring_category;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                }</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            } <span class="keywordflow">else</span> { <span class="comment">// not categorical</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                <span class="comment">// Replace non-categorical NULL values with the mean</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                <span class="keywordtype">double</span> sum = 0;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                <span class="keywordtype">size_t</span> count = 0;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                <span class="comment">// calculate mean</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> row = 1; row &lt; data_vec.size(); row++) {</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                    <span class="keywordflow">if</span>(data_vec[row][col] == <span class="stringliteral">&quot;NULL&quot;</span>) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                    <span class="keywordflow">try</span> {</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                        <span class="keywordtype">double</span> cell = std::stod(data_vec[row][col]);</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                        sum += cell;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                        count++;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                    } <span class="keywordflow">catch</span>(...) {</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                        <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                    }</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                }</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                <span class="comment">// replace NULL values</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> row = 1; row &lt; data_vec.size(); row++) {</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                    <span class="keywordflow">if</span>(data_vec[row][col] != <span class="stringliteral">&quot;NULL&quot;</span>) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                    <span class="keywordflow">if</span>(!count) { <span class="comment">// avoid division by 0</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                        data_vec[row][col] = <span class="stringliteral">&quot;0&quot;</span>; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                        <span class="keywordflow">continue</span>;    </div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                    }</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                    data_vec[row][col] = std::to_string(sum/count);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                }</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;            }</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        }</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keywordflow">return</span> data_vec;</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    }</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno"><a class="line" href="classDataHandler.html#aa9d8466deb2bf2b2e29b896b437f3cc0">  229</a></span>&#160;    std::vector&lt;std::string&gt; <a class="code" href="classDataHandler.html#aa9d8466deb2bf2b2e29b896b437f3cc0">unique_category_names</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec, <span class="keywordtype">int</span> column_index) {</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        std::unordered_set&lt;std::string&gt; unique_names;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> row = 1; row &lt; data_vec.size(); row++) {</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            <span class="keywordflow">if</span> (column_index &gt;= 0 &amp;&amp; column_index &lt; data_vec[row].size()) {</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                unique_names.insert(data_vec[row][column_index]);</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            }</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        }</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <span class="comment">// Convert the set to a vector and return</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        <span class="keywordflow">return</span> std::vector&lt;std::string&gt;(unique_names.begin(), unique_names.end());</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    }</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="comment">// std::pair&lt;std::vector&lt;std::vector&lt;std::string&gt;&gt;,std::vector&lt;std::vector&lt;std::string&gt;&gt;&gt; split_data(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec, double test_size = 0.2) {</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="comment">// }</span></div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    </div>
+<div class="line"><a name="l00253"></a><span class="lineno"><a class="line" href="classDataHandler.html#a7e5155e2530005ad5325cccc2cb9aaac">  253</a></span>&#160;    std::vector&lt;std::string&gt; <a class="code" href="classDataHandler.html#a7e5155e2530005ad5325cccc2cb9aaac">vector_column_names</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec) {</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="keywordflow">return</span> data_vec.front();</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    }</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
+<div class="line"><a name="l00259"></a><span class="lineno"><a class="line" href="classDataHandler.html#a943f59c3aa9605f60b337f551dbf8f61">  259</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classDataHandler.html#a943f59c3aa9605f60b337f551dbf8f61">print_vector_data</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec) {</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; row : data_vec) {</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            <span class="keywordtype">bool</span> first_column = <span class="keyword">true</span>; <span class="comment">// comma won&#39;t be placed before first column</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; cell : row) {</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                <span class="keywordflow">if</span> (!first_column) {</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                    std::cout &lt;&lt; <span class="stringliteral">&quot;,&quot;</span>;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                }</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                std::cout &lt;&lt; cell;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                first_column = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            }</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            std::cout &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        }</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    }</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
+<div class="line"><a name="l00276"></a><span class="lineno"><a class="line" href="classDataHandler.html#aa0093c86bd2f5f86cfebb77d148eb4cd">  276</a></span>&#160;    std::vector&lt;int&gt; <a class="code" href="classDataHandler.html#aa0093c86bd2f5f86cfebb77d148eb4cd">get_categorical_indexes</a>(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec) {</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        std::vector&lt;int&gt; categorical_indexes;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> col = 0; col &lt; data_vec[0].size(); col++) {</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> row = 1; row &lt; data_vec.size(); row++) { <span class="comment">// Skip the 0th row, since that just contains the column names</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                std::string cell = data_vec[row][col];</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                <span class="keywordflow">if</span>(cell == <span class="stringliteral">&quot;NULL&quot;</span>) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                <span class="keywordflow">if</span>(!is_number(cell)) { <span class="comment">// if a cell is found to not be a number, then we assume that it is a categorical value</span></div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                    categorical_indexes.push_back(col);</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;                }</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            }</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        }</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keywordflow">return</span> categorical_indexes;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    }</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    </div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="keywordtype">bool</span> is_number(std::string s) {</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::regex number_regex(<span class="stringliteral">&quot;^[-+]?[0-9]*\\.?[0-9]+$&quot;</span>);</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keywordflow">return</span> std::regex_match(s, number_regex);</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    }</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    <span class="comment">// Function to trim trailing whitespace and control characters</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    std::string trim_string(<span class="keyword">const</span> std::string&amp; str) {</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keyword">auto</span> end = std::find_if(str.rbegin(), str.rend(), [](<span class="keywordtype">char</span> c) {</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;            return !std::isspace(static_cast&lt;unsigned char&gt;(c)) &amp;&amp; std::isprint(c);</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        });</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        <span class="keywordflow">return</span> std::string(str.begin(), end.base());</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    }</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    std::string most_occurred_key_in_map(<span class="keyword">const</span> std::unordered_map&lt;std::string, int&gt;&amp; occurrence_map) {</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        std::string most_occurred_key;</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="keywordtype">int</span> max_occurrences = 0;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="comment">// Iterate through the map to find the key with maximum occurrences</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; pair : occurrence_map) {</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            <span class="keywordflow">if</span> (pair.second &gt; max_occurrences) {</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                most_occurred_key = pair.first;</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                max_occurrences = pair.second;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            }</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        }</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keywordflow">return</span> most_occurred_key;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    }</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    </div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    <span class="keywordtype">int</span> get_index_from_header_name(std::vector&lt;std::vector&lt;std::string&gt;&gt; data_vec, std::string column_name) {</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        </div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    }</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;};</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// DATAHANDLER_H</span></div>
+<div class="ttc" id="aclassDataHandler_html"><div class="ttname"><a href="classDataHandler.html">DataHandler</a></div><div class="ttdef"><b>Definition:</b> DataHandler.h:23</div></div>
+<div class="ttc" id="aclassDataHandler_html_a332756991c658e56f6bbee847f8685d5"><div class="ttname"><a href="classDataHandler.html#a332756991c658e56f6bbee847f8685d5">DataHandler::vector_drop_column</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; std::string &gt; &gt; vector_drop_column(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, int col_index)</div><div class="ttdoc">Drops a column from a vector.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:57</div></div>
+<div class="ttc" id="aclassDataHandler_html_a44c8846c951d3f42d027e70804c0992f"><div class="ttname"><a href="classDataHandler.html#a44c8846c951d3f42d027e70804c0992f">DataHandler::clean_vector_data</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; std::string &gt; &gt; clean_vector_data(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</div><div class="ttdoc">Cleans the dataset by removing strings from majority integer datasets and by removing integers from m...</div><div class="ttdef"><b>Definition:</b> DataHandler.h:81</div></div>
+<div class="ttc" id="aclassDataHandler_html_a46ba9f65217c06442f6b82e7c9b42d60"><div class="ttname"><a href="classDataHandler.html#a46ba9f65217c06442f6b82e7c9b42d60">DataHandler::one_hot_vector</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; std::string &gt; &gt; one_hot_vector(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, std::vector&lt; int &gt; categorical_indexes)</div><div class="ttdoc">Creates a one-hot vector given a 2D vector and a vector containing the column indexes of all categori...</div><div class="ttdef"><b>Definition:</b> DataHandler.h:126</div></div>
+<div class="ttc" id="aclassDataHandler_html_a5868c3269b998d4fb48db1c34aa399c4"><div class="ttname"><a href="classDataHandler.html#a5868c3269b998d4fb48db1c34aa399c4">DataHandler::vector_drop_row</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; std::string &gt; &gt; vector_drop_row(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, int row_index)</div><div class="ttdoc">Drops a row from a vector.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:70</div></div>
+<div class="ttc" id="aclassDataHandler_html_a75c1ffc84df3fe18c288a9b3f86991d5"><div class="ttname"><a href="classDataHandler.html#a75c1ffc84df3fe18c288a9b3f86991d5">DataHandler::impute_data</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; std::string &gt; &gt; impute_data(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, std::vector&lt; int &gt; categorical_indexes)</div><div class="ttdoc">Fills in missing categorical data with the most occurring category, and fills in missing integer data...</div><div class="ttdef"><b>Definition:</b> DataHandler.h:169</div></div>
+<div class="ttc" id="aclassDataHandler_html_a7e5155e2530005ad5325cccc2cb9aaac"><div class="ttname"><a href="classDataHandler.html#a7e5155e2530005ad5325cccc2cb9aaac">DataHandler::vector_column_names</a></div><div class="ttdeci">std::vector&lt; std::string &gt; vector_column_names(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</div><div class="ttdoc">Splits a dataset into two 2D vectors, one for training and one for testing.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:253</div></div>
+<div class="ttc" id="aclassDataHandler_html_a88d7d3129de68de6e97037183dd62690"><div class="ttname"><a href="classDataHandler.html#a88d7d3129de68de6e97037183dd62690">DataHandler::csv_to_vector</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; std::string &gt; &gt; csv_to_vector(std::ifstream &amp;input_csv)</div><div class="ttdoc">Convert CSV into a 2D vector. More specifically, a vector containing a vector of strings.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:29</div></div>
+<div class="ttc" id="aclassDataHandler_html_a943f59c3aa9605f60b337f551dbf8f61"><div class="ttname"><a href="classDataHandler.html#a943f59c3aa9605f60b337f551dbf8f61">DataHandler::print_vector_data</a></div><div class="ttdeci">void print_vector_data(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</div><div class="ttdoc">Prints the contents of a 2D vector that was created from a csv.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:259</div></div>
+<div class="ttc" id="aclassDataHandler_html_aa0093c86bd2f5f86cfebb77d148eb4cd"><div class="ttname"><a href="classDataHandler.html#aa0093c86bd2f5f86cfebb77d148eb4cd">DataHandler::get_categorical_indexes</a></div><div class="ttdeci">std::vector&lt; int &gt; get_categorical_indexes(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</div><div class="ttdoc">Returns a vector&lt;int&gt; of the indexes of all categorical indexes found in a 2D vector.</div><div class="ttdef"><b>Definition:</b> DataHandler.h:276</div></div>
+<div class="ttc" id="aclassDataHandler_html_aa9d8466deb2bf2b2e29b896b437f3cc0"><div class="ttname"><a href="classDataHandler.html#aa9d8466deb2bf2b2e29b896b437f3cc0">DataHandler::unique_category_names</a></div><div class="ttdeci">std::vector&lt; std::string &gt; unique_category_names(std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, int column_index)</div><div class="ttdef"><b>Definition:</b> DataHandler.h:229</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

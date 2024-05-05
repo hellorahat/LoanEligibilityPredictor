@@ -117,54 +117,13 @@ class DataHandler {
         return data_vec;
     }
 
-    /// @brief Creates a one-hot vector given a 2D vector and a vector containing the column indexes of all categorical values
-    /// @param data_vec The 2D vector to generate the one-hot vector from.
-    /// @param categorical_indexes The column indexes of the categorical values.
-    /// @return The one_hot_vector
-    // std::vector<std::vector<std::string>> one_hot_vector(std::vector<std::vector<std::string>> data_vec, std::vector<int> categorical_indexes) {
-    //     auto col_names = data_vec.front();
-    //     for(const auto& name : col_names) {
-    //         std::cout << name << std::endl;
-    //     }
 
-    //     // declare and initialize the variable to store the one hot vector
-    //     std::vector<std::vector<std::string>> one_hot_vec;
-    //     std::vector<std::string> empty_row;
-    //     one_hot_vec.push_back(empty_row);
-
-    //     // create the new column names
-    //     // index 0 of the 2D vector contains all of the column names
-        
-    //     for(size_t i = 0; i < data_vec[0].size(); i++) {
-    //         std::string col_name = data_vec[0][i];
-    //         auto it = std::find(categorical_indexes.begin(), categorical_indexes.end(), static_cast<int>(i));
-    //         if(it != categorical_indexes.end()) {
-    //             // is categorical
-
-    //             // get unique category names for the selected column
-    //             std::vector<std::string> category_name_vector = unique_category_names(data_vec, i);
-    //             for(std::string category_name : category_name_vector) {
-    //                 /*
-    //                 create new header name with the category name appended to the column
-    //                 e.g: ColumnName_CategoryName
-    //                 */
-    //                 std::cout << "col_name: " << col_name << ", category_name: " << category_name << std::endl;
-    //                 one_hot_vec[0].push_back(col_name + "_" + category_name); 
-    //             }
-    //         } else {
-    //             // not categorical
-    //             one_hot_vec[0].push_back(col_name);
-    //         }
-    //     }
-    //     data_vec.erase(data_vec.begin()); // remove the header row so we can iterate through the rest of the contents easily
-    //     return one_hot_vec;
-    // }
 
     /// @brief Creates a one-hot vector given a 2D vector and a vector containing the column indexes of all categorical values
     /// @param data_vec The 2D vector to generate the one-hot vector from.
     /// @param categorical_indexes The column indexes of the categorical values.
     /// @return The one_hot_vector
-    std::vector<std::vector<std::string>> one_hot_vector(std::vector<std::vector<std::string>> data_vec, std::vector<int> categorical_indexes) {    
+    std::vector<std::vector<std::string>> one_hot_vector(std::vector<std::vector<std::string>> data_vec, std::vector<int> categorical_indexes) {
         // declare and initialize the variable to store the one hot vector
         std::vector<std::vector<std::string>> one_hot_vec;
         std::vector<std::string> empty_row;
@@ -172,37 +131,95 @@ class DataHandler {
 
         // create the new column names
         // index 0 of the 2D vector contains all of the column names
-        
-        std::vector<std::string> col_names = data_vec.front();
-        int i = 0;
-        for(const auto& name : col_names) {
+        for(size_t i = 0; i < data_vec[0].size(); i++) {
+            std::string col_name = data_vec[0][i];
             auto it = std::find(categorical_indexes.begin(), categorical_indexes.end(), static_cast<int>(i));
             if(it != categorical_indexes.end()) {
                 // is categorical
 
                 // get unique category names for the selected column
                 std::vector<std::string> category_name_vector = unique_category_names(data_vec, i);
-
-                // std::vector<std::string> name_vector = data_vec.front();
-                // for (std::string name : name_vector) {
-                //     std::cout << name << std::endl;
-                // }
-
                 for(std::string category_name : category_name_vector) {
                     /*
                     create new header name with the category name appended to the column
                     e.g: ColumnName_CategoryName
                     */
-                    one_hot_vec[0].push_back(trim_string(name) + "_" + trim_string(category_name)); // trim_string removes any trailing whitespace and control characters
+                    one_hot_vec[0].push_back(trim_string(col_name) + "_" + trim_string(category_name)); 
                 }
             } else {
                 // not categorical
-                one_hot_vec[0].push_back(name);
+                one_hot_vec[0].push_back(col_name);
             }
-            i++;
         }
-        data_vec.erase(data_vec.begin()); // remove the header row so we can iterate through the rest of the contents easily
+
+        // iterate through the data and fill in the one_hot_vector
+        for(size_t col = 0; col < data_vec[0].size(); col++) {
+            for(size_t row = 1; row < data_vec.size(); row++) { // skip the first row, since that contains the header with column names, not the data contents
+
+            }
+        }
+
         return one_hot_vec;
+    }
+
+    /// @brief Fills in missing categorical data with the most occurring category, and fills in missing integer data with the mean.
+    /// @param data_vec The 2D vector to impute.
+    /// @param categorical_indexes A std::vector<int> containing the column indexes of all categorical values.
+    /// @return The imputed 2D vector.
+    std::vector<std::vector<std::string>> impute_data(std::vector<std::vector<std::string>> data_vec, std::vector<int> categorical_indexes) {
+        for(size_t col = 0; col < data_vec[0].size(); col++) {
+            auto it = std::find(categorical_indexes.begin(), categorical_indexes.end(), static_cast<int>(col));
+            if(it != categorical_indexes.end()) { // is categorical
+                /*
+                    declare unordered_map to count occurrence, impute missing data with most occurring category
+                    e.g: occurrence_map["Yes"] = 123, occurrence_map["No"] = 432 || Missing values will be replaced with "No" since it occured more often.
+                */ 
+                std::unordered_map<std::string, int> occurrence_map;
+
+                // count occurrences
+                for(size_t row = 1; row < data_vec.size(); row++) {
+                    std::string cell = data_vec[row][col];
+                    if(cell == "NULL") continue;
+                    occurrence_map[cell]++;
+                }
+                
+                // find the most occurring category
+                std::string most_occurring_category = most_occurred_key_in_map(occurrence_map);
+
+                // replace NULL values
+                for(size_t row = 1; row < data_vec.size(); row++) {
+                    if(data_vec[row][col] != "NULL") continue;
+                    data_vec[row][col] = most_occurring_category;
+                }
+
+            } else { // not categorical
+                // Replace non-categorical NULL values with the mean
+
+                double sum = 0;
+                size_t count = 0;
+                // calculate mean
+                for(size_t row = 1; row < data_vec.size(); row++) {
+                    if(data_vec[row][col] == "NULL") continue;
+                    try {
+                        double cell = std::stod(data_vec[row][col]);
+                        sum += cell;
+                        count++;
+                    } catch(...) {
+                        continue;
+                    }
+                }
+                // replace NULL values
+                for(size_t row = 1; row < data_vec.size(); row++) {
+                    if(data_vec[row][col] != "NULL") continue;
+                    if(!count) { // avoid division by 0
+                        data_vec[row][col] = "0"; 
+                        continue;    
+                    }
+                    data_vec[row][col] = std::to_string(sum/count);
+                }
+            }
+        }
+        return data_vec;
     }
 
     /// @brief 
@@ -213,7 +230,6 @@ class DataHandler {
         std::unordered_set<std::string> unique_names;
         for (size_t row = 1; row < data_vec.size(); row++) {
             if (column_index >= 0 && column_index < data_vec[row].size()) {
-                if(data_vec[row][column_index] == "NULL") continue;
                 unique_names.insert(data_vec[row][column_index]);
             }
         }
@@ -259,12 +275,6 @@ class DataHandler {
     /// @return A vector<int> containing all column indexes where categorical values exist.
     std::vector<int> get_categorical_indexes(std::vector<std::vector<std::string>> data_vec) {
         std::vector<int> categorical_indexes;
-        // for(size_t i = 0; i < data_vec[1].size(); i++) { // we use index 1 instead of index 0 because index 0 contains the names, not the data contents
-        //     const auto& cell = data_vec[1][i];
-        //     if(!is_number(cell)) { // if the cell is not a number, we assume that it is a categorical value
-        //         categorical_indexes.push_back(i);
-        //     }
-        // }
 
         for(size_t col = 0; col < data_vec[0].size(); col++) {
             for(size_t row = 1; row < data_vec.size(); row++) { // Skip the 0th row, since that just contains the column names
@@ -279,7 +289,7 @@ class DataHandler {
         return categorical_indexes;
     }
     
-
+    private:
     /// @brief Returns true if a string represents a number, false otherwise.
     /// @param s The string to check.
     /// @return bool indicating whether the string represents a number or not. (True if it is a number)
@@ -294,6 +304,26 @@ class DataHandler {
             return !std::isspace(static_cast<unsigned char>(c)) && std::isprint(c);
         });
         return std::string(str.begin(), end.base());
+    }
+
+
+    std::string most_occurred_key_in_map(const std::unordered_map<std::string, int>& occurrence_map) {
+        std::string most_occurred_key;
+        int max_occurrences = 0;
+
+        // Iterate through the map to find the key with maximum occurrences
+        for (const auto& pair : occurrence_map) {
+            if (pair.second > max_occurrences) {
+                most_occurred_key = pair.first;
+                max_occurrences = pair.second;
+            }
+        }
+
+        return most_occurred_key;
+    }
+    
+    int get_index_from_header_name(std::vector<std::vector<std::string>> data_vec, std::string column_name) {
+        
     }
 
 };

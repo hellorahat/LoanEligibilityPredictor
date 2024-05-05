@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['is_5fnumber_15',['is_number',['../classDataHandler.html#aeb5dfd72ffc12f0e1ec90c3e5030b3fa',1,'DataHandler']]]
+  ['impute_5fdata_19',['impute_data',['../classDataHandler.html#a75c1ffc84df3fe18c288a9b3f86991d5',1,'DataHandler']]]
 ];

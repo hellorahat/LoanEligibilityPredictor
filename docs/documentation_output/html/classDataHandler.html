@@ -75,14 +75,25 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a88d7d3129de68de6e97037183dd62690"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#a88d7d3129de68de6e97037183dd62690">csv_to_vector</a> (std::ifstream &amp;input_csv)</td></tr>
 <tr class="memdesc:a88d7d3129de68de6e97037183dd62690"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert CSV into a 2D vector. More specifically, a vector containing a vector of strings.  <a href="classDataHandler.html#a88d7d3129de68de6e97037183dd62690">More...</a><br /></td></tr>
 <tr class="separator:a88d7d3129de68de6e97037183dd62690"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7905e7fcd1c2c95fbf85b8d9e720a5f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#ad7905e7fcd1c2c95fbf85b8d9e720a5f">vector_drop_value</a> (std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, int index)</td></tr>
-<tr class="memdesc:ad7905e7fcd1c2c95fbf85b8d9e720a5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops a column from a vector.  <a href="classDataHandler.html#ad7905e7fcd1c2c95fbf85b8d9e720a5f">More...</a><br /></td></tr>
-<tr class="separator:ad7905e7fcd1c2c95fbf85b8d9e720a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a332756991c658e56f6bbee847f8685d5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#a332756991c658e56f6bbee847f8685d5">vector_drop_column</a> (std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, int col_index)</td></tr>
+<tr class="memdesc:a332756991c658e56f6bbee847f8685d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops a column from a vector.  <a href="classDataHandler.html#a332756991c658e56f6bbee847f8685d5">More...</a><br /></td></tr>
+<tr class="separator:a332756991c658e56f6bbee847f8685d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5868c3269b998d4fb48db1c34aa399c4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#a5868c3269b998d4fb48db1c34aa399c4">vector_drop_row</a> (std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, int row_index)</td></tr>
+<tr class="memdesc:a5868c3269b998d4fb48db1c34aa399c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops a row from a vector.  <a href="classDataHandler.html#a5868c3269b998d4fb48db1c34aa399c4">More...</a><br /></td></tr>
+<tr class="separator:a5868c3269b998d4fb48db1c34aa399c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44c8846c951d3f42d027e70804c0992f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#a44c8846c951d3f42d027e70804c0992f">clean_vector_data</a> (std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</td></tr>
+<tr class="memdesc:a44c8846c951d3f42d027e70804c0992f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans the dataset by removing strings from majority integer datasets and by removing integers from majority string datasets. This is intended to remove data entry mistakes. Also removes trailing whitespace and control characters from strings encountered.  <a href="classDataHandler.html#a44c8846c951d3f42d027e70804c0992f">More...</a><br /></td></tr>
+<tr class="separator:a44c8846c951d3f42d027e70804c0992f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46ba9f65217c06442f6b82e7c9b42d60"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#a46ba9f65217c06442f6b82e7c9b42d60">one_hot_vector</a> (std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, std::vector&lt; int &gt; categorical_indexes)</td></tr>
 <tr class="memdesc:a46ba9f65217c06442f6b82e7c9b42d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a one-hot vector given a 2D vector and a vector containing the column indexes of all categorical values.  <a href="classDataHandler.html#a46ba9f65217c06442f6b82e7c9b42d60">More...</a><br /></td></tr>
 <tr class="separator:a46ba9f65217c06442f6b82e7c9b42d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75c1ffc84df3fe18c288a9b3f86991d5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#a75c1ffc84df3fe18c288a9b3f86991d5">impute_data</a> (std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, std::vector&lt; int &gt; categorical_indexes)</td></tr>
+<tr class="memdesc:a75c1ffc84df3fe18c288a9b3f86991d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills in missing categorical data with the most occurring category, and fills in missing integer data with the mean.  <a href="classDataHandler.html#a75c1ffc84df3fe18c288a9b3f86991d5">More...</a><br /></td></tr>
+<tr class="separator:a75c1ffc84df3fe18c288a9b3f86991d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9d8466deb2bf2b2e29b896b437f3cc0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#aa9d8466deb2bf2b2e29b896b437f3cc0">unique_category_names</a> (std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec, int column_index)</td></tr>
+<tr class="separator:aa9d8466deb2bf2b2e29b896b437f3cc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e5155e2530005ad5325cccc2cb9aaac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#a7e5155e2530005ad5325cccc2cb9aaac">vector_column_names</a> (std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</td></tr>
-<tr class="memdesc:a7e5155e2530005ad5325cccc2cb9aaac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all column names of a 2D vector that was created from a csv.  <a href="classDataHandler.html#a7e5155e2530005ad5325cccc2cb9aaac">More...</a><br /></td></tr>
+<tr class="memdesc:a7e5155e2530005ad5325cccc2cb9aaac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Splits a dataset into two 2D vectors, one for training and one for testing.  <a href="classDataHandler.html#a7e5155e2530005ad5325cccc2cb9aaac">More...</a><br /></td></tr>
 <tr class="separator:a7e5155e2530005ad5325cccc2cb9aaac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a943f59c3aa9605f60b337f551dbf8f61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#a943f59c3aa9605f60b337f551dbf8f61">print_vector_data</a> (std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</td></tr>
 <tr class="memdesc:a943f59c3aa9605f60b337f551dbf8f61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the contents of a 2D vector that was created from a csv.  <a href="classDataHandler.html#a943f59c3aa9605f60b337f551dbf8f61">More...</a><br /></td></tr>
@@ -90,11 +101,43 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0093c86bd2f5f86cfebb77d148eb4cd"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#aa0093c86bd2f5f86cfebb77d148eb4cd">get_categorical_indexes</a> (std::vector&lt; std::vector&lt; std::string &gt;&gt; data_vec)</td></tr>
 <tr class="memdesc:aa0093c86bd2f5f86cfebb77d148eb4cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector&lt;int&gt; of the indexes of all categorical indexes found in a 2D vector.  <a href="classDataHandler.html#aa0093c86bd2f5f86cfebb77d148eb4cd">More...</a><br /></td></tr>
 <tr class="separator:aa0093c86bd2f5f86cfebb77d148eb4cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb5dfd72ffc12f0e1ec90c3e5030b3fa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataHandler.html#aeb5dfd72ffc12f0e1ec90c3e5030b3fa">is_number</a> (std::string s)</td></tr>
-<tr class="memdesc:aeb5dfd72ffc12f0e1ec90c3e5030b3fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if a string represents a number, false otherwise.  <a href="classDataHandler.html#aeb5dfd72ffc12f0e1ec90c3e5030b3fa">More...</a><br /></td></tr>
-<tr class="separator:aeb5dfd72ffc12f0e1ec90c3e5030b3fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a44c8846c951d3f42d027e70804c0992f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44c8846c951d3f42d027e70804c0992f">&#9670;&nbsp;</a></span>clean_vector_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::vector&lt;std::string&gt; &gt; DataHandler::clean_vector_data </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; std::string &gt;&gt;&#160;</td>
+          <td class="paramname"><em>data_vec</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cleans the dataset by removing strings from majority integer datasets and by removing integers from majority string datasets. This is intended to remove data entry mistakes. Also removes trailing whitespace and control characters from strings encountered. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data_vec</td><td>The 2D vector dataset to be cleaned. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The cleaned 2D vector. </dd></dl>
+
+</div>
+</div>
 <a id="a88d7d3129de68de6e97037183dd62690"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a88d7d3129de68de6e97037183dd62690">&#9670;&nbsp;</a></span>csv_to_vector()</h2>
 
@@ -165,8 +208,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aeb5dfd72ffc12f0e1ec90c3e5030b3fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb5dfd72ffc12f0e1ec90c3e5030b3fa">&#9670;&nbsp;</a></span>is_number()</h2>
+<a id="a75c1ffc84df3fe18c288a9b3f86991d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75c1ffc84df3fe18c288a9b3f86991d5">&#9670;&nbsp;</a></span>impute_data()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -175,11 +218,21 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool DataHandler::is_number </td>
+          <td class="memname">std::vector&lt;std::vector&lt;std::string&gt; &gt; DataHandler::impute_data </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>s</em></td><td>)</td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; std::string &gt;&gt;&#160;</td>
+          <td class="paramname"><em>data_vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">std::vector&lt; int &gt;&#160;</td>
+          <td class="paramname"><em>categorical_indexes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -189,14 +242,15 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns true if a string represents a number, false otherwise. </p>
+<p>Fills in missing categorical data with the most occurring category, and fills in missing integer data with the mean. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td>The string to check. </td></tr>
+    <tr><td class="paramname">data_vec</td><td>The 2D vector to impute. </td></tr>
+    <tr><td class="paramname">categorical_indexes</td><td>A std::vector&lt;int&gt; containing the column indexes of all categorical values. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>bool indicating whether the string represents a number or not. (True if it is a number) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The imputed 2D vector. </dd></dl>
 
 </div>
 </div>
@@ -280,6 +334,51 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aa9d8466deb2bf2b2e29b896b437f3cc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9d8466deb2bf2b2e29b896b437f3cc0">&#9670;&nbsp;</a></span>unique_category_names()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; DataHandler::unique_category_names </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; std::string &gt;&gt;&#160;</td>
+          <td class="paramname"><em>data_vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>column_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data_vec</td><td></td></tr>
+    <tr><td class="paramname">column_index</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><br  />
+ </dd></dl>
+
+</div>
+</div>
 <a id="a7e5155e2530005ad5325cccc2cb9aaac"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7e5155e2530005ad5325cccc2cb9aaac">&#9670;&nbsp;</a></span>vector_column_names()</h2>
 
@@ -304,8 +403,16 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns all column names of a 2D vector that was created from a csv. </p>
+<p>Splits a dataset into two 2D vectors, one for training and one for testing. </p>
 <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data_vec</td><td>The 2D vector that contains the data. </td></tr>
+    <tr><td class="paramname">test_size</td><td>The percentage of the data that will be used for testing, by default it is 20% (0.2). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair containing the training and testing 2D vectors respectively.</dd></dl>
+<p>Returns all column names of a 2D vector that was created from a csv. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data_vec</td><td>The 2D vector to obtain the column names from. </td></tr>
   </table>
@@ -315,8 +422,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad7905e7fcd1c2c95fbf85b8d9e720a5f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7905e7fcd1c2c95fbf85b8d9e720a5f">&#9670;&nbsp;</a></span>vector_drop_value()</h2>
+<a id="a332756991c658e56f6bbee847f8685d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a332756991c658e56f6bbee847f8685d5">&#9670;&nbsp;</a></span>vector_drop_column()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -325,7 +432,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;std::vector&lt;std::string&gt; &gt; DataHandler::vector_drop_value </td>
+          <td class="memname">std::vector&lt;std::vector&lt;std::string&gt; &gt; DataHandler::vector_drop_column </td>
           <td>(</td>
           <td class="paramtype">std::vector&lt; std::vector&lt; std::string &gt;&gt;&#160;</td>
           <td class="paramname"><em>data_vec</em>, </td>
@@ -334,7 +441,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>index</em>&#160;</td>
+          <td class="paramname"><em>col_index</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -353,7 +460,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data_vec</td><td>The 2D vector from which to drop the column. Each inner vector represents a row of data, and each element of the inner vectors represents a field (e.g., a comma-separated value). </td></tr>
-    <tr><td class="paramname">index</td><td>The index of the column to drop from the vector. </td></tr>
+    <tr><td class="paramname">col_index</td><td>The index of the column to drop from the vector. </td></tr>
   </table>
   </dd>
 </dl>
@@ -361,8 +468,54 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a5868c3269b998d4fb48db1c34aa399c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5868c3269b998d4fb48db1c34aa399c4">&#9670;&nbsp;</a></span>vector_drop_row()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::vector&lt;std::string&gt; &gt; DataHandler::vector_drop_row </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; std::string &gt;&gt;&#160;</td>
+          <td class="paramname"><em>data_vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>row_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Drops a row from a vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data_vec</td><td>The 2D vector from which to drop the column. Each inner vector represents a row of data, and each element of the inner vectors represents a field (e.g., a comma-separated value). </td></tr>
+    <tr><td class="paramname">row_index</td><td>The index of the row to drop from the vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A modified 2D vector with the specified row removed. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>src/DataHandler/<a class="el" href="DataHandler_8h_source.html">DataHandler.h</a></li>
+<li>src/DataProcessing/<a class="el" href="DataHandler_8h_source.html">DataHandler.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
