@@ -75,9 +75,9 @@ class DataHandler {
         return data_vec;
     }
 
-    /// @brief Cleans the dataset by removing strings from majority integer datasets and by removing integers from majority string datasets. This is intended to remove data entry mistakes.
+    /// @brief Cleans the dataset by removing strings from majority integer datasets and by removing integers from majority string datasets. This is intended to remove data entry mistakes. Also removes trailing whitespace and control characters from strings encountered.
     /// @param data_vec The 2D vector dataset to be cleaned.
-    /// @return The 2D vector cleaned dataset.
+    /// @return The cleaned 2D vector.
     std::vector<std::vector<std::string>> clean_vector_data(std::vector<std::vector<std::string>> data_vec) {
         for(size_t col = 0; col < data_vec[0].size(); col++) {
             int string_count = 0;
@@ -102,7 +102,6 @@ class DataHandler {
                 std::cout << "integer_count: " << integer_count << " / total_count: " << total_count << " = " << (double)integer_count/total_count << std::endl;
                 for(int val : integer_index_vector) {
                     if(data_vec[val][col] == "NULL") continue;
-                    std::cout << data_vec[val][col] << std::endl;
                     vector_drop_row(data_vec, val);
                 }
             }
@@ -111,7 +110,6 @@ class DataHandler {
                 std::cout << "string_count: " << string_count << " / total_count: " << total_count << " = " << (double)string_count/total_count << std::endl;
                 for(int val : string_index_vector) {
                     if(data_vec[val][col] == "NULL") continue;
-                    std::cout << data_vec[val][col] << std::endl;
                     vector_drop_row(data_vec, val);
                 }
             }
@@ -184,13 +182,18 @@ class DataHandler {
 
                 // get unique category names for the selected column
                 std::vector<std::string> category_name_vector = unique_category_names(data_vec, i);
+
+                // std::vector<std::string> name_vector = data_vec.front();
+                // for (std::string name : name_vector) {
+                //     std::cout << name << std::endl;
+                // }
+
                 for(std::string category_name : category_name_vector) {
                     /*
                     create new header name with the category name appended to the column
                     e.g: ColumnName_CategoryName
                     */
-                    std::cout << "col_name: " << name << ", category_name: " << category_name << std::endl;
-                    one_hot_vec[0].push_back(name + "_" + category_name); 
+                    one_hot_vec[0].push_back(trim_string(name) + "_" + trim_string(category_name)); // trim_string removes any trailing whitespace and control characters
                 }
             } else {
                 // not categorical
@@ -199,18 +202,19 @@ class DataHandler {
             i++;
         }
         data_vec.erase(data_vec.begin()); // remove the header row so we can iterate through the rest of the contents easily
-        for(const auto& name : col_names) {
-            std::cout << name << std::endl;
-        }
         return one_hot_vec;
     }
 
+    /// @brief 
+    /// @param data_vec 
+    /// @param column_index 
+    /// @return 
     std::vector<std::string> unique_category_names(std::vector<std::vector<std::string>> data_vec, int column_index) {
         std::unordered_set<std::string> unique_names;
-        for (const auto& row : data_vec) {
-            if (column_index >= 0 && column_index < row.size()) {
-                if(row[column_index] == "NULL") continue;
-                unique_names.insert(row[column_index]);
+        for (size_t row = 1; row < data_vec.size(); row++) {
+            if (column_index >= 0 && column_index < data_vec[row].size()) {
+                if(data_vec[row][column_index] == "NULL") continue;
+                unique_names.insert(data_vec[row][column_index]);
             }
         }
 
@@ -268,7 +272,6 @@ class DataHandler {
                 if(cell == "NULL") continue;
                 if(!is_number(cell)) { // if a cell is found to not be a number, then we assume that it is a categorical value
                     categorical_indexes.push_back(col);
-                    std::cout << "Is categorical: " << data_vec[row][col] << std::endl;
                     break;
                 }
             }
@@ -283,6 +286,14 @@ class DataHandler {
     bool is_number(std::string s) {
         static const std::regex number_regex("^[-+]?[0-9]*\\.?[0-9]+$");
         return std::regex_match(s, number_regex);
+    }
+
+    // Function to trim trailing whitespace and control characters
+    std::string trim_string(const std::string& str) {
+        auto end = std::find_if(str.rbegin(), str.rend(), [](char c) {
+            return !std::isspace(static_cast<unsigned char>(c)) && std::isprint(c);
+        });
+        return std::string(str.begin(), end.base());
     }
 
 };

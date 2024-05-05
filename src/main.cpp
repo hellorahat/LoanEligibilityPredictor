@@ -24,11 +24,11 @@ int main(int argc, char* argv[]) {
     // create a one-hot vector for all of the categorical values
     std::vector<std::vector<std::string>> one_hot_vec = data_handler.one_hot_vector(training_vector, categorical_indexes);
 
-    // for(const auto& row : one_hot_vec) {
-    //     for(const auto& cell : row) {
-    //         std::cout << cell << std::endl;
-    //     }
-    // }
+    for(const auto& row : one_hot_vec) {
+        for(const auto& cell : row) {
+            std::cout << cell << std::endl;
+        }
+    }
 
     return 0;
 }
