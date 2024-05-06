@@ -127,8 +127,6 @@ class DataHandler {
         // declare and initialize the variable to store the one hot vector
         std::vector<std::vector<std::string>> one_hot_vec;
         one_hot_vec.resize(data_vec.size());
-        // std::vector<std::string> empty_row;
-        // one_hot_vec.push_back(empty_row);
 
         // create the new column names
         // index 0 of the 2D vector contains all of the column names
