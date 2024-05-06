@@ -148,7 +148,7 @@ class DataHandler {
                 }
             } else {
                 // not categorical
-                one_hot_vec[0].push_back(col_name);//
+                one_hot_vec[0].push_back(col_name);
             }
         }
 
