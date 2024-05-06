@@ -1,4 +1,4 @@
-#include "DataHandler/DataHandler.h"
+#include "DataProcessing/DataHandler.h"
 #include <fstream>
 #include <iostream>
 
@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
 
     // get the column index of all categorical values
     std::vector<int> categorical_indexes = data_handler.get_categorical_indexes(training_vector);
+    categorical_indexes.push_back(9); // credit_history is categorical even though the value is either 0 or 1
 
     // fill in NULL values
     training_vector = data_handler.impute_data(training_vector, categorical_indexes);
@@ -27,11 +28,8 @@ int main(int argc, char* argv[]) {
     // create a one-hot vector for all of the categorical values
     std::vector<std::vector<std::string>> one_hot_vec = data_handler.one_hot_vector(training_vector, categorical_indexes);
 
-    for(const auto& row : one_hot_vec) {
-        for(const auto& cell : row) {
-            std::cout << cell << std::endl;
-        }
-    }
+    // print the data
+    data_handler.print_vector_data(one_hot_vec);
 
     return 0;
 }

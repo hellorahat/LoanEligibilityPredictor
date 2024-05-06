@@ -126,8 +126,9 @@ class DataHandler {
     std::vector<std::vector<std::string>> one_hot_vector(std::vector<std::vector<std::string>> data_vec, std::vector<int> categorical_indexes) {
         // declare and initialize the variable to store the one hot vector
         std::vector<std::vector<std::string>> one_hot_vec;
-        std::vector<std::string> empty_row;
-        one_hot_vec.push_back(empty_row);
+        one_hot_vec.resize(data_vec.size());
+        // std::vector<std::string> empty_row;
+        // one_hot_vec.push_back(empty_row);
 
         // create the new column names
         // index 0 of the 2D vector contains all of the column names
@@ -154,8 +155,36 @@ class DataHandler {
 
         // iterate through the data and fill in the one_hot_vector
         for(size_t col = 0; col < data_vec[0].size(); col++) {
+            std::vector<std::string> category_name_vector = unique_category_names(data_vec, col);
+            std::string column_name = data_vec[0][col];
             for(size_t row = 1; row < data_vec.size(); row++) { // skip the first row, since that contains the header with column names, not the data contents
+                one_hot_vec[row].resize(one_hot_vec[0].size());
+                auto it = std::find(categorical_indexes.begin(), categorical_indexes.end(), static_cast<int>(col));
+                if(it != categorical_indexes.end()) {
+                    // is categorical
 
+                    // iterate through all unique categories
+                    for(std::string category_name : category_name_vector) {
+                        std::string one_hot_column_name = trim_string(column_name) + "_" + trim_string(category_name);
+                        int one_hot_column_index = get_index_from_header_name(one_hot_vec, one_hot_column_name);
+                        
+                        // for each cateogry, fill in the data as "1" if the category matches, "0" otherwise
+                        if(category_name == data_vec[row][col]) {
+                            one_hot_vec[row][one_hot_column_index] = "1";
+                            continue;
+                        } else {
+                            one_hot_vec[row][one_hot_column_index] = "0";
+                            continue;
+                        }
+                    }
+
+                } else {
+                    // not categorical
+                    std::string value = data_vec[row][col];
+                    std::string column_name = data_vec[0][col];
+                    int header_index = get_index_from_header_name(one_hot_vec, column_name);
+                    one_hot_vec[row][header_index] = value;
+                }
             }
         }
 
@@ -323,7 +352,10 @@ class DataHandler {
     }
     
     int get_index_from_header_name(std::vector<std::vector<std::string>> data_vec, std::string column_name) {
-        
+        for(size_t col = 0; col < data_vec[0].size(); col++) {
+            if(data_vec[0][col] == column_name) return col;
+        }
+        return -1;
     }
 
 };
