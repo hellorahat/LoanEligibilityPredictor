@@ -17,6 +17,7 @@
 #include <string>
 #include <algorithm>
 #include <unordered_set>
+#include <unordered_map>
 #include <cctype>
 #include <regex>
 
@@ -265,7 +266,7 @@ class DataHandler {
         return std::vector<std::string>(unique_names.begin(), unique_names.end());
     }
 
-    /// @brief Splits a dataset into two 2D vectors, one for training and one for testing.
+    /// @brief Randomly splits a dataset into two 2D vectors, one for training and one for testing.
     /// @param data_vec The 2D vector that contains the data.
     /// @param test_size The percentage of the data that will be used for testing, by default it is 20% (0.2).
     /// @return A pair containing the training and testing 2D vectors respectively.

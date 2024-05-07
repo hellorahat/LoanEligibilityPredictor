@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
     //drop the 0th column, since the id is not necessary
     training_vector = data_handler.vector_drop_column(training_vector, 0);
 
-    // get the column index of all categorical values
+    // attempt to get the column index of all categorical values
     std::vector<int> categorical_indexes = data_handler.get_categorical_indexes(training_vector);
     categorical_indexes.push_back(9); // credit_history is categorical even though the value is either 0 or 1
 
@@ -27,9 +27,6 @@ int main(int argc, char* argv[]) {
 
     // create a one-hot vector for all of the categorical values
     std::vector<std::vector<std::string>> one_hot_vec = data_handler.one_hot_vector(training_vector, categorical_indexes);
-
-    // print the data
-    data_handler.print_vector_data(one_hot_vec);
 
     return 0;
 }
