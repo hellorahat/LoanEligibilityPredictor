@@ -15,3 +15,5 @@ private:
   Node* root;
   void build_tree(Node*& node, const vector<vector<double>>& features, const vector<int>& labels);
 };
+
+#endif
