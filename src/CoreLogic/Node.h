@@ -10,6 +10,7 @@
 class Node{
 public:
   Node() : left (nullptr), right(nullptr), feature_index(-1), threshold(0.0), is_leaf(false), label(-1){}
+
   Node* left;
   Node* right;
   int feature_index;
