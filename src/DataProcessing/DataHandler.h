@@ -29,9 +29,10 @@ class DataHandler {
     /// @return A 2D vector containing the CSV data converted into a structured format. Each element of the outer vector represents a row of the CSV data, and each element of the inner vectors represents a field (comma-separated value) of the corresponding row.
     std::vector<std::vector<std::string>> csv_to_vector(std::ifstream& input_csv) {
         std::vector<std::vector<std::string>> csv_data;
-        std::string line;
 
-        while(std::getline(input_csv, line)) {
+        // Iterate lines using istream_iterator
+        for(std::istream_iterator<std::string> it(input_csv); it != std::istream_iterator<std::string>(); ++it) {
+            std::string line = *it;
 
             // split line into tokens using comma delimiter
             std::istringstream iss(line);
@@ -48,7 +49,20 @@ class DataHandler {
             // add the row to the 2d vector
             csv_data.push_back(row);
         }
+
         return csv_data;
+    }
+
+    void vector_to_csv(std::vector<std::vector<std::string>> data_vec, std::string csv_name) {
+        std::ofstream myfile;
+        myfile.open(csv_name + ".csv");
+        for(size_t row = 0; row < data_vec.size(); row++) {
+            for(size_t col = 0; col < data_vec[0].size(); col++) {
+                myfile << data_vec[row][col] << ",";
+            }
+            myfile << std::endl;
+        }
+        myfile.close();
     }
 
     /// @brief Drops a column from a vector.
@@ -144,7 +158,7 @@ class DataHandler {
                     create new header name with the category name appended to the column
                     e.g: ColumnName_CategoryName
                     */
-                    one_hot_vec[0].push_back(trim_string(col_name) + "_" + trim_string(category_name)); 
+                    one_hot_vec[0].push_back(col_name + "_" + category_name);
                 }
             } else {
                 // not categorical
@@ -159,12 +173,13 @@ class DataHandler {
             for(size_t row = 1; row < data_vec.size(); row++) { // skip the first row, since that contains the header with column names, not the data contents
                 one_hot_vec[row].resize(one_hot_vec[0].size());
                 auto it = std::find(categorical_indexes.begin(), categorical_indexes.end(), static_cast<int>(col));
+                if(row%1000==0)std::cout << col << ":" << row << std::endl;
                 if(it != categorical_indexes.end()) {
                     // is categorical
 
                     // iterate through all unique categories
                     for(std::string category_name : category_name_vector) {
-                        std::string one_hot_column_name = trim_string(column_name) + "_" + trim_string(category_name);
+                        std::string one_hot_column_name = column_name + "_" + category_name;
                         int one_hot_column_index = get_index_from_header_name(one_hot_vec, one_hot_column_name);
                         
                         // for each cateogry, fill in the data as "1" if the category matches, "0" otherwise
@@ -341,12 +356,12 @@ class DataHandler {
 
         // Iterate through the map to find the key with maximum occurrences
         for (const auto& pair : occurrence_map) {
+            std::cout << pair.first << std::endl;
             if (pair.second > max_occurrences) {
                 most_occurred_key = pair.first;
                 max_occurrences = pair.second;
             }
         }
-
         return most_occurred_key;
     }
     
