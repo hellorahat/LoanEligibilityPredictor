@@ -132,73 +132,41 @@ class DataHandler {
         return data_vec;
     }
 
+    // std::vector<std::string> get_default_impute_values() {
 
+    // }
 
-    /// @brief Creates a one-hot vector given a 2D vector and a vector containing the column indexes of all categorical values
-    /// @param data_vec The 2D vector to generate the one-hot vector from.
-    /// @param categorical_indexes The column indexes of the categorical values.
-    /// @return The one_hot_vector
-    std::vector<std::vector<std::string>> one_hot_vector(std::vector<std::vector<std::string>> data_vec, std::vector<int> categorical_indexes) {
-        // declare and initialize the variable to store the one hot vector
+    std::vector<std::vector<std::string>> one_hot_encoding(std::vector<std::vector<std::string>> data_vec, int categoricalIndex) {
+        // declare the one hot encoding vector
         std::vector<std::vector<std::string>> one_hot_vec;
+        // the encoding has the same amount of rows as the source data vector
         one_hot_vec.resize(data_vec.size());
-
-        // create the new column names
-        // index 0 of the 2D vector contains all of the column names
-        for(size_t i = 0; i < data_vec[0].size(); i++) {
-            std::string col_name = data_vec[0][i];
-            auto it = std::find(categorical_indexes.begin(), categorical_indexes.end(), static_cast<int>(i));
-            if(it != categorical_indexes.end()) {
-                // is categorical
-
-                // get unique category names for the selected column
-                std::vector<std::string> category_name_vector = unique_category_names(data_vec, i);
-                for(std::string category_name : category_name_vector) {
-                    /*
-                    create new header name with the category name appended to the column
-                    e.g: ColumnName_CategoryName
-                    */
-                    one_hot_vec[0].push_back(col_name + "_" + category_name);
-                }
-            } else {
-                // not categorical
-                one_hot_vec[0].push_back(col_name);
-            }
+        // the amount of columns in the one_hot_vec depends on how much unique categories the categorical column has
+        std::vector<std::string> unique_category_vector = unique_category_names(data_vec, categoricalIndex);
+        for(int i = 0; i < one_hot_vec.size(); i++) {
+            one_hot_vec[i].resize(unique_category_vector.size());
         }
 
-        // iterate through the data and fill in the one_hot_vector
-        for(size_t col = 0; col < data_vec[0].size(); col++) {
-            std::vector<std::string> category_name_vector = unique_category_names(data_vec, col);
-            std::string column_name = data_vec[0][col];
-            for(size_t row = 1; row < data_vec.size(); row++) { // skip the first row, since that contains the header with column names, not the data contents
-                one_hot_vec[row].resize(one_hot_vec[0].size());
-                auto it = std::find(categorical_indexes.begin(), categorical_indexes.end(), static_cast<int>(col));
-                if(row%1000==0)std::cout << col << ":" << row << std::endl;
-                if(it != categorical_indexes.end()) {
-                    // is categorical
+        // label row 0 of one_hot_vec with the new column names
+        std::string column_name = data_vec[0][categoricalIndex];
+        std::unordered_map<std::string, int> one_hot_col_index; // one_hot_col_index["CategoryName"] = column_index
+        for(size_t i = 0; i < unique_category_vector.size(); i++) {
+            std::string category_name = unique_category_vector[i];
+            std::string one_hot_col_name = column_name + ":" + category_name;
+            one_hot_vec[0][i] = one_hot_col_name;
+            one_hot_col_index[category_name] = i;
+        }
 
-                    // iterate through all unique categories
-                    for(std::string category_name : category_name_vector) {
-                        std::string one_hot_column_name = column_name + "_" + category_name;
-                        int one_hot_column_index = get_index_from_header_name(one_hot_vec, one_hot_column_name);
-                        
-                        // for each cateogry, fill in the data as "1" if the category matches, "0" otherwise
-                        if(category_name == data_vec[row][col]) {
-                            one_hot_vec[row][one_hot_column_index] = "1";
-                            continue;
-                        } else {
-                            one_hot_vec[row][one_hot_column_index] = "0";
-                            continue;
-                        }
-                    }
-
-                } else {
-                    // not categorical
-                    std::string value = data_vec[row][col];
-                    std::string column_name = data_vec[0][col];
-                    int header_index = get_index_from_header_name(one_hot_vec, column_name);
-                    one_hot_vec[row][header_index] = value;
-                }
+        // fill in the rest of the rows
+        for(size_t row = 1; row < one_hot_vec.size(); row++) { // start at row 1 to iterate every row except the header (which contain the column names)
+            std::string category_name = data_vec[row][categoricalIndex]; // retrieve the category name from the row
+            int index = one_hot_col_index[category_name]; // retrieve the column index in our one hot vector for the category name
+            for(int col = 0; col < unique_category_vector.size(); col++) {
+                // if we are at the correct index, put 1, else 0
+                if(col==index)
+                    one_hot_vec[row][col] = "1";
+                else
+                    one_hot_vec[row][col] = "0";
             }
         }
 
