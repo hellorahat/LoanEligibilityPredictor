@@ -10,6 +10,7 @@
 #ifndef DATAHANDLER_H
 #define DATAHANDLER_H
 
+#include "DataFrame.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -25,7 +26,7 @@
 class DataHandler {
     public:
 
-    std::tuple<std::vector<std::string>, std::vector<std::vector<double>>, std::vector<double>> process_data(std::ifstream& input_csv, std::vector<int> categorical_indexes) {
+    DataFrame* process_data(std::ifstream& input_csv, std::vector<int> categorical_indexes) {
         // declare and initialize data_vec
         std::vector<std::vector<std::string>> data_vec;
         data_vec = csv_to_vector(input_csv);
@@ -35,12 +36,18 @@ class DataHandler {
         std::vector<double> impute_vec;
 
         // modify data_vec to have one-hot encodings for all categorical columns.
-        std::vector<std::unordered_map<std::string, int>> categorical_groups;
+        /*
+        the categorical_groups map provides an easy way to group each categorical column.
+            - categorical_group["ColumnName1"] = ["category1"]:0, ["category2"]:1, ["category3"]:2
+            - categorical_group["ColumnName2"] = ["category1"]:5, ["category2"]:6, ["category3"]:7
+        */
+        std::unordered_map<std::string, std::unordered_map<std::string, int>> categorical_groups;
         int total_vectors_added = 0; // keep track of total vectors added to keep indexing consistent
         for(int index : categorical_indexes) {
             std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, int>> encoding_pair = one_hot_encoding(data_vec, index+total_vectors_added);
             std::vector<std::vector<std::string>> one_hot_vec = encoding_pair.first;
             std::unordered_map<std::string, int> one_hot_col_index = encoding_pair.second; // one_hot_col_index["categoryname"] = index
+            std::string column_name = data_vec[0][index+total_vectors_added];
 
             // drop the column as we will be inputting the one_hot_vec in its place
             data_vec = vector_drop_column(data_vec, index+total_vectors_added);
@@ -60,7 +67,7 @@ class DataHandler {
             total_vectors_added += one_hot_vec[0].size()-1; // need to keep track of all vectors added to keep indexing correct. "-1" because we also dropped a column earlier.
             std::cout << "vectors added: " << total_vectors_added << std::endl;
 
-            categorical_groups.push_back(one_hot_col_index); // push the updated mappings into the categorical groups for future reference
+            categorical_groups[column_name] = one_hot_col_index; // push the updated mappings into the categorical groups for future reference
 
         }
 
@@ -80,12 +87,12 @@ class DataHandler {
         }
 
         // set impute_vec values for category groups first, the value given will be the mode
-        for(int i = 0; i < categorical_groups.size(); i++) {
+        for(auto group = categorical_groups.begin(); group != categorical_groups.end(); group++) {
             // for each category group
             // keep track of current max for each index
             int curr_max = -1;
             int max_index = -1;
-            for(auto it = categorical_groups[i].begin(); it != categorical_groups[i].end(); it++) {
+            for(auto it = group->second.begin(); it != group->second.end(); it++) {
                 int col = it->second;
                 std::cout<<"col:"<<col<<std::endl;
                 for(int row = 0; row < double_vec.size(); row++) {
@@ -99,9 +106,9 @@ class DataHandler {
             }
 
             // iterate through all columns of the category group. If col is the max_index, set it to 1; set to 0 otherwise.
-            for(auto it = categorical_groups[i].begin(); it != categorical_groups[i].end(); it++) {
+            for(auto it = group->second.begin(); it != group->second.end(); it++) {
                 int col = it->second;
-                std::cout<<"Group:"<<i<<"\tCol:"<<it->first<<"\tIndex:"<<it->second<<std::endl;
+                std::cout<<"Group:"<<group->first<<"\tCol:"<<it->first<<"\tIndex:"<<it->second<<std::endl;
                 if(col == max_index) {
                     impute_vec[col] = 1;
                 }
@@ -126,7 +133,8 @@ class DataHandler {
             std::cout << "Col: " << col << "\tVal: " << impute_vec[col] << std::endl;
         }
 
-        return std::make_tuple(feature_name_vec, double_vec, impute_vec);
+        DataFrame *df = new DataFrame(feature_name_vec, double_vec, impute_vec, categorical_groups);
+        return df;
     }
 
     /// @brief Convert CSV into a 2D vector. More specifically, a vector containing a vector of strings.

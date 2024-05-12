@@ -7,9 +7,20 @@
  */
 
 // Create header guard
-#ifndef DATAHANDLER_H
-#define DATAHANDLER_H
+#ifndef SUGGESTIONGENERATOR_H
+#define SUGGESTIONGENERATOR_H
 
+#include <iostream>
+#include <vector>
 
+class SuggestionGenerator {
+    public:
+    SuggestionGenerator() {
+        
+    }
+    std::vector<double> get_closest_positive_prediction(std::vector<double> negative_point) {
 
-#endif // DATAHANDLER_H
+    }
+};
+
+#endif // SUGGESTIONGENERATOR_H
