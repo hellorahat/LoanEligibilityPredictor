@@ -12,14 +12,12 @@
 
 #include <iostream>
 #include <vector>
+#include <../Includes/DataFrame.h>
 
 class SuggestionGenerator {
     public:
-    SuggestionGenerator() {
+    std::vector<double> get_closest_positive_prediction(std::vector<double> negative_point, DataFrame df) {
         
-    }
-    std::vector<double> get_closest_positive_prediction(std::vector<double> negative_point) {
-
     }
 };
 
