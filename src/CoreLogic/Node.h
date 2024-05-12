@@ -1,8 +1,21 @@
+//Node.h
+/**
+  *@file Node.h
+  *@brief Header file for the Node class used in decision trees.
+  *Contains both declaration and implementation.
+  */
+
 #ifndef NODE_H
 #define NODE_H
 
 #include <memory>
 #include <vector>
+
+//**
+  *@class Node
+  *@brief Node class for decision tree nodes.
+  *This class represents a node in the decision tree.
+  */
 
 class Node{
 public:
@@ -16,4 +29,4 @@ public:
   int label;                                          //Class label assigned to a leaf node
   int gini_index;                                      // Gini index for the node, used in splitting criteria
 
-#endif
+#endif      //NODE_H
