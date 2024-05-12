@@ -20,11 +20,12 @@
 #include <unordered_map>
 #include <cctype>
 #include <regex>
+#include <random>
 
 class DataHandler {
     public:
 
-    std::tuple<std::vector<std::string>, std::vector<std::vector<double>>, std::vector<double>> processData(std::ifstream& input_csv, std::vector<int> categorical_indexes) {
+    std::tuple<std::vector<std::string>, std::vector<std::vector<double>>, std::vector<double>> process_data(std::ifstream& input_csv, std::vector<int> categorical_indexes) {
         // declare and initialize data_vec
         std::vector<std::vector<std::string>> data_vec;
         data_vec = csv_to_vector(input_csv);
@@ -35,25 +36,29 @@ class DataHandler {
 
         // modify data_vec to have one-hot encodings for all categorical columns.
         std::vector<std::unordered_map<std::string, int>> categorical_groups;
+        int total_vectors_added = 0; // keep track of total vectors added to keep indexing consistent
         for(int index : categorical_indexes) {
-            std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, int>> encoding_pair = one_hot_encoding(data_vec, index);
+            std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, int>> encoding_pair = one_hot_encoding(data_vec, index+total_vectors_added);
             std::vector<std::vector<std::string>> one_hot_vec = encoding_pair.first;
             std::unordered_map<std::string, int> one_hot_col_index = encoding_pair.second; // one_hot_col_index["categoryname"] = index
 
             // drop the column as we will be inputting the one_hot_vec in its place
-            data_vec = vector_drop_column(data_vec, index);
+            data_vec = vector_drop_column(data_vec, index+total_vectors_added);
 
             // for each row, insert the one-hot encoding into the index
             for(int row = 0; row < one_hot_vec.size(); row++) {
                 // insert the one-hot encoded data into the specified index
-                auto it = data_vec[row].begin() + index;
+                auto it = data_vec[row].begin() + index+total_vectors_added;
                 data_vec[row].insert(it, one_hot_vec[row].begin(), one_hot_vec[row].end());
             }
-            
+
+            total_vectors_added += one_hot_vec[0].size()-1; // need to keep track of all vectors added to keep indexing correct
+            std::cout << "vectors added: " << total_vectors_added << std::endl;
+
             // now that the one_hot_vec has been merged to the source vector, we need to update the mappings
             for(auto it = one_hot_col_index.begin(); it != one_hot_col_index.end(); it++) {
                 it->second += index;
-                std::cout << it->first << ":" << it->second << std::endl;
+                // std::cout << it->first << ":" << it->second << std::endl;
             }
             categorical_groups.push_back(one_hot_col_index); // push the updated mappings into the categorical groups for future reference
 
@@ -116,7 +121,6 @@ class DataHandler {
         for(size_t col = 0; col < impute_vec.size(); col++) {
             std::cout << "Col: " << col << "\tVal: " << impute_vec[col] << std::endl;
         }
-
 
         return std::make_tuple(feature_name_vec, double_vec, impute_vec);
     }
@@ -339,7 +343,7 @@ class DataHandler {
     /// @param data_vec The 2D vector that contains the data.
     /// @param test_size The percentage of the data that will be used for testing, by default it is 20% (0.2).
     /// @return A pair containing the training and testing 2D vectors respectively.
-    // std::pair<std::vector<std::vector<std::string>>,std::vector<std::vector<std::string>>> split_data(std::vector<std::vector<std::string>> data_vec, double test_size = 0.2) {
+    // std::pair<std::vector<std::vector<double>>, std::vector<std::vector<double>>> split_data(std::vector<std::vector<double>> data_vec, double test_size = 0.2) {
         
     // }
     
