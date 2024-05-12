@@ -24,6 +24,103 @@
 class DataHandler {
     public:
 
+    std::tuple<std::vector<std::string>, std::vector<std::vector<double>>, std::vector<double>> processData(std::ifstream& input_csv, std::vector<int> categorical_indexes) {
+        // declare and initialize data_vec
+        std::vector<std::vector<std::string>> data_vec;
+        data_vec = csv_to_vector(input_csv);
+        // declare the vectors that will be returned
+        std::vector<std::string> feature_name_vec;
+        std::vector<std::vector<double>> double_vec;
+        std::vector<double> impute_vec;
+
+        // modify data_vec to have one-hot encodings for all categorical columns.
+        std::vector<std::unordered_map<std::string, int>> categorical_groups;
+        for(int index : categorical_indexes) {
+            std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, int>> encoding_pair = one_hot_encoding(data_vec, index);
+            std::vector<std::vector<std::string>> one_hot_vec = encoding_pair.first;
+            std::unordered_map<std::string, int> one_hot_col_index = encoding_pair.second; // one_hot_col_index["categoryname"] = index
+
+            // drop the column as we will be inputting the one_hot_vec in its place
+            data_vec = vector_drop_column(data_vec, index);
+
+            // for each row, insert the one-hot encoding into the index
+            for(int row = 0; row < one_hot_vec.size(); row++) {
+                // insert the one-hot encoded data into the specified index
+                auto it = data_vec[row].begin() + index;
+                data_vec[row].insert(it, one_hot_vec[row].begin(), one_hot_vec[row].end());
+            }
+            
+            // now that the one_hot_vec has been merged to the source vector, we need to update the mappings
+            for(auto it = one_hot_col_index.begin(); it != one_hot_col_index.end(); it++) {
+                it->second += index;
+                std::cout << it->first << ":" << it->second << std::endl;
+            }
+            categorical_groups.push_back(one_hot_col_index); // push the updated mappings into the categorical groups for future reference
+
+        }
+
+        // set the feature_name_vec to the header
+        feature_name_vec = data_vec[0];
+
+        // drop the header (which contains the column names) and create a vector<vector<double>> that contains only the row entries of data.
+        // this is done so we can input double data type into random forest model
+        double_vec = vector_convert_to_double(vector_drop_row(data_vec,0));        
+
+        // impute_vec will contain the values that will be replaced in the case of missing data in a user's input
+        impute_vec.resize(double_vec[0].size());
+
+        // -1 means that the column was not given a replacement value yet
+        for(size_t col = 0; col < impute_vec.size(); col++) {
+            impute_vec[col] = -1;
+        }
+
+        // set impute_vec values for category groups first, the value given will be the mode
+        for(int i = 0; i < categorical_groups.size(); i++) {
+            // for each category group
+            
+            // keep track of current max for each index
+            int curr_max = -1;
+            int max_index = -1;
+            for(auto it = categorical_groups[i].begin(); it != categorical_groups[i].end(); it++) {
+                int col = it->second;
+                for(int row = 0; row < double_vec.size(); row++) {
+                    if(impute_vec[col] == -1) impute_vec[col] = 0;
+                    impute_vec[col] += double_vec[row][col];
+                    if(impute_vec[col] > curr_max) {
+                        curr_max = impute_vec[col];
+                        max_index = col;
+                    }
+                }
+            }
+
+            // iterate through all columns of the category group. If col is the max_index, set it to 1; set to 0 otherwise.
+            for(auto it = categorical_groups[i].begin(); it != categorical_groups[i].end(); it++) {
+                int col = it->second;
+                if(col == max_index) 
+                    impute_vec[col] = 1;
+                else
+                    impute_vec[col] = 0;
+            }
+        }
+
+        // now set impute_vec values for numerical columns, the value given will be the mean for the column
+        for(size_t col = 0; col < impute_vec.size(); col++) {
+            if(impute_vec[col] != -1) continue; // if the value was already given (for categorical group) we skip the column
+            for(size_t row = 0; row < double_vec.size(); row++) {
+                if(impute_vec[col] == -1) impute_vec[col] = 0;
+                impute_vec[col] += double_vec[row][col];
+            }
+            impute_vec[col] /= double_vec.size();
+        }
+
+        for(size_t col = 0; col < impute_vec.size(); col++) {
+            std::cout << "Col: " << col << "\tVal: " << impute_vec[col] << std::endl;
+        }
+
+
+        return std::make_tuple(feature_name_vec, double_vec, impute_vec);
+    }
+
     /// @brief Convert CSV into a 2D vector. More specifically, a vector containing a vector of strings.
     /// @param input_csv An input stream (std::ifstream) containing CSV data to be converted into a 2D vector. The CSV data should follow standard CSV format. The input stream should be open and ready for reading before calling this function.
     /// @return A 2D vector containing the CSV data converted into a structured format. Each element of the outer vector represents a row of the CSV data, and each element of the inner vectors represents a field (comma-separated value) of the corresponding row.
@@ -53,12 +150,46 @@ class DataHandler {
         return csv_data;
     }
 
+    // vector_to_csv for vector<vector<string>>
     void vector_to_csv(std::vector<std::vector<std::string>> data_vec, std::string csv_name) {
         std::ofstream myfile;
         myfile.open(csv_name + ".csv");
         for(size_t row = 0; row < data_vec.size(); row++) {
             for(size_t col = 0; col < data_vec[0].size(); col++) {
-                myfile << data_vec[row][col] << ",";
+                myfile << data_vec[row][col];
+                if(col != data_vec[0].size()-1) myfile << ",";
+            }
+            myfile << std::endl;
+        }
+        myfile.close();
+    }
+    // vector_to_csv for vector<string>, vector<vector<double>>
+    void vector_to_csv(std::vector<std::string> feature_names, std::vector<std::vector<double>> double_vec, std::string csv_name) {
+        std::ofstream myfile;
+        myfile.open(csv_name + ".csv");
+        for(size_t col = 0; col < feature_names.size(); col++) {
+            myfile << feature_names[col];
+            if(col != feature_names.size()-1) myfile << ",";
+        }
+        myfile << std::endl;
+        for(size_t row = 0; row < double_vec.size(); row++) {
+            for(size_t col = 0; col < double_vec[0].size(); col++) {
+                myfile << double_vec[row][col];
+                if(col != double_vec[0].size()-1) myfile << ",";
+            }
+            myfile << std::endl;
+        }
+        myfile.close();
+    }
+
+    // vector_to_csv for vector<vector<double>>
+    void vector_to_csv(std::vector<std::vector<double>> data_vec, std::string csv_name) {
+        std::ofstream myfile;
+        myfile.open(csv_name + ".csv");
+        for(size_t row = 0; row < data_vec.size(); row++) {
+            for(size_t col = 0; col < data_vec[0].size(); col++) {
+                myfile << data_vec[row][col];
+                if(col != data_vec[0].size()-1) myfile << ",";
             }
             myfile << std::endl;
         }
@@ -83,15 +214,13 @@ class DataHandler {
     /// @param row_index The index of the row to drop from the vector.
     /// @return A modified 2D vector with the specified row removed.
     std::vector<std::vector<std::string>> vector_drop_row(std::vector<std::vector<std::string>> data_vec, int row_index) {
-        std::cout << "Dropping row: " << row_index << std::endl;
         if (row_index >= 0 && row_index < data_vec.size()) {
             data_vec.erase(data_vec.begin() + row_index); // Erase row at the specified index
         }
         return data_vec;
     }
 
-    /// @brief Cleans the dataset by removing strings from majority integer datasets and by removing integers from majority string datasets. This is intended to remove data entry mistakes. Also removes trailing whitespace and control characters from strings encountered.
-    /// @param data_vec The 2D vector dataset to be cleaned.
+    /// @brief Cleans the dataset by removing strings from majority integer datasets and by removing integers from majority string datasets. This is intended to remove data entry mistakes.
     /// @return The cleaned 2D vector.
     std::vector<std::vector<std::string>> clean_vector_data(std::vector<std::vector<std::string>> data_vec) {
         for(size_t col = 0; col < data_vec[0].size(); col++) {
@@ -132,11 +261,28 @@ class DataHandler {
         return data_vec;
     }
 
-    // std::vector<std::string> get_default_impute_values() {
+    std::vector<std::vector<double>> vector_convert_to_double(std::vector<std::vector<std::string>> data_vec) {
+        // declare variable to hold the converted vector
+        std::vector<std::vector<double>> double_vec;
 
-    // }
+        // convert each entry into double
+        for(size_t row = 0; row < data_vec.size(); row++) {
+            std::vector<double> doubleRow;
+            for(size_t col = 0; col < data_vec[row].size(); col++) {
+                try {
+                    double val = std::stod(data_vec[row][col]); // this variable will hold the converted value
+                    doubleRow.push_back(val);
+                } catch(...) {
+                    doubleRow.push_back(0.0);
+                    std::cout << "Conversion error: " << data_vec[row][col];
+                }
+            }
+            double_vec.push_back(doubleRow);
+        }
+        return double_vec;
+    }
 
-    std::vector<std::vector<std::string>> one_hot_encoding(std::vector<std::vector<std::string>> data_vec, int categoricalIndex) {
+    std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, int>> one_hot_encoding(std::vector<std::vector<std::string>> data_vec, int categoricalIndex) {
         // declare the one hot encoding vector
         std::vector<std::vector<std::string>> one_hot_vec;
         // the encoding has the same amount of rows as the source data vector
@@ -170,67 +316,7 @@ class DataHandler {
             }
         }
 
-        return one_hot_vec;
-    }
-
-    /// @brief Fills in missing categorical data with the most occurring category, and fills in missing integer data with the mean.
-    /// @param data_vec The 2D vector to impute.
-    /// @param categorical_indexes A std::vector<int> containing the column indexes of all categorical values.
-    /// @return The imputed 2D vector.
-    std::vector<std::vector<std::string>> impute_data(std::vector<std::vector<std::string>> data_vec, std::vector<int> categorical_indexes) {
-        for(size_t col = 0; col < data_vec[0].size(); col++) {
-            auto it = std::find(categorical_indexes.begin(), categorical_indexes.end(), static_cast<int>(col));
-            if(it != categorical_indexes.end()) { // is categorical
-                /*
-                    declare unordered_map to count occurrence, impute missing data with most occurring category
-                    e.g: occurrence_map["Yes"] = 123, occurrence_map["No"] = 432 || Missing values will be replaced with "No" since it occured more often.
-                */ 
-                std::unordered_map<std::string, int> occurrence_map;
-
-                // count occurrences
-                for(size_t row = 1; row < data_vec.size(); row++) {
-                    std::string cell = data_vec[row][col];
-                    if(cell == "NULL") continue;
-                    occurrence_map[cell]++;
-                }
-                
-                // find the most occurring category
-                std::string most_occurring_category = most_occurred_key_in_map(occurrence_map);
-
-                // replace NULL values
-                for(size_t row = 1; row < data_vec.size(); row++) {
-                    if(data_vec[row][col] != "NULL") continue;
-                    data_vec[row][col] = most_occurring_category;
-                }
-
-            } else { // not categorical
-                // Replace non-categorical NULL values with the mean
-
-                double sum = 0;
-                size_t count = 0;
-                // calculate mean
-                for(size_t row = 1; row < data_vec.size(); row++) {
-                    if(data_vec[row][col] == "NULL") continue;
-                    try {
-                        double cell = std::stod(data_vec[row][col]);
-                        sum += cell;
-                        count++;
-                    } catch(...) {
-                        continue;
-                    }
-                }
-                // replace NULL values
-                for(size_t row = 1; row < data_vec.size(); row++) {
-                    if(data_vec[row][col] != "NULL") continue;
-                    if(!count) { // avoid division by 0
-                        data_vec[row][col] = "0"; 
-                        continue;    
-                    }
-                    data_vec[row][col] = std::to_string(sum/count);
-                }
-            }
-        }
-        return data_vec;
+        return std::make_pair(one_hot_vec, one_hot_col_index);
     }
 
     /// @brief 
@@ -256,51 +342,11 @@ class DataHandler {
     // std::pair<std::vector<std::vector<std::string>>,std::vector<std::vector<std::string>>> split_data(std::vector<std::vector<std::string>> data_vec, double test_size = 0.2) {
         
     // }
-
-    
-    /// @brief Returns all column names of a 2D vector that was created from a csv.
-    /// @param data_vec The 2D vector to obtain the column names from.
-    /// @return A std::vector<std::string> containing the column names.
-    std::vector<std::string> vector_column_names(std::vector<std::vector<std::string>> data_vec) {
-        return data_vec.front();
-    }
-
-    /// @brief Prints the contents of a 2D vector that was created from a csv.
-    /// @param data_vec The 2D vector to print the contents of.
-    void print_vector_data(std::vector<std::vector<std::string>> data_vec) {
-        for (const auto& row : data_vec) {
-            bool first_column = true; // comma won't be placed before first column
-            for (const auto& cell : row) {
-                if (!first_column) {
-                    std::cout << ",";
-                }
-                std::cout << cell;
-                first_column = false;
-            }
-            std::cout << std::endl;
-        }
-    }
-
-    /// @brief Returns a vector<int> of the indexes of all categorical indexes found in a 2D vector.
-    /// @param data_vec The 2D vector to find any categorical values from.
-    /// @return A vector<int> containing all column indexes where categorical values exist.
-    std::vector<int> get_categorical_indexes(std::vector<std::vector<std::string>> data_vec) {
-        std::vector<int> categorical_indexes;
-
-        for(size_t col = 0; col < data_vec[0].size(); col++) {
-            for(size_t row = 1; row < data_vec.size(); row++) { // Skip the 0th row, since that just contains the column names
-                std::string cell = data_vec[row][col];
-                if(cell == "NULL") continue;
-                if(!is_number(cell)) { // if a cell is found to not be a number, then we assume that it is a categorical value
-                    categorical_indexes.push_back(col);
-                    break;
-                }
-            }
-        }
-        return categorical_indexes;
-    }
     
     private:
+
+    
+
     /// @brief Returns true if a string represents a number, false otherwise.
     /// @param s The string to check.
     /// @return bool indicating whether the string represents a number or not. (True if it is a number)
