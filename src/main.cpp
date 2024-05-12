@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
     data_handler.vector_to_csv(feature_name_vec, double_vec, "one-hot-encoded-vector");
 
-    // split the data into training and testing vectors
+    
 
     
     return 0;

@@ -52,14 +52,14 @@ class DataHandler {
                 data_vec[row].insert(it, one_hot_vec[row].begin(), one_hot_vec[row].end());
             }
 
-            total_vectors_added += one_hot_vec[0].size()-1; // need to keep track of all vectors added to keep indexing correct
-            std::cout << "vectors added: " << total_vectors_added << std::endl;
-
             // now that the one_hot_vec has been merged to the source vector, we need to update the mappings
             for(auto it = one_hot_col_index.begin(); it != one_hot_col_index.end(); it++) {
-                it->second += index;
-                // std::cout << it->first << ":" << it->second << std::endl;
+                it->second += index+total_vectors_added;
             }
+
+            total_vectors_added += one_hot_vec[0].size()-1; // need to keep track of all vectors added to keep indexing correct. "-1" because we also dropped a column earlier.
+            std::cout << "vectors added: " << total_vectors_added << std::endl;
+
             categorical_groups.push_back(one_hot_col_index); // push the updated mappings into the categorical groups for future reference
 
         }
@@ -82,15 +82,15 @@ class DataHandler {
         // set impute_vec values for category groups first, the value given will be the mode
         for(int i = 0; i < categorical_groups.size(); i++) {
             // for each category group
-            
             // keep track of current max for each index
             int curr_max = -1;
             int max_index = -1;
             for(auto it = categorical_groups[i].begin(); it != categorical_groups[i].end(); it++) {
                 int col = it->second;
+                std::cout<<"col:"<<col<<std::endl;
                 for(int row = 0; row < double_vec.size(); row++) {
                     if(impute_vec[col] == -1) impute_vec[col] = 0;
-                    impute_vec[col] += double_vec[row][col];
+                    impute_vec[col]++;
                     if(impute_vec[col] > curr_max) {
                         curr_max = impute_vec[col];
                         max_index = col;
@@ -101,11 +101,15 @@ class DataHandler {
             // iterate through all columns of the category group. If col is the max_index, set it to 1; set to 0 otherwise.
             for(auto it = categorical_groups[i].begin(); it != categorical_groups[i].end(); it++) {
                 int col = it->second;
-                if(col == max_index) 
+                std::cout<<"Group:"<<i<<"\tCol:"<<it->first<<"\tIndex:"<<it->second<<std::endl;
+                if(col == max_index) {
                     impute_vec[col] = 1;
+                }
                 else
                     impute_vec[col] = 0;
             }
+
+            std::cout<<"------------------------"<<std::endl;
         }
 
         // now set impute_vec values for numerical columns, the value given will be the mean for the column
@@ -277,7 +281,7 @@ class DataHandler {
                     double val = std::stod(data_vec[row][col]); // this variable will hold the converted value
                     doubleRow.push_back(val);
                 } catch(...) {
-                    doubleRow.push_back(0.0);
+                    doubleRow.push_back(0.0); // if conversion failed, place 0.0 instead
                     std::cout << "Conversion error: " << data_vec[row][col];
                 }
             }
@@ -337,19 +341,7 @@ class DataHandler {
 
         // Convert the set to a vector and return
         return std::vector<std::string>(unique_names.begin(), unique_names.end());
-    }
-
-    /// @brief Randomly splits a dataset into two 2D vectors, one for training and one for testing.
-    /// @param data_vec The 2D vector that contains the data.
-    /// @param test_size The percentage of the data that will be used for testing, by default it is 20% (0.2).
-    /// @return A pair containing the training and testing 2D vectors respectively.
-    // std::pair<std::vector<std::vector<double>>, std::vector<std::vector<double>>> split_data(std::vector<std::vector<double>> data_vec, double test_size = 0.2) {
-        
-    // }
-    
-    private:
-
-    
+    }    
 
     /// @brief Returns true if a string represents a number, false otherwise.
     /// @param s The string to check.
