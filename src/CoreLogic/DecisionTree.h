@@ -4,25 +4,162 @@
 #include "Node.h"
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <limits>
 
 class DecisionTree {
 public:
   DecisionTree() : root (new Node()){}                                    //Constructor initializes the tree with a root node
   void train(const vector<vector<double>>& data_vec){
     cout << "Training Decision Tree..." <<endl;
-    for (size_t row = 0; row < data_vec.size(); row++){
-      for (size_t col=0; col < data_vec[row].size(); col++){
-        double current_iteration = data_vec[row][col];
-      }
-    }
+    build_tree(root.get(), data_vec,0,data_vec.size());
   }
 int predict(const vector<double>& feature){
   cout<<"Predicting with Decision Trees..." <<endl;
-  return 0;                                                        //placeholder return
+  Node* node = root.get();
+  while (!node->is_leaf){
+    if(feature[node->feature_index] < node ->threshold){
+      node = node->left.get();
+    } else {
+      node = node->right.get();
+    }
 }
+return node->label;
+}
+
 private:
   unique_ptr<Node> root;                                          //Unique pointer to the root node of decision tree
-  void build_tree(Node*& node, const vector<vector<double>>& data_vec, size_t start, size_t end);                      //Recursive function to build the tree
+  void build_tree(Node*& node, const vector<vector<double>>& data_vec, size_t start, size_t end){
+    if(start >= end) return;
+
+    //determine if this node should be a leaf
+    if (should_be_leaf(data_vec, start, end)){
+      node -> is_leaf = true;
+      node -> label = determine_label(data_vec, start, end);
+      return;
+    }
+    
+    //Find the best split
+    int best_feature;
+    double best_threshold;
+    double best_gini = numeric_limits<double>::max();
+    for (size_t feature_index = 0; feature_index < data_vec[0].size(); ++ feature_index){
+      auto result = find_best_split(data_vec, start, end, feature_index);
+      if (result.gini < best_gini){
+        best_gini = result.gini;
+        best_feature = feature_index;
+        best_threshold = result.threshold;
+      }
+    }
+
+    //set the node's properties
+    node -> feature_index = best_feature;
+    ndoe -> threshold = best_threshold;
+    node -> gini_index = best_gini;
+
+    //recursively build the left and right subtrees
+    node->left.reset(new Node());
+    node->right.reset(new Node());
+    size_t split_index = partition_data (data_vec, start, end, best_feature, best_threshold);
+    build_tree(node->left.get(), data_vec, start, split_index);
+    build_tree(node->right.get(), data_vec, split_index, end);
+  }
+
+  bool should_be_leaf(const vector<vector<double>>& data_vec, size_t start, size_t end){
+    //Example stopping condition: if all data points have the same label
+    int first_label = data_vec[start].back();
+    for (size_t i = start + 1; i < end; ++i){
+      if (data_vec[i].back() != first_label){
+        return false;
+      }
+    }
+  return true;
+  }
+
+  int determine_label(const vector<vector<double>>& data_vec, size_t start, size_t end){
+    //Majority voting for label
+    map<int, int> label_counts;
+    for (size_t i = start; i < end; ++i){
+      int label = data_vec[i].back();
+      label_count[label]++;
+    }
+    int majority_label = -1;
+    int max_count = 0;
+    for(auto& pair : label_counts){
+      if (pair.second > max_count){
+        max_count = pair.second;
+        majority_label = pair.first;
+      }
+    }
+    return majority_label;
+  }
+
+struct SplitResult {
+  double gini;
+  double threshold
+};
+
+SplitResult find_best_split(const vector<vector<double>>& data_vec, size_t start, size_t end, size_t feature_index){
+  vector<double> values;
+  for (size_t i = start; i < end; ++i){
+    values.push_back(data_vec[i][feature_index]);
+  }
+  sort(value.begin(), value.end());
+
+  double best_gini = numeric_limits<double>::max();
+  double best_threshold = 0;
+
+  for (size_t i = 1; i < values.size(); ++i){
+    double threshold = (value[i - 1] + values[i])/2;
+    double gini = calculate_gini_index(data_vec, start, end, feature_index, threshold);
+    if (gini < best_gini){
+      best_gini = gini;
+      best_threshold = threshold;
+    }
+  }
+
+  return {best_gini, best_threshold};
+}
+
+size_t partition_data (const vector<vector<double>>& data_vec, size_t start, size_t end, int feature_index, double threshold){
+  size_t mid = start;
+  for (size_t i = start; i < end; ++i){
+    if(data_vec[i][feature_index] < threshold){
+      swap(data_vec[mid], data_vec[i]);
+      mid++;
+    }
+  }
+  return mid;
+}
+
+double calculate_gini_index(const vector<vector<double>>& data_vec, size_t start, size_t end, size_t feature_index, double threshold){
+  map<int,int> left_counts, right_counts;
+  int left_size = 0, right_size = 0;
+
+  for (size_t i = start, i < end, ++i){
+    int label = data_vec[i].back();
+    if (data_vec[i][feature_index] < threshold){
+      left_counts[label]++;
+      left_size++;
+  } else {
+    right_counts[label]++;
+    right_size++;
+  }
+}
+
+double left_gini = 1.0, right_gini = 1.0;
+for (auto& pair : left_counts){
+  double p = pair.second/(double)left_size;
+  left_gini -= p * p;
+}
+
+//weighted average of the Gini index
+return (left_gini* left_size + right_gini * right_size) / (left_size + right_size);
+}
+
+private:
+  unquire_prt<Node> root;                                                                    //unique pointer to the root node of the decision tree
+  void build_tree(Node*& node, the vector<vector<double>>& data_vec, size_t start, size_t end);  //recursive function to build the tree
 };
 
 #endif
