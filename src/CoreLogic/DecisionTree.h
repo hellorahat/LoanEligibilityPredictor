@@ -1,3 +1,10 @@
+//DecisionTree.h
+/**
+  *@file DecisionTree.h
+  *@brief Header file for the DecisionTree class
+  *Contain both declaraction and implementation
+*/
+
 #infdef DECISIONTREE_H
 #define DECISIONTREE_H
 
@@ -6,6 +13,12 @@
 #include <vector>
 #include <algorithm>
 #include <limits>
+
+/**
+  *@class DecisionTree
+  *@brief DecisionTree class for creating and managing a decision tree
+*This class handles the logic for building and using a decision tree.
+*/
 
 class DecisionTree {
 public:
@@ -162,4 +175,4 @@ private:
   void build_tree(Node*& node, the vector<vector<double>>& data_vec, size_t start, size_t end);  //recursive function to build the tree
 };
 
-#endif
+#endif  //DECISIONTREE_H
