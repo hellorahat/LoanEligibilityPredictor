@@ -16,18 +16,20 @@
 
 /**
   *@class DecisionTree
-  *@brief DecisionTree class for creating and managing a decision tree
-*This class handles the logic for building and using a decision tree.
+  *@brief Manage the creation and operation of a decision tree.
+  *
+*This class provides functionality to build and use a decision tree for classification tasks.
+*It includes methods for training the tree based on provided data and predicting class labels for new data instances.
 */
 
 class DecisionTree {
 public:
-  DecisionTree() : root (new Node()){}                                    //Constructor initializes the tree with a root node
-  void train(const vector<vector<double>>& data_vec){
+  DecisionTree() : root (new Node()){}                                    //< Constructor initializes the tree with a root node.
+  void train(const vector<vector<double>>& data_vec){                    //< Trains the decision tree using the provided 
     cout << "Training Decision Tree..." <<endl;
     build_tree(root.get(), data_vec,0,data_vec.size());
   }
-int predict(const vector<double>& feature){
+int predict(const vector<double>& feature){                              //< predicts the class label for the given features.
   cout<<"Predicting with Decision Trees..." <<endl;
   Node* node = root.get();
   while (!node->is_leaf){
@@ -41,8 +43,8 @@ return node->label;
 }
 
 private:
-  unique_ptr<Node> root;                                          //Unique pointer to the root node of decision tree
-  void build_tree(Node*& node, const vector<vector<double>>& data_vec, size_t start, size_t end){
+  unique_ptr<Node> root;                                          //< Unique pointer to the root node of decision tree
+  void build_tree(Node*& node, const vector<vector<double>>& data_vec, size_t start, size_t end){      //< Recursive function to build the tree.
     if(start >= end) return;
 
     //determine if this node should be a leaf
@@ -78,7 +80,7 @@ private:
     build_tree(node->right.get(), data_vec, split_index, end);
   }
 
-  bool should_be_leaf(const vector<vector<double>>& data_vec, size_t start, size_t end){
+  bool should_be_leaf(const vector<vector<double>>& data_vec, size_t start, size_t end){            //< Determine if the current node should be a leaf.
     //Example stopping condition: if all data points have the same label
     int first_label = data_vec[start].back();
     for (size_t i = start + 1; i < end; ++i){
@@ -89,7 +91,7 @@ private:
   return true;
   }
 
-  int determine_label(const vector<vector<double>>& data_vec, size_t start, size_t end){
+  int determine_label(const vector<vector<double>>& data_vec, size_t start, size_t end){         //< Determine the label of the leaf node based on majority voting.
     //Majority voting for label
     map<int, int> label_counts;
     for (size_t i = start; i < end; ++i){
@@ -108,11 +110,11 @@ private:
   }
 
 struct SplitResult {
-  double gini;
-  double threshold
+  double gini;                  //< Gini index of the split.
+  double threshold;             //< Threshold value of the split.
 };
 
-SplitResult find_best_split(const vector<vector<double>>& data_vec, size_t start, size_t end, size_t feature_index){
+SplitResult find_best_split(const vector<vector<double>>& data_vec, size_t start, size_t end, size_t feature_index){              //< Finds the best split based on Gini index.
   vector<double> values;
   for (size_t i = start; i < end; ++i){
     values.push_back(data_vec[i][feature_index]);
@@ -134,7 +136,7 @@ SplitResult find_best_split(const vector<vector<double>>& data_vec, size_t start
   return {best_gini, best_threshold};
 }
 
-size_t partition_data (const vector<vector<double>>& data_vec, size_t start, size_t end, int feature_index, double threshold){
+size_t partition_data (const vector<vector<double>>& data_vec, size_t start, size_t end, int feature_index, double threshold){    //< Partitions the data into left and right based on the threshold.
   size_t mid = start;
   for (size_t i = start; i < end; ++i){
     if(data_vec[i][feature_index] < threshold){
@@ -145,7 +147,7 @@ size_t partition_data (const vector<vector<double>>& data_vec, size_t start, siz
   return mid;
 }
 
-double calculate_gini_index(const vector<vector<double>>& data_vec, size_t start, size_t end, size_t feature_index, double threshold){
+double calculate_gini_index(const vector<vector<double>>& data_vec, size_t start, size_t end, size_t feature_index, double threshold){     //< Calculates the Gini index for a given split.
   map<int,int> left_counts, right_counts;
   int left_size = 0, right_size = 0;
 
