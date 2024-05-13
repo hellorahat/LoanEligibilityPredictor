@@ -1,15 +1,37 @@
+/**
+  *@file RandomForest.h
+  *@brief Header file the RandomForest class.
+  *Contain both declaration and implementation.
+  */
+
 #ifndef RANDOMFOREST_H
 #define RANDOMFOREST_H
 
-#include <DecisionTree.h>
+#include "DecisionTree.h"
 #include <vector>
 #include <cstdlib>
 
 using namespace std;
 
+/**
+  *@class RandomForest
+  *@brief Manage the creation and operation of a random forest.
+  *
+  *This class encapsulates a collection of decision trees to form a random forest.
+  *It provides methods to train the forest using bagging and to predict class labels using majority voting among the tree.
+  */
+
 class RandomForest{
 public:
+  /**
+    *@brief Constructor that initializes the forest with a specified number of trees.
+    *@param num_trees Number of trees to include in the forest.
+    */
   RandomForest(int num_trees): num_trees_(num_trees), trees_(num_trees){}          //Constructor initializes the forest with a specified number of trees
+  /**
+    *@brief Trains the random forest using the provided dataset.
+    *@param data_vec Data used for training the random forest. Each tree is train on a bootstrap sample of this data.
+    */
   void train (const vector<vector<double>>& data_vec){
     cout <<"Training "<<num_trees_ << " trees with bagging..." << endl;
     int num_samples = data_vec.size();
@@ -22,6 +44,12 @@ public:
     tree.train(sample_data_vec);
   }
 }
+/**
+  *@brief Predict the class label for the given feature using majority voting among all trees.
+  *@param feature Vcetor of feature for which the class label is predicted.
+  *@return The predicted class label, determined by majority vote.
+  */
+
 int predict(const vector<double>& feature){
   vector<int> votes(num_trees_,0);
   for (auto& tree : trees_){
@@ -36,4 +64,4 @@ private:
   vector<DecisionTree> trees_;                                     //Vector of decision trees
 }
 
-#endif  
+#endif  //RANDOMFOREST_H
