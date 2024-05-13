@@ -15,8 +15,13 @@
 #include <cmath>
 #include "../Includes/DataFrame.h"
 
+/// @brief For negatively classified predictions, this class finds the closest positive evaluation within the same categories (the credit policy and purpose will be the same) of the negative entries.
 class SuggestionGenerator {
     public:
+    /// @brief Returns the closest positive data point within the same categories of the negative data point.
+    /// @param negative_point The negatively classified point.
+    /// @param df The DataFrame object to search in.
+    /// @return The closest positive data point within the same category.
     std::vector<double> get_closest_positive_prediction(std::vector<double> negative_point, DataFrame *df) {
         int curr_max_dist = -1;
         int curr_max_row_index = -1;
@@ -36,6 +41,10 @@ class SuggestionGenerator {
         }
         return df->get_data_vec()[curr_max_row_index];
     }
+    /// @brief Calculates the manhattan distance between two vectors.
+    /// @param p1 Point 1
+    /// @param p2 Point 2
+    /// @return Distance between the two vectors.
     double distance_between_points(std::vector<double> p1, std::vector<double> p2) {
         double current_distance = 0.0;
         for(size_t col = 0; col < p1.size(); col++) {

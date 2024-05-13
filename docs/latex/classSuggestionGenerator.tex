@@ -1,0 +1,69 @@
+\hypertarget{classSuggestionGenerator}{}\doxysection{Suggestion\+Generator Class Reference}
+\label{classSuggestionGenerator}\index{SuggestionGenerator@{SuggestionGenerator}}
+
+
+For negatively classified predictions, this class finds the closest positive evaluation within the same categories (the credit policy and purpose will be the same) of the negative entries.  
+
+
+
+
+{\ttfamily \#include $<$Suggestion\+Generator.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classSuggestionGenerator_a1c3ea2a7595e95376ea20ac005ec6027}{get\+\_\+closest\+\_\+positive\+\_\+prediction}} (std\+::vector$<$ double $>$ negative\+\_\+point, \mbox{\hyperlink{classDataFrame}{Data\+Frame}} $\ast$df)
+\begin{DoxyCompactList}\small\item\em Returns the closest positive data point within the same categories of the negative data point. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSuggestionGenerator_a19fd0e56fc9623cb23cd06e0318297a1}{distance\+\_\+between\+\_\+points}} (std\+::vector$<$ double $>$ p1, std\+::vector$<$ double $>$ p2)
+\begin{DoxyCompactList}\small\item\em Calculates the manhattan distance between two vectors. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+For negatively classified predictions, this class finds the closest positive evaluation within the same categories (the credit policy and purpose will be the same) of the negative entries. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSuggestionGenerator_a19fd0e56fc9623cb23cd06e0318297a1}\label{classSuggestionGenerator_a19fd0e56fc9623cb23cd06e0318297a1}} 
+\index{SuggestionGenerator@{SuggestionGenerator}!distance\_between\_points@{distance\_between\_points}}
+\index{distance\_between\_points@{distance\_between\_points}!SuggestionGenerator@{SuggestionGenerator}}
+\doxysubsubsection{\texorpdfstring{distance\_between\_points()}{distance\_between\_points()}}
+{\footnotesize\ttfamily double Suggestion\+Generator\+::distance\+\_\+between\+\_\+points (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$}]{p1,  }\item[{std\+::vector$<$ double $>$}]{p2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Calculates the manhattan distance between two vectors. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p1} & Point 1 \\
+\hline
+{\em p2} & Point 2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Distance between the two vectors. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSuggestionGenerator_a1c3ea2a7595e95376ea20ac005ec6027}\label{classSuggestionGenerator_a1c3ea2a7595e95376ea20ac005ec6027}} 
+\index{SuggestionGenerator@{SuggestionGenerator}!get\_closest\_positive\_prediction@{get\_closest\_positive\_prediction}}
+\index{get\_closest\_positive\_prediction@{get\_closest\_positive\_prediction}!SuggestionGenerator@{SuggestionGenerator}}
+\doxysubsubsection{\texorpdfstring{get\_closest\_positive\_prediction()}{get\_closest\_positive\_prediction()}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Suggestion\+Generator\+::get\+\_\+closest\+\_\+positive\+\_\+prediction (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$}]{negative\+\_\+point,  }\item[{\mbox{\hyperlink{classDataFrame}{Data\+Frame}} $\ast$}]{df }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the closest positive data point within the same categories of the negative data point. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em negative\+\_\+point} & The negatively classified point. \\
+\hline
+{\em df} & The \mbox{\hyperlink{classDataFrame}{Data\+Frame}} object to search in. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The closest positive data point within the same category. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Core\+Logic/\mbox{\hyperlink{SuggestionGenerator_8h}{Suggestion\+Generator.\+h}}\end{DoxyCompactItemize}

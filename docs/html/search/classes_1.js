@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['node_14',['Node',['../classNode.html',1,'']]]
+  ['randomforest_41',['RandomForest',['../classRandomForest.html',1,'']]]
 ];

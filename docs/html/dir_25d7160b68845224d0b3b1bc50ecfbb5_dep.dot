@@ -1,0 +1,11 @@
+digraph "src/CoreLogic" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_68267d1309a1af8e8297ef4c3efbcdba {
+    graph [ bgcolor="#ddddee", pencolor="black", label="src" fontname="Helvetica", fontsize="10", URL="dir_68267d1309a1af8e8297ef4c3efbcdba.html"]
+  dir_2a2e13dd651d9f4dfc9d1ceadd85b622 [shape=box label="Includes" URL="dir_2a2e13dd651d9f4dfc9d1ceadd85b622.html"];
+  dir_25d7160b68845224d0b3b1bc50ecfbb5 [shape=box, label="CoreLogic", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_25d7160b68845224d0b3b1bc50ecfbb5.html"];
+  }
+  dir_25d7160b68845224d0b3b1bc50ecfbb5->dir_2a2e13dd651d9f4dfc9d1ceadd85b622 [headlabel="1", labeldistance=1.5 headhref="dir_000001_000003.html"];
+}

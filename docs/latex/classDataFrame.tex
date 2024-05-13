@@ -1,0 +1,314 @@
+\hypertarget{classDataFrame}{}\doxysection{Data\+Frame Class Reference}
+\label{classDataFrame}\index{DataFrame@{DataFrame}}
+
+
+Provides an object to hold the different vectors used by the Random Forest Model. Also contains useful utility functions.  
+
+
+
+
+{\ttfamily \#include $<$Data\+Frame.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_a69a9dc47b7506b8062fd34aedacbf579}\label{classDataFrame_a69a9dc47b7506b8062fd34aedacbf579}} 
+\mbox{\hyperlink{classDataFrame_a69a9dc47b7506b8062fd34aedacbf579}{Data\+Frame}} ()
+\begin{DoxyCompactList}\small\item\em Empty constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classDataFrame_a5c26f1c8436159bd78fc13439d1d1ad7}{Data\+Frame}} (std\+::vector$<$ std\+::string $>$ feature\+\_\+names, std\+::vector$<$ std\+::vector$<$ double $>$$>$ data, std\+::vector$<$ double $>$ impute\+\_\+vals, std\+::unordered\+\_\+map$<$ std\+::string, std\+::unordered\+\_\+map$<$ std\+::string, int $>$$>$ categories)
+\begin{DoxyCompactList}\small\item\em Constructor for a dataframe. It contains the feature\+\_\+name\+\_\+vec, data\+\_\+vec, impute\+\_\+vec, and categorical\+\_\+groups. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{classDataFrame_a59c6264e00330428f8017ab6a5b9ab88}{get\+\_\+feature\+\_\+name\+\_\+vec}} ()
+\begin{DoxyCompactList}\small\item\em Getter method for returning the feature name vector. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDataFrame_a61b585b74edc3c42152354dcf1c90ca7}\label{classDataFrame_a61b585b74edc3c42152354dcf1c90ca7}} 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ {\bfseries get\+\_\+data\+\_\+vec} ()
+\item 
+\mbox{\Hypertarget{classDataFrame_a4c74c4759c9da32055c372a7749b1984}\label{classDataFrame_a4c74c4759c9da32055c372a7749b1984}} 
+std\+::vector$<$ double $>$ {\bfseries get\+\_\+impute\+\_\+vec} ()
+\item 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::unordered\+\_\+map$<$ std\+::string, int $>$ $>$ \mbox{\hyperlink{classDataFrame_a99296a1e02872aaac85fff218ff3c19b}{get\+\_\+categorical\+\_\+groups}} ()
+\begin{DoxyCompactList}\small\item\em Column names are mapped to all of the categories in that column, all the categories are mapped to their index in the dataset vector. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classDataFrame_a01a0234a2f6d60995a08a83b44a99db9}{get\+\_\+col\+\_\+index\+\_\+from\+\_\+feature\+\_\+name}} (std\+::string feature\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Given a feature name, returns the column index of that feature. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classDataFrame_a4ba87d10bf85fb9b577e071ad7b3bc01}{get\+\_\+feature\+\_\+name\+\_\+from\+\_\+col\+\_\+index}} (int index)
+\begin{DoxyCompactList}\small\item\em Given a column index, returns the feature name. \end{DoxyCompactList}\item 
+std\+::unordered\+\_\+map$<$ std\+::string, int $>$ \mbox{\hyperlink{classDataFrame_a5ea6305816ef6ec2bfbdae27ca6957d8}{get\+\_\+categories\+\_\+in\+\_\+column}} (std\+::string col\+\_\+name)
+\begin{DoxyCompactList}\small\item\em (For categorical columns) Given a column name, return all of the unique categories present in that column. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classDataFrame_a034946e5e5c6112a1a202b81f76570ce}{get\+\_\+column\+\_\+index\+\_\+of\+\_\+category}} (std\+::string col\+\_\+name, std\+::string category\+\_\+name)
+\begin{DoxyCompactList}\small\item\em (For one-\/hot encoded columns) Given a Column name, and the Category name which is present in the column. Return the column where that category is present. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classDataFrame_a904d8757e13dd72c0dd9d04c020f91da}{get\+\_\+val\+\_\+of\+\_\+category}} (int row, std\+::string col\+\_\+name, std\+::string category\+\_\+name)
+\begin{DoxyCompactList}\small\item\em (For one-\/hot encoded vectors) Gets the value of a category in a certain row. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{classDataFrame_a97ff21370355e56f60fbba4fc6606363}{get\+\_\+all\+\_\+numerical\+\_\+columns}} ()
+\begin{DoxyCompactList}\small\item\em Returns all columns in the one-\/hot encoded data vector that represent numerical values. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{classDataFrame_ac2ebb330177540b745442bc6ed347d3e}{get\+\_\+all\+\_\+categorical\+\_\+columns}} ()
+\begin{DoxyCompactList}\small\item\em Returns all columns in the one-\/hot encoded data vector that represent categorical values. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classDataFrame_a078dd023a9339a28302757c49024c45f}{is\+\_\+numerical}} (int col\+\_\+index)
+\begin{DoxyCompactList}\small\item\em Returns true if the column specified represents a numerical value. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classDataFrame_a9ed14b38b3ba1868a60314d3cdd4c163}{is\+\_\+categorical}} (int col\+\_\+index)
+\begin{DoxyCompactList}\small\item\em Returns true if the column specified represents a categorical value. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classDataFrame_a72b7bfb67f361002331b642644b99980}{in\+\_\+same\+\_\+category}} (std\+::vector$<$ double $>$ p1, std\+::vector$<$ double $>$ p2)
+\begin{DoxyCompactList}\small\item\em Checks if two data points belong to the same category group. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classDataFrame_a9b00eb9c0f15558e53d001d0407b8fd4}{paid\+\_\+back\+\_\+loan}} (int row)
+\begin{DoxyCompactList}\small\item\em Returns if the borrower paid back the loan. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Provides an object to hold the different vectors used by the Random Forest Model. Also contains useful utility functions. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classDataFrame_a5c26f1c8436159bd78fc13439d1d1ad7}\label{classDataFrame_a5c26f1c8436159bd78fc13439d1d1ad7}} 
+\index{DataFrame@{DataFrame}!DataFrame@{DataFrame}}
+\index{DataFrame@{DataFrame}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{DataFrame()}{DataFrame()}}
+{\footnotesize\ttfamily Data\+Frame\+::\+Data\+Frame (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::string $>$}]{feature\+\_\+names,  }\item[{std\+::vector$<$ std\+::vector$<$ double $>$$>$}]{data,  }\item[{std\+::vector$<$ double $>$}]{impute\+\_\+vals,  }\item[{std\+::unordered\+\_\+map$<$ std\+::string, std\+::unordered\+\_\+map$<$ std\+::string, int $>$$>$}]{categories }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor for a dataframe. It contains the feature\+\_\+name\+\_\+vec, data\+\_\+vec, impute\+\_\+vec, and categorical\+\_\+groups. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em feature\+\_\+names} & Vector of strings that contain the name of a column. \\
+\hline
+{\em data} & Vector of vector of doubles which contain the data contents. (One-\/hot encoded) \\
+\hline
+{\em impute\+\_\+vals} & Vector of doubles that contain values to replace in the case of missing data. Numerical categories are replaced with mean. Categorical categories are replaced with mode. \\
+\hline
+{\em categories} & Intended for one-\/hot encoded categories. This is an unordered mapping which maps Columns(by their name) to a map of all of the column\textquotesingle{}s categories(by their name) to all of its indexes. \{\char`\"{}\+Column\+Name1\char`\"{}\+:\{\char`\"{}\+Category\+Name1\char`\"{}\+:2\},\{\char`\"{}\+Category\+Name2\char`\"{}\+:3\}\} \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classDataFrame_ac2ebb330177540b745442bc6ed347d3e}\label{classDataFrame_ac2ebb330177540b745442bc6ed347d3e}} 
+\index{DataFrame@{DataFrame}!get\_all\_categorical\_columns@{get\_all\_categorical\_columns}}
+\index{get\_all\_categorical\_columns@{get\_all\_categorical\_columns}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{get\_all\_categorical\_columns()}{get\_all\_categorical\_columns()}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ Data\+Frame\+::get\+\_\+all\+\_\+categorical\+\_\+columns (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns all columns in the one-\/hot encoded data vector that represent categorical values. 
+
+\begin{DoxyReturn}{Returns}
+Vector of ints of all column indexes 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a97ff21370355e56f60fbba4fc6606363}\label{classDataFrame_a97ff21370355e56f60fbba4fc6606363}} 
+\index{DataFrame@{DataFrame}!get\_all\_numerical\_columns@{get\_all\_numerical\_columns}}
+\index{get\_all\_numerical\_columns@{get\_all\_numerical\_columns}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{get\_all\_numerical\_columns()}{get\_all\_numerical\_columns()}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ Data\+Frame\+::get\+\_\+all\+\_\+numerical\+\_\+columns (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns all columns in the one-\/hot encoded data vector that represent numerical values. 
+
+\begin{DoxyReturn}{Returns}
+Vector of ints of all column indexes 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a99296a1e02872aaac85fff218ff3c19b}\label{classDataFrame_a99296a1e02872aaac85fff218ff3c19b}} 
+\index{DataFrame@{DataFrame}!get\_categorical\_groups@{get\_categorical\_groups}}
+\index{get\_categorical\_groups@{get\_categorical\_groups}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{get\_categorical\_groups()}{get\_categorical\_groups()}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, std\+::unordered\+\_\+map$<$std\+::string, int$>$ $>$ Data\+Frame\+::get\+\_\+categorical\+\_\+groups (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Column names are mapped to all of the categories in that column, all the categories are mapped to their index in the dataset vector. 
+
+\begin{DoxyReturn}{Returns}
+Unordered map of string \+: (string \+: int)
+\end{DoxyReturn}
+
+\begin{DoxyItemize}
+\item categorical\+\_\+group\mbox{[}\char`\"{}\+Column\+Name1\char`\"{}\mbox{]} = \mbox{[}\char`\"{}category1\char`\"{}\mbox{]}\+:0, \mbox{[}\char`\"{}category2\char`\"{}\mbox{]}\+:1, \mbox{[}\char`\"{}category3\char`\"{}\mbox{]}\+:2 ~\newline
+
+\item categorical\+\_\+group\mbox{[}\char`\"{}\+Column\+Name2\char`\"{}\mbox{]} = \mbox{[}\char`\"{}category4\char`\"{}\mbox{]}\+:5, \mbox{[}\char`\"{}category5\char`\"{}\mbox{]}\+:6, \mbox{[}\char`\"{}category6\char`\"{}\mbox{]}\+:7
+\item categorical\+\_\+group\mbox{[}\char`\"{}purpose\char`\"{}\mbox{]}\mbox{[}\char`\"{}debt\+\_\+consolidation\char`\"{}\mbox{]} = COLUMN\+\_\+\+INDEX (int) 
+\end{DoxyItemize}\mbox{\Hypertarget{classDataFrame_a5ea6305816ef6ec2bfbdae27ca6957d8}\label{classDataFrame_a5ea6305816ef6ec2bfbdae27ca6957d8}} 
+\index{DataFrame@{DataFrame}!get\_categories\_in\_column@{get\_categories\_in\_column}}
+\index{get\_categories\_in\_column@{get\_categories\_in\_column}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{get\_categories\_in\_column()}{get\_categories\_in\_column()}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, int$>$ Data\+Frame\+::get\+\_\+categories\+\_\+in\+\_\+column (\begin{DoxyParamCaption}\item[{std\+::string}]{col\+\_\+name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+(For categorical columns) Given a column name, return all of the unique categories present in that column. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em col\+\_\+name} & Name of the column. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An unordered map of all the unique categories in that column. Each category is mapped to an int which represents their index in the dataset vector. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a01a0234a2f6d60995a08a83b44a99db9}\label{classDataFrame_a01a0234a2f6d60995a08a83b44a99db9}} 
+\index{DataFrame@{DataFrame}!get\_col\_index\_from\_feature\_name@{get\_col\_index\_from\_feature\_name}}
+\index{get\_col\_index\_from\_feature\_name@{get\_col\_index\_from\_feature\_name}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{get\_col\_index\_from\_feature\_name()}{get\_col\_index\_from\_feature\_name()}}
+{\footnotesize\ttfamily int Data\+Frame\+::get\+\_\+col\+\_\+index\+\_\+from\+\_\+feature\+\_\+name (\begin{DoxyParamCaption}\item[{std\+::string}]{feature\+\_\+name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Given a feature name, returns the column index of that feature. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em feature\+\_\+name} & A string value of the feature\textquotesingle{}s name. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The column index if feature was found. Returns -\/1 if not found. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a034946e5e5c6112a1a202b81f76570ce}\label{classDataFrame_a034946e5e5c6112a1a202b81f76570ce}} 
+\index{DataFrame@{DataFrame}!get\_column\_index\_of\_category@{get\_column\_index\_of\_category}}
+\index{get\_column\_index\_of\_category@{get\_column\_index\_of\_category}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{get\_column\_index\_of\_category()}{get\_column\_index\_of\_category()}}
+{\footnotesize\ttfamily int Data\+Frame\+::get\+\_\+column\+\_\+index\+\_\+of\+\_\+category (\begin{DoxyParamCaption}\item[{std\+::string}]{col\+\_\+name,  }\item[{std\+::string}]{category\+\_\+name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+(For one-\/hot encoded columns) Given a Column name, and the Category name which is present in the column. Return the column where that category is present. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em col\+\_\+name} & The column name \\
+\hline
+{\em category\+\_\+name} & The category in that column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Column in the one-\/hot encoded dataset vector where the category is located. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a4ba87d10bf85fb9b577e071ad7b3bc01}\label{classDataFrame_a4ba87d10bf85fb9b577e071ad7b3bc01}} 
+\index{DataFrame@{DataFrame}!get\_feature\_name\_from\_col\_index@{get\_feature\_name\_from\_col\_index}}
+\index{get\_feature\_name\_from\_col\_index@{get\_feature\_name\_from\_col\_index}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{get\_feature\_name\_from\_col\_index()}{get\_feature\_name\_from\_col\_index()}}
+{\footnotesize\ttfamily std\+::string Data\+Frame\+::get\+\_\+feature\+\_\+name\+\_\+from\+\_\+col\+\_\+index (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Given a column index, returns the feature name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & Column index \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Column name 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a59c6264e00330428f8017ab6a5b9ab88}\label{classDataFrame_a59c6264e00330428f8017ab6a5b9ab88}} 
+\index{DataFrame@{DataFrame}!get\_feature\_name\_vec@{get\_feature\_name\_vec}}
+\index{get\_feature\_name\_vec@{get\_feature\_name\_vec}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{get\_feature\_name\_vec()}{get\_feature\_name\_vec()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ Data\+Frame\+::get\+\_\+feature\+\_\+name\+\_\+vec (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Getter method for returning the feature name vector. 
+
+\begin{DoxyReturn}{Returns}
+vector of strings for feature name vector. Indexed by columns. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a904d8757e13dd72c0dd9d04c020f91da}\label{classDataFrame_a904d8757e13dd72c0dd9d04c020f91da}} 
+\index{DataFrame@{DataFrame}!get\_val\_of\_category@{get\_val\_of\_category}}
+\index{get\_val\_of\_category@{get\_val\_of\_category}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{get\_val\_of\_category()}{get\_val\_of\_category()}}
+{\footnotesize\ttfamily double Data\+Frame\+::get\+\_\+val\+\_\+of\+\_\+category (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{std\+::string}]{col\+\_\+name,  }\item[{std\+::string}]{category\+\_\+name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+(For one-\/hot encoded vectors) Gets the value of a category in a certain row. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & Row index to look in. \\
+\hline
+{\em col\+\_\+name} & Name of the Column. \\
+\hline
+{\em category\+\_\+name} & Name of the Category in that column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The double value thats located in the row for the specified category. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a72b7bfb67f361002331b642644b99980}\label{classDataFrame_a72b7bfb67f361002331b642644b99980}} 
+\index{DataFrame@{DataFrame}!in\_same\_category@{in\_same\_category}}
+\index{in\_same\_category@{in\_same\_category}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{in\_same\_category()}{in\_same\_category()}}
+{\footnotesize\ttfamily bool Data\+Frame\+::in\+\_\+same\+\_\+category (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$}]{p1,  }\item[{std\+::vector$<$ double $>$}]{p2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Checks if two data points belong to the same category group. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p1} & Data point 1 \\
+\hline
+{\em p2} & Data point 2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if they belong to the same category group. i.\+e\+: If they belong in the \char`\"{}purpose\char`\"{} group in the one-\/hot encoded vector. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a9ed14b38b3ba1868a60314d3cdd4c163}\label{classDataFrame_a9ed14b38b3ba1868a60314d3cdd4c163}} 
+\index{DataFrame@{DataFrame}!is\_categorical@{is\_categorical}}
+\index{is\_categorical@{is\_categorical}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{is\_categorical()}{is\_categorical()}}
+{\footnotesize\ttfamily bool Data\+Frame\+::is\+\_\+categorical (\begin{DoxyParamCaption}\item[{int}]{col\+\_\+index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns true if the column specified represents a categorical value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em col\+\_\+index} & Column index to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if categorical, false if numerical 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a078dd023a9339a28302757c49024c45f}\label{classDataFrame_a078dd023a9339a28302757c49024c45f}} 
+\index{DataFrame@{DataFrame}!is\_numerical@{is\_numerical}}
+\index{is\_numerical@{is\_numerical}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{is\_numerical()}{is\_numerical()}}
+{\footnotesize\ttfamily bool Data\+Frame\+::is\+\_\+numerical (\begin{DoxyParamCaption}\item[{int}]{col\+\_\+index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns true if the column specified represents a numerical value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em col\+\_\+index} & Column index to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if numerical, false if categorical 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDataFrame_a9b00eb9c0f15558e53d001d0407b8fd4}\label{classDataFrame_a9b00eb9c0f15558e53d001d0407b8fd4}} 
+\index{DataFrame@{DataFrame}!paid\_back\_loan@{paid\_back\_loan}}
+\index{paid\_back\_loan@{paid\_back\_loan}!DataFrame@{DataFrame}}
+\doxysubsubsection{\texorpdfstring{paid\_back\_loan()}{paid\_back\_loan()}}
+{\footnotesize\ttfamily bool Data\+Frame\+::paid\+\_\+back\+\_\+loan (\begin{DoxyParamCaption}\item[{int}]{row }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns if the borrower paid back the loan. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & Row index to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the borrower paid back the loan on time, false if they didn\textquotesingle{}t pay the loan back on time. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Includes/\mbox{\hyperlink{DataFrame_8h}{Data\+Frame.\+h}}\end{DoxyCompactItemize}

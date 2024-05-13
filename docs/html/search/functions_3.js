@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['one_5fhot_5fvector_20',['one_hot_vector',['../classDataHandler.html#a46ba9f65217c06442f6b82e7c9b42d60',1,'DataHandler']]]
+  ['in_5fsame_5fcategory_63',['in_same_category',['../classDataFrame.html#a72b7bfb67f361002331b642644b99980',1,'DataFrame']]],
+  ['is_5fcategorical_64',['is_categorical',['../classDataFrame.html#a9ed14b38b3ba1868a60314d3cdd4c163',1,'DataFrame']]],
+  ['is_5fnumber_65',['is_number',['../classDataHandler.html#aeb5dfd72ffc12f0e1ec90c3e5030b3fa',1,'DataHandler']]],
+  ['is_5fnumerical_66',['is_numerical',['../classDataFrame.html#a078dd023a9339a28302757c49024c45f',1,'DataFrame']]]
 ];

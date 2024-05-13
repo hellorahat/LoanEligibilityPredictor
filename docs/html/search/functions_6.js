@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['vector_5fcolumn_5fnames_23',['vector_column_names',['../classDataHandler.html#a7e5155e2530005ad5325cccc2cb9aaac',1,'DataHandler']]],
-  ['vector_5fdrop_5fcolumn_24',['vector_drop_column',['../classDataHandler.html#a332756991c658e56f6bbee847f8685d5',1,'DataHandler']]],
-  ['vector_5fdrop_5frow_25',['vector_drop_row',['../classDataHandler.html#a5868c3269b998d4fb48db1c34aa399c4',1,'DataHandler']]]
+  ['paid_5fback_5floan_69',['paid_back_loan',['../classDataFrame.html#a9b00eb9c0f15558e53d001d0407b8fd4',1,'DataFrame']]],
+  ['process_5fdata_70',['process_data',['../classDataHandler.html#a3739ef56ad034c89fe9f1ec3cc20be13',1,'DataHandler']]]
 ];

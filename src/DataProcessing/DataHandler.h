@@ -24,9 +24,14 @@
 #include <regex>
 #include <random>
 
+/// @brief Provides utility functions for dealing with vectors and CSVs for Random Forest Model
 class DataHandler {
     public:
 
+    /// @brief Returns a DataFrame object of necessary vectors for a Random Forest model.
+    /// @param input_csv ifstream file of a CSV.
+    /// @param categorical_indexes A vector of int indexes that contain categorical data (as opposed to numerical data)
+    /// @return DataFrame object that contains feature_name_vector (vector<string>), data_vector (vector<vector<double>>), impute_vector (vector<double>), categorical_groups (unordered_map<string,unordered_map<string,int>>) -- Refer to DataFrame.h for more information.
     DataFrame* process_data(std::ifstream& input_csv, std::vector<int> categorical_indexes) {
         // declare and initialize data_vec
         std::vector<std::vector<std::string>> data_vec;
@@ -167,7 +172,9 @@ class DataHandler {
         return csv_data;
     }
 
-    // vector_to_csv for vector<vector<string>>
+    /// @brief Creates a CSV file for the given vector. 
+    /// @param data_vec Vector to create the CSV from.
+    /// @param csv_name Name of the CSV file.
     void vector_to_csv(std::vector<std::vector<std::string>> data_vec, std::string csv_name) {
         std::ofstream myfile;
         myfile.open(csv_name + ".csv");
@@ -180,7 +187,11 @@ class DataHandler {
         }
         myfile.close();
     }
-    // vector_to_csv for vector<string>, vector<vector<double>>
+    
+    /// @brief Create a CSV from a vector given a feature name vector, and a data content vector
+    /// @param feature_names Vector of feature names.
+    /// @param double_vec Vector of data contents.
+    /// @param csv_name Name of the CSV file.
     void vector_to_csv(std::vector<std::string> feature_names, std::vector<std::vector<double>> double_vec, std::string csv_name) {
         std::ofstream myfile;
         myfile.open(csv_name + ".csv");
@@ -199,7 +210,10 @@ class DataHandler {
         myfile.close();
     }
 
-    // vector_to_csv for vector<vector<double>>
+
+    /// @brief Creates a CSV from a vector given a vector<vector<double>>
+    /// @param data_vec The vector containing the data contents.
+    /// @param csv_name The name of the CSV file.
     void vector_to_csv(std::vector<std::vector<double>> data_vec, std::string csv_name) {
         std::ofstream myfile;
         myfile.open(csv_name + ".csv");
@@ -278,6 +292,9 @@ class DataHandler {
         return data_vec;
     }
 
+    /// @brief Convert a vector<vector<string>> into a vector<vector<double>>
+    /// @param data_vec A vector of vector of strings
+    /// @return The converted vector with data type double.
     std::vector<std::vector<double>> vector_convert_to_double(std::vector<std::vector<std::string>> data_vec) {
         // declare variable to hold the converted vector
         std::vector<std::vector<double>> double_vec;
@@ -299,6 +316,10 @@ class DataHandler {
         return double_vec;
     }
 
+    /// @brief Creates a one-hot encoding given a 2D vector.
+    /// @param data_vec Vector to be encoded.
+    /// @param categoricalIndex A vector containing the indexes of all categorical columns
+    /// @return A pair where the first value is the encoded vector, and the second value is an unordered map where a category name is mapped to its int index.
     std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, int>> one_hot_encoding(std::vector<std::vector<std::string>> data_vec, int categoricalIndex) {
         // declare the one hot encoding vector
         std::vector<std::vector<std::string>> one_hot_vec;
@@ -336,10 +357,10 @@ class DataHandler {
         return std::make_pair(one_hot_vec, one_hot_col_index);
     }
 
-    /// @brief 
-    /// @param data_vec 
-    /// @param column_index 
-    /// @return 
+    /// @brief Returns all unique category names in a categorical column.
+    /// @param data_vec The 2D vector to check.
+    /// @param column_index The column in the 2D vector.
+    /// @return A vector of strings that contain all unique category names in that column.
     std::vector<std::string> unique_category_names(std::vector<std::vector<std::string>> data_vec, int column_index) {
         std::unordered_set<std::string> unique_names;
         for (size_t row = 1; row < data_vec.size(); row++) {
@@ -360,7 +381,10 @@ class DataHandler {
         return std::regex_match(s, number_regex);
     }
 
-    // Function to trim trailing whitespace and control characters
+    
+    /// @brief Function to trim trailing whitespace and control characters
+    /// @param str String to trim.
+    /// @return Trimmed string.
     std::string trim_string(const std::string& str) {
         auto end = std::find_if(str.rbegin(), str.rend(), [](char c) {
             return !std::isspace(static_cast<unsigned char>(c)) && std::isprint(c);
@@ -369,6 +393,9 @@ class DataHandler {
     }
 
 
+    /// @brief Iterates through a map to find the most occurring string. Useful to find the mode.
+    /// @param occurrence_map The map to iterate through.
+    /// @return The most occurring string in the map.
     std::string most_occurred_key_in_map(const std::unordered_map<std::string, int>& occurrence_map) {
         std::string most_occurred_key;
         int max_occurrences = 0;
@@ -384,6 +411,10 @@ class DataHandler {
         return most_occurred_key;
     }
     
+    /// @brief Returns the column index of a Column name.
+    /// @param data_vec The vector to search in.
+    /// @param column_name The name to search.
+    /// @return The index of the column that has the name. (Returns -1 if no match found)
     int get_index_from_header_name(std::vector<std::vector<std::string>> data_vec, std::string column_name) {
         for(size_t col = 0; col < data_vec[0].size(); col++) {
             if(data_vec[0][col] == column_name) return col;

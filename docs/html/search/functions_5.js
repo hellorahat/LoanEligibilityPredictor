@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unique_5fcategory_5fnames_22',['unique_category_names',['../classDataHandler.html#aa9d8466deb2bf2b2e29b896b437f3cc0',1,'DataHandler']]]
+  ['one_5fhot_5fencoding_68',['one_hot_encoding',['../classDataHandler.html#a8fede959b2a65ebb662682a9543f0a68',1,'DataHandler']]]
 ];

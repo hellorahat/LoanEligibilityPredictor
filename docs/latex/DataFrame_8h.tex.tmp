@@ -1,0 +1,33 @@
+\hypertarget{DataFrame_8h}{}\doxysection{src/\+Includes/\+Data\+Frame.h File Reference}
+\label{DataFrame_8h}\index{src/Includes/DataFrame.h@{src/Includes/DataFrame.h}}
+
+
+A header that contains the dataframe class for the application. The \mbox{\hyperlink{classDataFrame}{Data\+Frame}} class provides easy access to the feature name, data, and impute vectors.  
+
+
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+map$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+Include dependency graph for Data\+Frame.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classDataFrame}{Data\+Frame}}
+\begin{DoxyCompactList}\small\item\em Provides an object to hold the different vectors used by the Random Forest Model. Also contains useful utility functions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A header that contains the dataframe class for the application. The \mbox{\hyperlink{classDataFrame}{Data\+Frame}} class provides easy access to the feature name, data, and impute vectors. 
+
+\begin{DoxyAuthor}{Author}
+Rohan 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2024-\/05-\/12 
+\end{DoxyDate}
