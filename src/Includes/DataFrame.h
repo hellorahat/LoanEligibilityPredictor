@@ -16,6 +16,7 @@
 
 class DataFrame {
 public:
+    DataFrame(){}
     DataFrame(std::vector<std::string> feature_names, std::vector<std::vector<double>> data, std::vector<double> impute_vals, std::unordered_map<std::string, std::unordered_map<std::string, int>> categories) {
         feature_name_vec = feature_names;
         data_vec = data;
@@ -81,11 +82,22 @@ public:
         }
         return false;
     }
+
+    bool in_same_category(std::vector<double> p1, std::vector<double> p2) {
+        for(int col : get_all_categorical_columns()) {
+            if(p1[col]!=p2[col]) return false;
+        }
+        return true;
+    }
+
+    bool paid_back_loan(int row) { return this->data_vec[row].back() == 0; }
+
 private:
     std::vector<std::string> feature_name_vec;
     std::vector<std::vector<double>> data_vec;
     std::vector<double> impute_vec;
     std::unordered_map<std::string, std::unordered_map<std::string, int>> categorical_groups;
+    std::vector<double> classification_vec;
 };
 
 #endif // DATAFRAME_H
