@@ -1,7 +1,7 @@
 #ifndef KFOLDCROSSVALIDATION_H
 #define KFOLDCROSSVALIDATION_H
 
-#include "DecisionTree.h"
+#include "RandomForest.h"
 #include <vector>
 #include <numeric>  // For iota
 #include <algorithm> // For shuffle
@@ -20,9 +20,10 @@ public:
      * @brief Performs k-fold cross-validation on a dataset using the DecisionTree model.
      * @param data The dataset to be used in the cross-validation.
      * @param k The number of folds to use for the cross-validation.
+     * @param num_trees Number of trees to include in each random forest.
      * @return The average evaluation score across all k folds.
      */
-    static double perform(const vector<vector<double>>& data, int k) {
+    static double perform(const vector<vector<double>>& data, int k, int num_trees) {
         int n = data.size();
         vector<int> indices(n);
         iota(indices.begin(), indices.end(), 0);        //Fill indices with 0, 1,..., n-1 
@@ -48,7 +49,7 @@ public:
                     trainSet.push_back(data[indices[j]]);
             }
 
-            DecisionTree model;
+            RandomForest model(num_trees);
             model.train(trainSet);
             double score = model.evaluate(testSet);         //Assume evaluate() calculates accuracy or other metric
             score.push_back(score);
