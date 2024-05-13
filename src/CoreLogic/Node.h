@@ -13,8 +13,10 @@
 
 //**
   *@class Node
-  *@brief Node class for decision tree nodes.
-  *This class represents a node in the decision tree.
+  *@brief Represent a node in a decision tree.
+  *
+  *This class encapsulates the properites of a node in a decision tree, including pointers to child nodes, feature index for splitting, threshold value, and
+  *whether it is a leaf node.
   */
 
 class Node{
