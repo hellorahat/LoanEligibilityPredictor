@@ -27,21 +27,7 @@ class SuggestionGenerator {
             std::vector<double> compared_point = df->get_data_vec()[row];
 
             if(!df->in_same_category(negative_point, compared_point)) continue;
-            // std::vector<int> categorical_columns;
 
-            // check if all categorical values are the same
-
-            // bool same_category = true;
-            // for(int col : categorical_columns) {
-            //     if(negative_point[col] != compared_point[col]) {
-            //         same_category = false;
-            //         break;
-            //     }
-            // }
-            // // if the point is not in the same category, we skip it.
-            // if(same_category == false) continue;
-
-            // calculate distance
             int distance = distance_between_points(negative_point, compared_point);
             if(distance > curr_max_dist) {
                 curr_max_dist = distance;
