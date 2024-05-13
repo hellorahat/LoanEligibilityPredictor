@@ -31,9 +31,11 @@ class SuggestionGenerator {
 
             std::vector<double> compared_point = df->get_data_vec()[row];
 
+            // the borrower's information and the compared information need to be in the same categories
+            // otherwise the data will be too irrelevant, so we skip it.
             if(!df->in_same_category(negative_point, compared_point)) continue;
 
-            int distance = distance_between_points(negative_point, compared_point);
+            int distance = distance_between_points(negative_point, compared_point); // manhattan distance calculation
             if(distance > curr_max_dist) {
                 curr_max_dist = distance;
                 curr_max_row_index = row;

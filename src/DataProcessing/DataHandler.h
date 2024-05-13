@@ -100,7 +100,6 @@ class DataHandler {
             int max_index = -1;
             for(auto it = group->second.begin(); it != group->second.end(); it++) {
                 int col = it->second;
-                std::cout<<"col:"<<col<<std::endl;
                 for(int row = 0; row < double_vec.size(); row++) {
                     if(impute_vec[col] == -1) impute_vec[col] = 0;
                     impute_vec[col]++;
@@ -114,15 +113,12 @@ class DataHandler {
             // iterate through all columns of the category group. If col is the max_index, set it to 1; set to 0 otherwise.
             for(auto it = group->second.begin(); it != group->second.end(); it++) {
                 int col = it->second;
-                std::cout<<"Group:"<<group->first<<"\tCol:"<<it->first<<"\tIndex:"<<it->second<<std::endl;
                 if(col == max_index) {
                     impute_vec[col] = 1;
                 }
                 else
                     impute_vec[col] = 0;
             }
-
-            std::cout<<"------------------------"<<std::endl;
         }
 
         // now set impute_vec values for numerical columns, the value given will be the mean for the column
@@ -133,10 +129,6 @@ class DataHandler {
                 impute_vec[col] += double_vec[row][col];
             }
             impute_vec[col] /= double_vec.size();
-        }
-
-        for(size_t col = 0; col < impute_vec.size(); col++) {
-            std::cout << "Col: " << col << "\tVal: " << impute_vec[col] << std::endl;
         }
 
         DataFrame *df = new DataFrame(feature_name_vec, double_vec, impute_vec, categorical_groups);
