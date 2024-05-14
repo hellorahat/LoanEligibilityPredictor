@@ -175,10 +175,5 @@ for (auto& pair : left_counts){
 //weighted average of the Gini index
 return (left_gini* left_size + right_gini * right_size) / (left_size + right_size);
 }
-
-private:
-  unique_ptr<Node> root;                                                                    //unique pointer to the root node of the decision tree
-  void build_tree(Node*& node, const vector<vector<double>>& data_vec, size_t start, size_t end);  //recursive function to build the tree
 };
-
 #endif  //DECISIONTREE_H
