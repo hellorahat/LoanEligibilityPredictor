@@ -1,0 +1,3 @@
+credit.policy:0,credit.policy:1,purpose:educational,purpose:major_purchase,purpose:small_business,purpose:home_improvement,purpose:all_other,purpose:credit_card,purpose:debt_consolidation,int.rate,installment,log.annual.inc,dti,fico,days.with.cr.line,revol.bal,revol.util,inq.last.6mths,delinq.2yrs,pub.rec,not.fully.paid
+0,1,0,0,1,0,0,0,0,0.1154,104.76,9.61581,12.24,672,1289.96,2867,55.1,3,0,0,1
+0,1,0,0,1,0,0,0,0,0.1122,217.59,10.8198,18.38,707,3359,113,2.4,1,0,0,0

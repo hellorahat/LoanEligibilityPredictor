@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
     std::vector<std::string> feature_name_vec = df->get_feature_name_vec(); // the header row: this contains the column names
     std::vector<std::vector<double>> double_vec = df->get_data_vec(); // the raw data content
     std::vector<double> impute_vec = df->get_impute_vec(); // a vector that will be used to replace missing values with, uses mean for numerical, and mode for categorical.
+
     /*
     The following variable is an unordered_map where "ColumnName" is mapped to another unordered_map where "CategoryName" is mapped to the column index in the raw data vector.
         e.g:  - categorical_group["ColumnName1"] = ["category1"]:0, ["category2"]:1, ["category3"]:2
@@ -29,16 +30,20 @@ int main(int argc, char* argv[]) {
     data_handler.vector_to_csv(feature_name_vec, double_vec, "one-hot-encoded-vector");
     
     // closest vector: {0,1,0,1,0,0,0,0,0,0.1103,327.53,10.7389,13.04,702,8159.96,5394,53.4,1,0,0,0};
-    std::vector<double> test_vec = double_vec[90];
+    std::vector<double> negative_point = double_vec[90];
+
+    // SuggestionGenerator sg = SuggestionGenerator();
+    // std::vector<double> closest_vec = sg.get_closest_positive_prediction(df->normalize(test_vec), df);
+
 
     SuggestionGenerator sg = SuggestionGenerator();
-    std::vector<double> closest_vec = sg.get_closest_positive_prediction(df->normalize(test_vec), df);
+    std::vector<double> closest_positive_point = sg.get_closest_positive_prediction(df->normalize(negative_point), df);
 
     std::vector<std::vector<double>> merged_vec;
-    merged_vec.push_back(test_vec);
-    merged_vec.push_back(closest_vec);
+    merged_vec.push_back(negative_point);
+    merged_vec.push_back(closest_positive_point);
 
-    data_handler.vector_to_csv(df->get_feature_name_vec(), merged_vec, "closest_point");
+    data_handler.vector_to_csv(df->get_feature_name_vec(), merged_vec, "closest-point");
     
 
     return 0;
