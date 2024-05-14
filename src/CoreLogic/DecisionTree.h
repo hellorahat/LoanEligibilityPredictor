@@ -5,7 +5,7 @@
   *Contain both declaraction and implementation
 */
 
-#infdef DECISIONTREE_H
+#ifndef DECISIONTREE_H
 #define DECISIONTREE_H
 
 #include "Node.h"
@@ -13,6 +13,9 @@
 #include <vector>
 #include <algorithm>
 #include <limits>
+#include <map>
+
+using namespace std;
 
 /**
   *@class DecisionTree
@@ -24,10 +27,11 @@
 
 class DecisionTree {
 public:
-  DecisionTree() : root (new Node()){}                                    //< Constructor initializes the tree with a root node.
-  void train(const vector<vector<double>>& data_vec){                    //< Trains the decision tree using the provided 
+  DecisionTree() : root (new Node()) {}                                    //< Constructor initializes the tree with a root node.
+  
+  void train(vector<vector<double>>& data_vec){                    //< Trains the decision tree using the provided 
     cout << "Training Decision Tree..." <<endl;
-    build_tree(root.get(), data_vec,0,data_vec.size());
+    build_tree(root.get(), data_vec, 0, data_vec.size());
   }
 int predict(const vector<double>& feature){                              //< predicts the class label for the given features.
   cout<<"Predicting with Decision Trees..." <<endl;
@@ -38,13 +42,13 @@ int predict(const vector<double>& feature){                              //< pre
     } else {
       node = node->right.get();
     }
-}
-return node->label;
+  }
+  return node->label;
 }
 
 private:
   unique_ptr<Node> root;                                          //< Unique pointer to the root node of decision tree
-  void build_tree(Node*& node, const vector<vector<double>>& data_vec, size_t start, size_t end){      //< Recursive function to build the tree.
+  void build_tree(Node* node, vector<vector<double>>& data_vec, size_t start, size_t end){      //< Recursive function to build the tree.
     if(start >= end) return;
 
     //determine if this node should be a leaf
@@ -69,7 +73,7 @@ private:
 
     //set the node's properties
     node -> feature_index = best_feature;
-    ndoe -> threshold = best_threshold;
+    node -> threshold = best_threshold;
     node -> gini_index = best_gini;
 
     //recursively build the left and right subtrees
@@ -96,7 +100,7 @@ private:
     map<int, int> label_counts;
     for (size_t i = start; i < end; ++i){
       int label = data_vec[i].back();
-      label_count[label]++;
+      label_counts[label]++;
     }
     int majority_label = -1;
     int max_count = 0;
@@ -119,13 +123,13 @@ SplitResult find_best_split(const vector<vector<double>>& data_vec, size_t start
   for (size_t i = start; i < end; ++i){
     values.push_back(data_vec[i][feature_index]);
   }
-  sort(value.begin(), value.end());
+  sort(values.begin(), values.end());
 
   double best_gini = numeric_limits<double>::max();
   double best_threshold = 0;
 
   for (size_t i = 1; i < values.size(); ++i){
-    double threshold = (value[i - 1] + values[i])/2;
+    double threshold = (values[i - 1] + values[i])/2;
     double gini = calculate_gini_index(data_vec, start, end, feature_index, threshold);
     if (gini < best_gini){
       best_gini = gini;
@@ -136,11 +140,11 @@ SplitResult find_best_split(const vector<vector<double>>& data_vec, size_t start
   return {best_gini, best_threshold};
 }
 
-size_t partition_data (const vector<vector<double>>& data_vec, size_t start, size_t end, int feature_index, double threshold){    //< Partitions the data into left and right based on the threshold.
+size_t partition_data (vector<vector<double>>& data_vec, size_t start, size_t end, int feature_index, double threshold){    //< Partitions the data into left and right based on the threshold.
   size_t mid = start;
   for (size_t i = start; i < end; ++i){
     if(data_vec[i][feature_index] < threshold){
-      swap(data_vec[mid], data_vec[i]);
+      swap (data_vec[mid], data_vec[i]);
       mid++;
     }
   }
@@ -151,7 +155,7 @@ double calculate_gini_index(const vector<vector<double>>& data_vec, size_t start
   map<int,int> left_counts, right_counts;
   int left_size = 0, right_size = 0;
 
-  for (size_t i = start, i < end, ++i){
+  for (size_t i = start; i < end; ++i){
     int label = data_vec[i].back();
     if (data_vec[i][feature_index] < threshold){
       left_counts[label]++;
@@ -173,8 +177,8 @@ return (left_gini* left_size + right_gini * right_size) / (left_size + right_siz
 }
 
 private:
-  unquire_prt<Node> root;                                                                    //unique pointer to the root node of the decision tree
-  void build_tree(Node*& node, the vector<vector<double>>& data_vec, size_t start, size_t end);  //recursive function to build the tree
+  unique_ptr<Node> root;                                                                    //unique pointer to the root node of the decision tree
+  void build_tree(Node*& node, const vector<vector<double>>& data_vec, size_t start, size_t end);  //recursive function to build the tree
 };
 
 #endif  //DECISIONTREE_H
