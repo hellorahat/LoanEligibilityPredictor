@@ -2,7 +2,7 @@
 #define LOAD_DATA_H
 
 #include <QDialog>
-#include <Qtcore>
+#include <QtCore>
 #include <vector>
 #include <string>
 

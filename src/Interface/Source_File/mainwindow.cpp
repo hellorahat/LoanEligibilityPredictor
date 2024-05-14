@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "../Header_File/mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 
