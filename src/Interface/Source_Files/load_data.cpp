@@ -1,4 +1,4 @@
-#include "load_data.h"
+#include "../Header_Files/load_data.h"
 #include "ui_load_data.h"
 #include <QFileDialog>
 

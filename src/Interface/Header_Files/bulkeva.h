@@ -2,7 +2,6 @@
 #define BULKEVA_H
 
 #include <QDialog>
-#include <Qtcore>
 #include <vector>
 #include <string>
 
