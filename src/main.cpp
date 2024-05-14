@@ -29,9 +29,17 @@ int main(int argc, char* argv[]) {
     data_handler.vector_to_csv(feature_name_vec, double_vec, "one-hot-encoded-vector");
     
     // closest vector: {0,1,0,1,0,0,0,0,0,0.1103,327.53,10.7389,13.04,702,8159.96,5394,53.4,1,0,0,0};
-    std::vector<double> test_vec = {0,1,0,1,0,0,0,0,0,0.1103,400.53,10.7389,13.04,702,8159.96,5394,53.4,1,0,0,0};
+    std::vector<double> test_vec = double_vec[90];
+
     SuggestionGenerator sg = SuggestionGenerator();
-    std::vector<double> closest_vec = sg.get_closest_positive_prediction(test_vec, df);
+    std::vector<double> closest_vec = sg.get_closest_positive_prediction(df->normalize(test_vec), df);
+
+    std::vector<std::vector<double>> merged_vec;
+    merged_vec.push_back(test_vec);
+    merged_vec.push_back(closest_vec);
+
+    data_handler.vector_to_csv(df->get_feature_name_vec(), merged_vec, "closest_point");
+    
 
     return 0;
 }

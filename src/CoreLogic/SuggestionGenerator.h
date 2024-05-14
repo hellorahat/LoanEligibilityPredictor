@@ -25,11 +25,11 @@ class SuggestionGenerator {
     std::vector<double> get_closest_positive_prediction(std::vector<double> negative_point, DataFrame *df) {
         int curr_max_dist = -1;
         int curr_max_row_index = -1;
-        for(int row = 0; row < df->get_data_vec().size(); row++) {
+        for(int row = 0; row < df->get_normalized_vector().size(); row++) {
             // if the borrower didnt pay back the loan, we skip it
             if(!(df->paid_back_loan(row))) continue;
 
-            std::vector<double> compared_point = df->get_data_vec()[row];
+            std::vector<double> compared_point = df->get_normalized_vector()[row];
 
             // the borrower's information and the compared information need to be in the same categories
             // otherwise the data will be too irrelevant, so we skip it.

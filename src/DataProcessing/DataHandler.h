@@ -71,7 +71,6 @@ class DataHandler {
             }
 
             total_vectors_added += one_hot_vec[0].size()-1; // need to keep track of all vectors added to keep indexing correct. "-1" because we also dropped a column earlier.
-            std::cout << "vectors added: " << total_vectors_added << std::endl;
 
             categorical_groups[column_name] = one_hot_col_index; // push the updated mappings into the categorical groups for future reference
 

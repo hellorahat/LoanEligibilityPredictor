@@ -30,14 +30,21 @@ public:
         data_vec = data;
         impute_vec = impute_vals;
         categorical_groups = categories;
+        normalized_vector = return_normalized_vec();
     }
     /// @brief Getter method for returning the feature name vector
-    /// @return vector of strings for feature name vector. Indexed by columns.
+    /// @return vector of strings for feature name vector. Indexed by columns
     std::vector<std::string> get_feature_name_vec() { return feature_name_vec; }
+
+    /// @brief Returns vector<vector<double>> of data content
+    /// @return Data content vector of vectors
     std::vector<std::vector<double>> get_data_vec() { return data_vec; }
+
+    /// @brief Returns vector<double> of impute values
+    /// @return Impute value vector
     std::vector<double> get_impute_vec() { return impute_vec; }
 
-    /**
+        /**
      * @brief Column names are mapped to all of the categories in that column,
      *        all the categories are mapped to their index in the dataset vector.
      * @return Unordered map of string : (string : int)
@@ -47,6 +54,37 @@ public:
      * - categorical_group["purpose"]["debt_consolidation"] = COLUMN_INDEX (int)
      */
     std::unordered_map<std::string, std::unordered_map<std::string, int>> get_categorical_groups() { return categorical_groups; }
+    std::vector<std::vector<double>> get_normalized_vector() { return normalized_vector; }
+
+    std::vector<double> normalize(std::vector<double> vec) {
+        std::vector<double> new_vec;
+        double sum = 0;
+        for(int col : get_all_numerical_columns()) {
+            sum += vec[col];
+        }
+        for(size_t col = 0; col < vec.size(); col++) {
+            if(is_categorical(col)) new_vec.push_back(vec[col]);
+            else new_vec.push_back(vec[col]/sum);
+        }
+        return new_vec;
+    }
+
+    std::vector<std::vector<double>> return_normalized_vec() {
+        std::vector<std::vector<double>> normalized_vec;
+        for(size_t row = 0; row < this->data_vec.size(); row++) {
+            std::vector<double> normalized_row;
+            double sum = 0;
+            for(size_t col : get_all_numerical_columns()) {
+                sum += data_vec[row][col];
+            }
+            for(size_t col = 0; col < this->data_vec[row].size(); col++) {
+                if(is_categorical(col)) normalized_row.push_back(this->data_vec[row][col]);
+                else normalized_row.push_back(this->data_vec[row][col]/sum);
+            }
+            normalized_vec.push_back(normalized_row);
+        }
+        return normalized_vec;
+    }
 
     /// @brief Given a feature name, returns the column index of that feature.
     /// @param feature_name A string value of the feature's name.
@@ -144,6 +182,8 @@ public:
     bool paid_back_loan(int row) { return this->data_vec[row].back() == 0; }
 
 private:
+    std::vector<std::vector<double>> normalized_vector;
+
     /// @brief Vector of strings that contain the name of a column.
     std::vector<std::string> feature_name_vec;
 
