@@ -1,14 +1,14 @@
-#ifndef NODE_H
-#define NODE_H
-
-#include <memory>
-#include <vector>
-
+//Node.h
 /**
  * @file Node.h
  * @brief Header file for the Node class used in decision trees.
  * Contains both declaration and implementation.
 */
+#ifndef NODE_H
+#define NODE_H
+
+#include <memory>
+#include <vector>
 
 using namespace std;
 
