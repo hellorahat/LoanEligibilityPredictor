@@ -10,6 +10,8 @@
 #include "DecisionTree.h"
 #include <vector>
 #include <cstdlib>
+#include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -56,12 +58,33 @@ int predict(const vector<double>& feature){
     int prediction = tree.predict(feature);
     votes[prediction]++;
   }
-return distance(votes.begin(), max_element(votes.begin(), votes.end()));        //return the class with the most votes
+  return distance(votes.begin(), max_element(votes.begin(), votes.end()));        //return the class with the most votes
+}
+
+/**
+ * @brief Evaluates the accuracy of the random forest on a test dataset.
+ * @param test_data The test dataset.
+ * @return The accuracy of predictions as a double.
+*/
+
+double evaluate(const vector<vector<double>>& test_data) {
+  int correct_predictions = 0;
+  for (const auto& data_point : test_data) {
+    vector<double> features(data_point.begin(), data_point.end() - 1);           //Assuming last element is the label
+    int true_label = static_cast<int>(data_point.back());
+    int predicted = predict(features);
+    if (predicted == true_label){
+      correct_predictions++;
+    }
+  }
+  return static_cast<double>(correct_predictions) / test_data.size();
 }
 
 private:
-  int num_trees_;                                                  //Number of trees in the forest
-  vector<DecisionTree> trees_;                                     //Vector of decision trees
-}
+  /// @brief Number of trees in the forest.
+  int num_trees_;
+  /// @brief Vector of decision trees.
+  vector<DecisionTree> trees_;
+};
 
 #endif  //RANDOMFOREST_H

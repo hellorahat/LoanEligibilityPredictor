@@ -43,16 +43,17 @@ public:
 
             vector<vector<double>> trainSet, testSet;
             for (int j = 0; j < n; j++) {
-                if (j >= start && j < end)
+                if (j >= start && j < end){
                     testSet.push_back(data[indices[j]]);
-                else
+                } else{
                     trainSet.push_back(data[indices[j]]);
+                }
             }
-
             RandomForest model(num_trees);
             model.train(trainSet);
-            double score = model.evaluate(testSet);         //Assume evaluate() calculates accuracy or other metric
-            score.push_back(score);
+            //Assuming evaluate() method exists and is adjusted to work without true labels
+            double score = model.evaluate(testSet);
+            scores.push_back(score);
         }
         double averageScore = accumulate(scores.begin(), scores.end(), 0.0) / scores.size();
         return averageScore;
