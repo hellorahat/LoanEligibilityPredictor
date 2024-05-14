@@ -63,6 +63,7 @@ private:
     double best_threshold;
     double best_gini = numeric_limits<double>::max();
     for (size_t feature_index = 0; feature_index < data_vec[0].size(); ++ feature_index){
+      std::cout << "feature_index:"<<feature_index<<std::endl;
       auto result = find_best_split(data_vec, start, end, feature_index);
       if (result.gini < best_gini){
         best_gini = result.gini;
