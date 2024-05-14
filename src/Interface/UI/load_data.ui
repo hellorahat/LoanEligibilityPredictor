@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>load_data</class>
- <widget class="QDialog" name="load_data">
+ <class>Load_Data</class>
+ <widget class="QDialog" name="Load_Data">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>604</height>
+    <width>519</width>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>290</y>
-     <width>151</width>
-     <height>71</height>
+     <x>170</x>
+     <y>20</y>
+     <width>131</width>
+     <height>61</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Load Data</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="Open_CSV">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>180</y>
-     <width>151</width>
-     <height>71</height>
+     <x>120</x>
+     <y>140</y>
+     <width>201</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="text">
     <string>Open CSV</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
      <x>120</x>
-     <y>110</y>
-     <width>101</width>
-     <height>61</height>
+     <y>280</y>
+     <width>201</width>
+     <height>91</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
    <property name="text">
-    <string>Load Data</string>
+    <string>Save Data</string>
    </property>
   </widget>
  </widget>

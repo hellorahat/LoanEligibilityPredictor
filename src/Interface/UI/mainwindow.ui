@@ -18,48 +18,48 @@
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>40</y>
-      <width>141</width>
-      <height>61</height>
+      <y>0</y>
+      <width>271</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="text">
      <string>Loan Prediction</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>220</y>
-      <width>161</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Evaluate Data</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>130</y>
-      <width>161</width>
-      <height>81</height>
+      <x>190</x>
+      <y>90</y>
+      <width>221</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="text">
      <string>Load Data</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>310</y>
-      <width>161</width>
-      <height>81</height>
+      <x>190</x>
+      <y>220</y>
+      <width>221</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Evaluate Data</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="LogFile">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>350</y>
+      <width>221</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="text">

@@ -1,22 +1,24 @@
-#include "bulk.h"
-#include "ui_bulk.h"
-#include <QFile>
+#include "bulkeva.h"
+#include "ui_bulkeva.h"
 #include <QFileDialog>
+#include <QFile>
 #include <QTextStream>
+#include <QDebug>
 
-bulk::bulk(QWidget *parent)
+Bulkeva::Bulkeva(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::bulk)
+    , ui(new Ui::Bulkeva)
 {
     ui->setupUi(this);
+
 }
 
-bulk::~bulk()
+Bulkeva::~Bulkeva()
 {
     delete ui;
 }
 
-std::vector<std::vector<std::string>> bulk::readCSV(const QString& fileName)
+std::vector<std::vector<std::string>> Bulkeva::readCSV(const QString& fileName)
 {
     std::vector<std::vector<std::string>> csvData;
 
@@ -27,13 +29,32 @@ std::vector<std::vector<std::string>> bulk::readCSV(const QString& fileName)
     }
 
     QTextStream in(&file);
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        QStringList fields = line.split(",", Qt::SkipEmptyParts);
+    QString line = in.readLine(); // Read the entire line
 
+    // Split the line by commas
+    QStringList fields = line.split(",", Qt::SkipEmptyParts);
+
+    // Calculate the number of sets of 13 variables
+    int numSets = fields.size() / 13;
+
+    // Check if the number of fields is divisible by 13
+    if (fields.size() % 13 != 0) {
+        qDebug() << "Invalid CSV format. Number of fields is not a multiple of 13.";
+        file.close();
+        return csvData;
+    }
+
+    // Process each set of 13 variables
+    for (int i = 0; i < numSets; ++i) {
         std::vector<std::string> row;
-        for (const QString& field : fields) {
-            row.push_back(field.toStdString());
+        for (int j = 0; j < 13; ++j) {
+            // Discard the first 13 fields (variables) in each set
+            fields.pop_front();
+        }
+        // Process the remaining fields as data
+        for (int j = 0; j < 13; ++j) {
+            row.push_back(fields.front().toStdString());
+            fields.pop_front();
         }
         csvData.push_back(row);
     }
@@ -42,7 +63,8 @@ std::vector<std::vector<std::string>> bulk::readCSV(const QString& fileName)
     return csvData;
 }
 
-void bulk::on_pushButton_clicked()
+// open file
+void Bulkeva::on_pushButton_OPENCSV_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open CSV File"),
@@ -56,8 +78,8 @@ void bulk::on_pushButton_clicked()
     }
 }
 
-
-void bulk::on_pushButton_2_clicked()
+// Process CSV file and update progress bar and result
+void Bulkeva::on_pushButton_bulkeva_clicked()
 {
     if (csvData.empty()) {
         qDebug() << "No CSV data loaded. Please open a CSV file first.";
@@ -65,7 +87,7 @@ void bulk::on_pushButton_2_clicked()
     }
 
     // Clear any existing data in the UI text edit widget
-    ui->resultLable->clear();
+    ui->resultLabel->clear();
 
     int totalRows = csvData.size();
     int processedRows = 0;
@@ -83,7 +105,7 @@ void bulk::on_pushButton_2_clicked()
         }
         rowText.append(result ? "Y" : "N"); // Append the result to the row
         rowText.append("\n"); // Add a newline after each row
-        ui->resultLable->append(rowText);
+        ui->resultLabel->append(rowText);
 
 
         // Update progress bar
@@ -98,7 +120,7 @@ void bulk::on_pushButton_2_clicked()
 }
 
 
-void bulk::on_pushButton_3_clicked()
+void Bulkeva::on_pushButton_export_clicked()
 {
     {
         QString fileName = QFileDialog::getSaveFileName(this,
@@ -110,7 +132,7 @@ void bulk::on_pushButton_3_clicked()
             QFile outputFile(fileName);
             if (outputFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
                 QTextStream out(&outputFile);
-                out << ui->resultLable->toPlainText();
+                out << ui->resultLabel->toPlainText();
                 outputFile.close();
                 qDebug() << "Output saved to file: " << fileName;
             } else {

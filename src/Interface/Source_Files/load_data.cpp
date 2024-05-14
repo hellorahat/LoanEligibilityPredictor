@@ -2,19 +2,20 @@
 #include "ui_load_data.h"
 #include <QFileDialog>
 
-load_data::load_data(QWidget *parent)
+Load_Data::Load_Data(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::load_data)
+    , ui(new Ui::Load_Data)
 {
     ui->setupUi(this);
+
 }
 
-load_data::~load_data()
+Load_Data::~Load_Data()
 {
     delete ui;
 }
 
-std::vector<std::vector<std::string>> load_data::readCSV(const QString& fileName)
+std::vector<std::vector<std::string>> Load_Data::readCSV(const QString& fileName)
 {
     std::vector<std::vector<std::string>> csvData;
 
@@ -39,7 +40,8 @@ std::vector<std::vector<std::string>> load_data::readCSV(const QString& fileName
     return csvData;
 }
 
-void load_data::on_pushButton_clicked()
+
+void Load_Data::on_Open_CSV_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open CSV File"),
