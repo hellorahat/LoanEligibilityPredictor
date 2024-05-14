@@ -40,6 +40,6 @@ int main(int argc, char* argv[]) {
 
     data_handler.vector_to_csv(df->get_feature_name_vec(), merged_vec, "closest_point");
     
-//
+
     return 0;
 }
