@@ -1,15 +1,17 @@
 #include <iostream>
 #include <fstream>
 #include "RandomForest.h"
-#include "..\DataProcessing\DataHandler.h"
+#include "../DataProcessing/DataHandler.h"
 
-int main(){
-    DataHandler data_handler;
+int main(int argc, char* argv[]){
+    DataHandler data_handler = DataHandler();
     std::vector<int> categorical_indexes = {0, 1};        //adjust based on your dataset
-    std::string filename = "C:\\Users\\qasda\\OneDrive\\文档\\GitHub\\LoanRepaymentPredictor\\data\\loan_data.csv";                          //Update this path
+    // std::string filename = "C:\\Users\\qasda\\OneDrive\\文档\\GitHub\\LoanRepaymentPredictor\\data\\loan_data.csv";                          //Update this path
 
-    std::cout<< "Attempting to open file at: " << filename <<std:: endl;
-    std::ifstream file(filename);
+    // std::cout<< "Attempting to open file at: " << filename <<std:: endl;
+
+    std::ifstream file(argv[1]);
+
     if(!file){
         std::cerr<< "Error opening file!" << std::endl;
         return 1;

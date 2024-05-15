@@ -22,7 +22,6 @@ class Ui_Load_Data
 public:
     QLabel *label;
     QPushButton *Open_CSV;
-    QPushButton *pushButton_2;
 
     void setupUi(QDialog *Load_Data)
     {
@@ -38,9 +37,6 @@ public:
         Open_CSV = new QPushButton(Load_Data);
         Open_CSV->setObjectName(QString::fromUtf8("Open_CSV"));
         Open_CSV->setGeometry(QRect(120, 140, 201, 91));
-        pushButton_2 = new QPushButton(Load_Data);
-        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
-        pushButton_2->setGeometry(QRect(120, 280, 201, 91));
 
         retranslateUi(Load_Data);
 
@@ -51,8 +47,7 @@ public:
     {
         Load_Data->setWindowTitle(QCoreApplication::translate("Load_Data", "Dialog", nullptr));
         label->setText(QCoreApplication::translate("Load_Data", "Load Data", nullptr));
-        Open_CSV->setText(QCoreApplication::translate("Load_Data", "Open CSV", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("Load_Data", "Save Data", nullptr));
+        Open_CSV->setText(QCoreApplication::translate("Load_Data", "Open CSV then Training", nullptr));
     } // retranslateUi
 
 };

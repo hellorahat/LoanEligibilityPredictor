@@ -16,43 +16,63 @@
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTextEdit>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_Bulkeva
 {
 public:
-    QPushButton *pushButton_OPENCSV;
     QLabel *label;
+    QWidget *widget;
+    QVBoxLayout *verticalLayout;
+    QPushButton *pushButton_OPENCSV;
     QPushButton *pushButton_bulkeva;
-    QPushButton *pushButton_export;
     QProgressBar *progressBar;
     QTextEdit *resultLabel;
+    QPushButton *pushButton_export;
 
     void setupUi(QDialog *Bulkeva)
     {
         if (Bulkeva->objectName().isEmpty())
             Bulkeva->setObjectName(QString::fromUtf8("Bulkeva"));
-        Bulkeva->resize(407, 443);
-        pushButton_OPENCSV = new QPushButton(Bulkeva);
-        pushButton_OPENCSV->setObjectName(QString::fromUtf8("pushButton_OPENCSV"));
-        pushButton_OPENCSV->setGeometry(QRect(80, 60, 211, 41));
+        Bulkeva->resize(1337, 886);
         label = new QLabel(Bulkeva);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(110, 20, 141, 41));
-        pushButton_bulkeva = new QPushButton(Bulkeva);
+        label->setGeometry(QRect(470, 10, 351, 71));
+        widget = new QWidget(Bulkeva);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        widget->setGeometry(QRect(200, 140, 931, 681));
+        verticalLayout = new QVBoxLayout(widget);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        pushButton_OPENCSV = new QPushButton(widget);
+        pushButton_OPENCSV->setObjectName(QString::fromUtf8("pushButton_OPENCSV"));
+
+        verticalLayout->addWidget(pushButton_OPENCSV);
+
+        pushButton_bulkeva = new QPushButton(widget);
         pushButton_bulkeva->setObjectName(QString::fromUtf8("pushButton_bulkeva"));
-        pushButton_bulkeva->setGeometry(QRect(80, 110, 211, 41));
-        pushButton_export = new QPushButton(Bulkeva);
-        pushButton_export->setObjectName(QString::fromUtf8("pushButton_export"));
-        pushButton_export->setGeometry(QRect(90, 350, 211, 41));
-        progressBar = new QProgressBar(Bulkeva);
+
+        verticalLayout->addWidget(pushButton_bulkeva);
+
+        progressBar = new QProgressBar(widget);
         progressBar->setObjectName(QString::fromUtf8("progressBar"));
-        progressBar->setGeometry(QRect(80, 160, 211, 21));
         progressBar->setValue(0);
-        resultLabel = new QTextEdit(Bulkeva);
+
+        verticalLayout->addWidget(progressBar);
+
+        resultLabel = new QTextEdit(widget);
         resultLabel->setObjectName(QString::fromUtf8("resultLabel"));
-        resultLabel->setGeometry(QRect(80, 190, 211, 141));
+
+        verticalLayout->addWidget(resultLabel);
+
+        pushButton_export = new QPushButton(widget);
+        pushButton_export->setObjectName(QString::fromUtf8("pushButton_export"));
+
+        verticalLayout->addWidget(pushButton_export);
+
 
         retranslateUi(Bulkeva);
 
@@ -62,8 +82,8 @@ public:
     void retranslateUi(QDialog *Bulkeva)
     {
         Bulkeva->setWindowTitle(QCoreApplication::translate("Bulkeva", "Dialog", nullptr));
-        pushButton_OPENCSV->setText(QCoreApplication::translate("Bulkeva", "Open CSV", nullptr));
         label->setText(QCoreApplication::translate("Bulkeva", "Bulk Evaluation", nullptr));
+        pushButton_OPENCSV->setText(QCoreApplication::translate("Bulkeva", "Open CSV", nullptr));
         pushButton_bulkeva->setText(QCoreApplication::translate("Bulkeva", "Evaluate", nullptr));
         pushButton_export->setText(QCoreApplication::translate("Bulkeva", "Export Evaluation", nullptr));
     } // retranslateUi
