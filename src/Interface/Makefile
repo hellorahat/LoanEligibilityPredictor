@@ -351,6 +351,7 @@ compiler_moc_header_make_all: moc_bulkeva.cpp moc_evaluate_data.cpp moc_load_dat
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_bulkeva.cpp moc_evaluate_data.cpp moc_load_data.cpp moc_mainwindow.cpp moc_singleeva.cpp
 moc_bulkeva.cpp: Header_File/bulkeva.h \
+		../Includes/DataFrame.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
 	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/hellorahat/Github/LoanEligibilityPredictor/src/Interface/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/hellorahat/Github/LoanEligibilityPredictor/src/Interface -I/home/hellorahat/Github/LoanEligibilityPredictor/src/Interface -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include Header_File/bulkeva.h -o moc_bulkeva.cpp
@@ -358,6 +359,7 @@ moc_bulkeva.cpp: Header_File/bulkeva.h \
 moc_evaluate_data.cpp: Header_File/evaluate_data.h \
 		Header_File/singleeva.h \
 		Header_File/bulkeva.h \
+		../Includes/DataFrame.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
 	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/hellorahat/Github/LoanEligibilityPredictor/src/Interface/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/hellorahat/Github/LoanEligibilityPredictor/src/Interface -I/home/hellorahat/Github/LoanEligibilityPredictor/src/Interface -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include Header_File/evaluate_data.h -o moc_evaluate_data.cpp
@@ -372,6 +374,7 @@ moc_mainwindow.cpp: Header_File/mainwindow.h \
 		Header_File/evaluate_data.h \
 		Header_File/singleeva.h \
 		Header_File/bulkeva.h \
+		../Includes/DataFrame.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
 	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/hellorahat/Github/LoanEligibilityPredictor/src/Interface/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/hellorahat/Github/LoanEligibilityPredictor/src/Interface -I/home/hellorahat/Github/LoanEligibilityPredictor/src/Interface -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include Header_File/mainwindow.h -o moc_mainwindow.cpp
@@ -419,16 +422,22 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 ####### Compile
 
 bulkeva.o: Source_File/bulkeva.cpp Header_File/bulkeva.h \
-		ui_bulkeva.h
+		../Includes/DataFrame.h \
+		ui_bulkeva.h \
+		../DataProcessing/DataHandler.h \
+		../CoreLogic/SuggestionGenerator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bulkeva.o Source_File/bulkeva.cpp
 
 evaluate_data.o: Source_File/evaluate_data.cpp Header_File/evaluate_data.h \
 		Header_File/singleeva.h \
 		Header_File/bulkeva.h \
+		../Includes/DataFrame.h \
 		ui_evaluate_data.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o evaluate_data.o Source_File/evaluate_data.cpp
 
 load_data.o: Source_File/load_data.cpp Header_File/load_data.h \
+		../Includes/DataFrame.h \
+		../DataProcessing/DataHandler.h \
 		ui_load_data.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o load_data.o Source_File/load_data.cpp
 
@@ -436,7 +445,8 @@ main.o: Source_File/main.cpp Header_File/mainwindow.h \
 		Header_File/load_data.h \
 		Header_File/evaluate_data.h \
 		Header_File/singleeva.h \
-		Header_File/bulkeva.h
+		Header_File/bulkeva.h \
+		../Includes/DataFrame.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o Source_File/main.cpp
 
 mainwindow.o: Source_File/mainwindow.cpp Header_File/mainwindow.h \
@@ -444,6 +454,7 @@ mainwindow.o: Source_File/mainwindow.cpp Header_File/mainwindow.h \
 		Header_File/evaluate_data.h \
 		Header_File/singleeva.h \
 		Header_File/bulkeva.h \
+		../Includes/DataFrame.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o Source_File/mainwindow.cpp
 

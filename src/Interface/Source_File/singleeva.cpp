@@ -18,6 +18,15 @@ Singleeva::~Singleeva()
     delete ui;
 }
 
+// Function to convert QString to double using std::stod
+double convertToDouble(const QString& str) {
+    bool ok;
+    double value = str.toDouble(&ok);
+    if (!ok) {
+        throw std::invalid_argument("Invalid argument: " + str.toStdString());
+    }
+    return value;
+}
 
 // single evaluate page evaluate button
 void Singleeva::on_pushButton_clicked()

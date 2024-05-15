@@ -1,6 +1,10 @@
 #include "../Header_File/load_data.h"
+#include "../Includes/DataFrame.h"
+#include "../DataProcessing/DataHandler.h"
 #include "../ui_load_data.h"
 #include <QFileDialog>
+#include <QTemporaryFile>
+
 
 Load_Data::Load_Data(QWidget *parent)
     : QDialog(parent)
