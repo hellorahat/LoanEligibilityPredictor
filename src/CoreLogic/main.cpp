@@ -20,7 +20,7 @@ int main(){
     std::vector<std::vector<double>> data = df -> get_data_vec();
 
     //initialize RandomForest
-    int num_trees = 10;         //Number of trees in the forest.
+    int num_trees = 3;         //Number of trees in the forest.
     RandomForest forest(num_trees);
 
     //Train the RandomForest
