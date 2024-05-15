@@ -21,10 +21,19 @@ int main(int argc, char* argv[]) {
 
     //Train the RandomForest
     forest.train(data);
-
+    
+    //perform k-fold cross validation
+    int k = 5;
+    double average_accuracy = forest.kFoldCrossValidation(data, k);
+    std::cout << "Average Cross Validation Accuracy: " << average_accuracy * 100 <<"%" << std::endl;
+    
     //optionally, evaluate the model if you have a separate test set
-    double accuracy = forest.evaluate(data);        //here, using the same data for simplicity
-    std:: cout<< "Model Accuracy: " << accuracy * 100 << "%" << std:: endl;
+    RandomForest::AccuracyMetrics metrics = forest.evaluate_accuracy(data);
+    std::cout<<"Model Accuracy: "<< metrics.accuracy <<"%" << std::endl;
+    std::cout<<"True Positive: " << metrics.true_positives <<std::endl;
+    std::cout << "True Negatives: " << metrics.true_negatives << std::endl;
+    std::cout << "False Positives: " << metrics.false_positives << std::endl;
+    std::cout << "False Negatives: " << metrics.false_negatives << std::endl;
 
     delete df; //Clean up DataFrame object
     return 0;
