@@ -6,87 +6,68 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>407</width>
-    <height>443</height>
+    <width>1337</width>
+    <height>886</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="pushButton_OPENCSV">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>60</y>
-     <width>211</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Open CSV</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>20</y>
-     <width>141</width>
-     <height>41</height>
+     <x>470</x>
+     <y>10</y>
+     <width>351</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="text">
     <string>Bulk Evaluation</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_bulkeva">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>110</y>
-     <width>211</width>
-     <height>41</height>
+     <x>200</x>
+     <y>140</y>
+     <width>931</width>
+     <height>681</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Evaluate</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_export">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>350</y>
-     <width>211</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Export Evaluation</string>
-   </property>
-  </widget>
-  <widget class="QProgressBar" name="progressBar">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>160</y>
-     <width>211</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="value">
-    <number>0</number>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="resultLabel">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>190</y>
-     <width>211</width>
-     <height>141</height>
-    </rect>
-   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="pushButton_OPENCSV">
+      <property name="text">
+       <string>Open CSV</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_bulkeva">
+      <property name="text">
+       <string>Evaluate</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QProgressBar" name="progressBar">
+      <property name="value">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTextEdit" name="resultLabel"/>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_export">
+      <property name="text">
+       <string>Export Evaluation</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

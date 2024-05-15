@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>713</width>
-    <height>945</height>
+    <height>1048</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,25 +26,58 @@
     <string>Evaluate</string>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QLabel" name="textLabel">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>421</width>
-     <height>811</height>
+     <x>480</x>
+     <y>350</y>
+     <width>161</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>20</y>
+     <width>419</width>
+     <height>52</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Single Evaluation</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>150</y>
+     <width>361</width>
+     <height>721</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Single Evaluation</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Credit_Policy</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit1_3"/>
+      </item>
+     </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
@@ -58,7 +91,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
        <widget class="QLabel" name="label_9">
         <property name="text">
@@ -72,7 +105,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_9">
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
        <widget class="QLabel" name="label_10">
         <property name="text">
@@ -86,7 +119,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_10">
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
       <item>
        <widget class="QLabel" name="label_11">
         <property name="text">
@@ -100,7 +133,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_11">
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
       <item>
        <widget class="QLabel" name="label_12">
         <property name="text">
@@ -114,7 +147,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_12">
+     <layout class="QHBoxLayout" name="horizontalLayout_8">
       <item>
        <widget class="QLabel" name="label_13">
         <property name="text">
@@ -128,7 +161,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_13">
+     <layout class="QHBoxLayout" name="horizontalLayout_9">
       <item>
        <widget class="QLabel" name="label_14">
         <property name="text">
@@ -142,7 +175,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_14">
+     <layout class="QHBoxLayout" name="horizontalLayout_10">
       <item>
        <widget class="QLabel" name="label_15">
         <property name="text">
@@ -156,7 +189,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_15">
+     <layout class="QHBoxLayout" name="horizontalLayout_11">
       <item>
        <widget class="QLabel" name="label_16">
         <property name="text">
@@ -170,7 +203,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_16">
+     <layout class="QHBoxLayout" name="horizontalLayout_12">
       <item>
        <widget class="QLabel" name="label_17">
         <property name="text">
@@ -184,7 +217,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_17">
+     <layout class="QHBoxLayout" name="horizontalLayout_13">
       <item>
        <widget class="QLabel" name="label_18">
         <property name="text">
@@ -198,7 +231,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_18">
+     <layout class="QHBoxLayout" name="horizontalLayout_14">
       <item>
        <widget class="QLabel" name="label_19">
         <property name="text">
@@ -212,7 +245,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_31">
+     <layout class="QHBoxLayout" name="horizontalLayout_15">
       <item>
        <widget class="QLabel" name="label_33">
         <property name="text">
@@ -226,19 +259,6 @@
      </layout>
     </item>
    </layout>
-  </widget>
-  <widget class="QLabel" name="textLabel">
-   <property name="geometry">
-    <rect>
-     <x>480</x>
-     <y>350</y>
-     <width>161</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>TextLabel</string>
-   </property>
   </widget>
  </widget>
  <resources/>
