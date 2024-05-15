@@ -115,7 +115,7 @@ double kFoldCrossValidation(const vector<vector<double>>& data, int k){
   for (int i = 0; i < k; ++i){
     int start = i * foldSize;
     int end = (i + 1) * foldSize;
-    if (i == k - 1) end = n;                //Ensure the last fold includes all remainning elements.
+    if (i == k - 1) end = n;                //Ensure the last fold includes all remaining elements.
 
     vector<vector<double>> trainSet, testSet;
     for (int j = 0; j < n; j++){
