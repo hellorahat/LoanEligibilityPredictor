@@ -30,9 +30,9 @@ class DecisionTree {
 public:
   DecisionTree() : root (new Node()) {}                                    //< Constructor initializes the tree with a root node.
   
-  void train(vector<vector<double>>& data_vec, const unordered_set<int>& sampled_features){                    //< Trains the decision tree using the provided 
+  void train(vector<vector<double>>& data_vec, const unordered_set<int>& sampled_features = {}){                    //< Trains the decision tree using the provided 
     unordered_set<int> modifiable_sample_features = sampled_features;
-    cout << "Training Decision Tree with feature sampling..." <<endl;
+    cout << "Training Decision Tree..." <<endl;
     if (modifiable_sample_features.empty()){
       for(size_t i = 0; i < data_vec[0].size(); i++){
         modifiable_sample_features.insert(i);
@@ -51,6 +51,24 @@ int predict(const vector<double>& feature){                              //< pre
     }
   }
   return node->label;
+}
+
+double calculate_incremental_gini(const map<int, int>& left_counts, const map<int, int>& total_counts, int left_size, int right_size){
+  double left_gini = 1.0, right_gini = 1.0;
+  int total_size = left_size + right_size;
+
+  for(const auto& pair: left_counts){
+    double p = pair.second / (double)left_size;
+    left_gini -= p * p;
+  }
+
+  for (const auto& pair : total_counts){
+    int right_count = pair.second - left_counts.at (pair.first);
+    double p = right_count / (double)right_size;
+    right_gini -= p*p;
+  }
+
+  return (left_gini * left_size + right_gini * right_size) / total_size;
 }
 
 private:
@@ -81,7 +99,7 @@ private:
     //set the node's properties
     node -> feature_index = best_feature;
     node -> threshold = best_threshold;
-    node -> gini_index = best_gini;
+    node -> gini_index = best_gini;                                                                                                                                                                                                                                                                                                          
 
     //recursively build the left and right subtrees
     node->left.reset(new Node());
@@ -126,21 +144,28 @@ struct SplitResult {
 };
 
 SplitResult find_best_split(const vector<vector<double>>& data_vec, size_t start, size_t end, size_t feature_index){              //< Finds the best split based on Gini index.
-  vector<double> values;
+  map<int,int> total_counts, left_counts;
   for (size_t i = start; i < end; ++i){
-    values.push_back(data_vec[i][feature_index]);
+    total_counts[data_vec[i].back()]++;
   }
-  sort(values.begin(), values.end());
 
+  int left_size = 0, right_size = end - start;
   double best_gini = numeric_limits<double>::max();
   double best_threshold = 0;
 
-  for (size_t i = 1; i < values.size(); ++i){
-    double threshold = (values[i - 1] + values[i])/2;
-    double gini = calculate_gini_index(data_vec, start, end, feature_index, threshold);
-    if (gini < best_gini){
+  for (size_t i = start; i < end - 1; ++i){
+    int label = data_vec[i].back();
+    left_counts[label]++;
+    left_size++;
+    right_size++;
+
+    if(data_vec[i][feature_index] != data_vec[i + 1][feature_index]){
+      double threshold = (data_vec[i][feature_index] + data_vec[i + 1][feature_index]) / 2;
+      double gini = calculate_incremental_gini(left_counts, total_counts, left_size, right_size);
+      if (gini < best_gini){
       best_gini = gini;
       best_threshold = threshold;
+      }
     }
   }
 
@@ -154,7 +179,7 @@ size_t partition_data (vector<vector<double>>& data_vec, size_t start, size_t en
       swap (data_vec[mid], data_vec[i]);
       mid++;
     }
-  }
+  }                                                                                                                                                                                                                                                                                                                                
   return mid;
 }
 
