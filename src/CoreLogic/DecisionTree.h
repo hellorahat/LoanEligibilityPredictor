@@ -28,7 +28,7 @@ using namespace std;
 
 class DecisionTree {
 public:
-  DecisionTree(int maxDepth = 10) : root (new Node()) {}                                    //< Constructor initializes the tree with a root node.
+  DecisionTree() : root (new Node()) {}                                    //< Constructor initializes the tree with a root node.
   
   void train(vector<vector<double>>& data_vec, const unordered_set<int>& sampled_features = {}){                    //< Trains the decision tree using the provided 
     unordered_set<int> modifiable_sample_features = sampled_features;
@@ -41,7 +41,6 @@ public:
     build_tree(root.get(), data_vec, 0, data_vec.size(), modifiable_sample_features);
   }
 int predict(const vector<double>& feature, bool verbose = false){                              //< predicts the class label for the given features.
-  cout<<"Predicting with Decision Trees..." <<endl;
   Node* node = root.get();
   if (verbose) cout << "Starting at root " <<endl;
   while (!node->is_leaf){
