@@ -31,4 +31,4 @@ SOURCES += Source_File/bulkeva.cpp \
            Source_File/mainwindow.cpp \
            Source_File/singleeva.cpp
 
-QT+=widgets
+QT+= widgets

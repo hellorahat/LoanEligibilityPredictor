@@ -2,9 +2,7 @@
 #define BULKEVA_H
 
 #include <QDialog>
-#include <QtCore>
-#include <vector>
-#include <string>
+#include "../../Includes/DataFrame.h"
 
 namespace Ui {
 class Bulkeva;
@@ -30,8 +28,9 @@ private slots:
 
 private:
     Ui::Bulkeva *ui;
-    std::vector<std::vector<std::string>> readCSV(const QString& fileName);
-    std::vector<std::vector<std::string>> csvData;
+    std::vector<std::vector<double>>readCSV(const QString& fileName);
+    std::vector<std::vector<double>>csvData;
+    DataFrame *df;
 
 };
 

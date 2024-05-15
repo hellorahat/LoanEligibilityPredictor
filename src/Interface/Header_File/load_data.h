@@ -2,9 +2,6 @@
 #define LOAD_DATA_H
 
 #include <QDialog>
-#include <QtCore>
-#include <vector>
-#include <string>
 
 namespace Ui {
 class Load_Data;
@@ -23,7 +20,8 @@ private slots:
 
 private:
     Ui::Load_Data *ui;
-    std::vector<std::vector<std::string>> readCSV(const QString& fileName);
+    std::vector<std::vector<double>>readCSVV(const QString& fileName);
+    std::vector<std::vector<double>>csvDataa;
 };
 
 #endif // LOAD_DATA_H

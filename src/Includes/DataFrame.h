@@ -54,8 +54,13 @@ public:
      * - categorical_group["purpose"]["debt_consolidation"] = COLUMN_INDEX (int)
      */
     std::unordered_map<std::string, std::unordered_map<std::string, int>> get_categorical_groups() { return categorical_groups; }
+
+    /// @return Returns the normalized data content 
     std::vector<std::vector<double>> get_normalized_vector() { return normalized_vector; }
 
+    /// @brief Normalizes a data by obtaining the sum of all columns and dividing each specific value by that sum.
+    /// @param vec The vector to be normalized.
+    /// @return A normalized version of the vector passed as the argument.
     std::vector<double> normalize(std::vector<double> vec) {
         std::vector<double> new_vec;
         double sum = 0;
@@ -69,6 +74,8 @@ public:
         return new_vec;
     }
 
+    /// @brief Normalizes the 2D vector located in DataFrame.data_vec (which is the raw, one-hot encoded data content in the double data type)
+    /// @return The normalized 2D vector.
     std::vector<std::vector<double>> return_normalized_vec() {
         std::vector<std::vector<double>> normalized_vec;
         for(size_t row = 0; row < this->data_vec.size(); row++) {

@@ -218,6 +218,19 @@ class DataHandler {
         myfile.close();
     }
 
+    /// @brief Creates a CSV from a vector given a vector<double>
+    /// @param data_vec The vector containing the data contents.
+    /// @param csv_name The name of the CSV file.
+    void vector_to_csv(std::vector<double> data_vec, std::string csv_name) {
+        std::ofstream myfile;
+        myfile.open(csv_name + ".csv");
+        for(size_t col = 0; col < data_vec.size(); col++) {
+            myfile << data_vec[col];
+            if(col != data_vec.size()-1) myfile << ",";
+        }
+        myfile.close();
+    }
+
     /// @brief Drops a column from a vector.
     /// @param data_vec The 2D vector from which to drop the column. Each inner vector represents a row of data, and each element of the inner vectors represents a field (e.g., a comma-separated value).
     /// @param col_index The index of the column to drop from the vector.
@@ -299,10 +312,27 @@ class DataHandler {
                     doubleRow.push_back(val);
                 } catch(...) {
                     doubleRow.push_back(0.0); // if conversion failed, place 0.0 instead
-                    std::cout << "Conversion error: " << data_vec[row][col];
+                    std::cout << "Conversion error: " << data_vec[row][col] << std::endl;
                 }
             }
             double_vec.push_back(doubleRow);
+        }
+        return double_vec;
+    }
+
+    std::vector<double> vector_convert_to_double(std::vector<std::string> data_vec) {
+        // declare variable to hold the converted vector
+        std::vector<double> double_vec;
+
+        // convert each entry into double
+        for(size_t col = 0; col < data_vec.size(); col++) {
+            try{
+                double val = std::stod(data_vec[col]);
+                double_vec.push_back(val);
+            } catch(...) {
+                double_vec.push_back(0.0);
+                std::cout << "Conversion error: " << data_vec[col] << std::endl;
+            }
         }
         return double_vec;
     }
