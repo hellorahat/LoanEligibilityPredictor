@@ -53,24 +53,6 @@ int predict(const vector<double>& feature){                              //< pre
   return node->label;
 }
 
-double calculate_incremental_gini(const map<int, int>& left_counts, const map<int, int>& total_counts, int left_size, int right_size){
-  double left_gini = 1.0, right_gini = 1.0;
-  int total_size = left_size + right_size;
-
-  for(const auto& pair: left_counts){
-    double p = pair.second / (double)left_size;
-    left_gini -= p * p;
-  }
-
-  for (const auto& pair : total_counts){
-    int right_count = pair.second - left_counts.at (pair.first);
-    double p = right_count / (double)right_size;
-    right_gini -= p*p;
-  }
-
-  return (left_gini * left_size + right_gini * right_size) / total_size;
-}
-
 private:
   unique_ptr<Node> root;                                          //< Unique pointer to the root node of decision tree
   void build_tree(Node* node, vector<vector<double>>& data_vec, size_t start, size_t end, const unordered_set<int>& sampled_features){      //< Recursive function to build the tree.
@@ -161,7 +143,7 @@ SplitResult find_best_split(const vector<vector<double>>& data_vec, size_t start
 
     if(data_vec[i][feature_index] != data_vec[i + 1][feature_index]){
       double threshold = (data_vec[i][feature_index] + data_vec[i + 1][feature_index]) / 2;
-      double gini = calculate_incremental_gini(left_counts, total_counts, left_size, right_size);
+      double gini = calculate_gini_index(data_vec,start, end, feature_index, threshold);
       if (gini < best_gini){
       best_gini = gini;
       best_threshold = threshold;
