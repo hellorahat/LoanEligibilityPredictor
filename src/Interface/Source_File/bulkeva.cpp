@@ -1,9 +1,13 @@
 #include "../Header_File/bulkeva.h"
-#include "ui_bulkeva.h"
+#include "../ui_bulkeva.h"
+#include "../../Includes/DataFrame.h"
+#include "../../DataProcessing/DataHandler.h"
+#include "../../CoreLogic/SuggestionGenerator.h"
 #include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
+#include <QTemporaryFile>
 
 Bulkeva::Bulkeva(QWidget *parent)
     : QDialog(parent)
@@ -18,48 +22,37 @@ Bulkeva::~Bulkeva()
     delete ui;
 }
 
-std::vector<std::vector<std::string>> Bulkeva::readCSV(const QString& fileName)
+std::vector<std::vector<double>>Bulkeva::readCSV(const QString& fileName)
 {
-    std::vector<std::vector<std::string>> csvData;
+    std::vector<std::vector<double>>csvData;
 
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    // Convert QFile to std::ifstream
+    QFile training_data(fileName);
+    if (!training_data.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Failed to open file: " << fileName;
         return csvData;
     }
 
-    QTextStream in(&file);
-    QString line = in.readLine(); // Read the entire line
-
-    // Split the line by commas
-    QStringList fields = line.split(",", Qt::SkipEmptyParts);
-
-    // Calculate the number of sets of 13 variables
-    int numSets = fields.size() / 13;
-
-    // Check if the number of fields is divisible by 13
-    if (fields.size() % 13 != 0) {
-        qDebug() << "Invalid CSV format. Number of fields is not a multiple of 13.";
-        file.close();
-        return csvData;
+    QTemporaryFile tempFile;
+    tempFile.setAutoRemove(true); // This ensures that the temporary file is deleted automatically when it's no longer needed
+    if (tempFile.open()) {
+        // Write the contents of the QFile to the temporary file
+        tempFile.write(training_data.readAll());
+        // Seek back to the beginning of the file
+        tempFile.seek(0);
     }
+    std::ifstream fileStream(tempFile.fileName().toStdString());
 
-    // Process each set of 13 variables
-    for (int i = 0; i < numSets; ++i) {
-        std::vector<std::string> row;
-        for (int j = 0; j < 13; ++j) {
-            // Discard the first 13 fields (variables) in each set
-            fields.pop_front();
-        }
-        // Process the remaining fields as data
-        for (int j = 0; j < 13; ++j) {
-            row.push_back(fields.front().toStdString());
-            fields.pop_front();
-        }
-        csvData.push_back(row);
-    }
+    // Call the data processor
+    DataHandler data_handler;
+    std::vector<int> categorical_indexes = {0,1};
+    df = data_handler.process_data(fileStream, categorical_indexes);
+    std::vector<std::string> feature_name_vec = df->get_feature_name_vec();// the header row: this contains the column names
+    std::vector<std::vector<double>> double_vec = df->get_data_vec(); // the raw data content
+    csvData = double_vec;
 
-    file.close();
+
+    tempFile.close();
     return csvData;
 }
 
@@ -91,19 +84,36 @@ void Bulkeva::on_pushButton_bulkeva_clicked()
 
     int totalRows = csvData.size();
     int processedRows = 0;
+    int lineNumber = 1; // Counter for line numbers
+
+
+
 
     // Process the CSV data and update progress bar and result in real-time
     for (const auto& row : csvData) {
         // Process the current row (placeholder)
-        bool result = true;
+        int result = 1;
 
         // Append the CSV data row to the text edit widget along with the result
-        QString rowText;
+        QString rowText = QString::number(lineNumber++) + ","; // Add line number
         for (const auto& field : row) {
-            rowText.append(QString::fromStdString(field));
-            rowText.append("\t"); // Add tab between fields
+            rowText.append(QString::number(field)); // Convert double to QString
+            rowText.append(","); // Add tab between fields
         }
-        rowText.append(result ? "Y" : "N"); // Append the result to the row
+        if (result) {
+            rowText.append("Y"); // Append the result to the row
+        } else {
+            rowText.append("N"); // Append the result to the row
+            rowText.append("\n");
+            SuggestionGenerator sg = SuggestionGenerator();
+            std::vector<double>closest_vec=sg.get_closest_positive_prediction(row,df);
+            rowText.append("Closest vector: ");
+            for (size_t i = 0; i < closest_vec.size(); ++i) {
+                rowText.append(QString::number(closest_vec[i]));
+                if (i < closest_vec.size() - 1)
+                    rowText.append(", "); // Add comma and space between elements
+            }
+        }
         rowText.append("\n"); // Add a newline after each row
         ui->resultLabel->append(rowText);
 

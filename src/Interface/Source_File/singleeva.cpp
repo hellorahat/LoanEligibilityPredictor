@@ -1,5 +1,5 @@
 #include "../Header_File/singleeva.h"
-#include "ui_singleeva.h"
+#include "../ui_singleeva.h"
 #include <QDebug>
 //#include "DataProcessing/DataHandler.h"
 
@@ -10,7 +10,7 @@ Singleeva::Singleeva(QWidget *parent)
     , ui(new Ui::Singleeva)
 {
     ui->setupUi(this);
-     connect(ui->pushButton, &QPushButton::clicked, this, &Singleeva::on_pushButton_clicked);
+
 }
 
 Singleeva::~Singleeva()
@@ -22,7 +22,9 @@ Singleeva::~Singleeva()
 // single evaluate page evaluate button
 void Singleeva::on_pushButton_clicked()
 {
+    try {
     // Collect data from QLineEdit widgets
+    QString credit_policy = ui->lineEdit1_3->text();
     QString purpose = ui->lineEdit1->text();
     QString interest_rate = ui->lineEdit2->text();
     QString installment = ui->lineEdit3->text();
@@ -37,35 +39,48 @@ void Singleeva::on_pushButton_clicked()
     QString derogatory_public_records = ui->lineEdit12->text();
     QString not_fully_paid = ui->lineEdit13->text();
 
-    // Construct a row of data
-    std::vector<std::string> rowData = {
-        purpose.toStdString(),
-        interest_rate.toStdString(),
-        installment.toStdString(),
-        log_annual_income.toStdString(),
-        debt_to_income.toStdString(),
-        fico_score.toStdString(),
-        days_with_credit_line.toStdString(),
-        revolving_balance.toStdString(),
-        revolving_utilization_rate.toStdString(),
-        inquiries_last_6_months.toStdString(),
-        past_due_last_2_years.toStdString(),
-        derogatory_public_records.toStdString(),
-        not_fully_paid.toStdString()
+    // Convert QString values to doubles and store in vector<double>
+    std::vector<double> rowData = {
+        convertToDouble(credit_policy),
+        convertToDouble(purpose),
+        convertToDouble(interest_rate),
+        convertToDouble(installment),
+        convertToDouble(log_annual_income),
+        convertToDouble(debt_to_income),
+        convertToDouble(fico_score),
+        convertToDouble(days_with_credit_line),
+        convertToDouble(revolving_balance),
+        convertToDouble(revolving_utilization_rate),
+        convertToDouble(inquiries_last_6_months),
+        convertToDouble(past_due_last_2_years),
+        convertToDouble(derogatory_public_records),
+        convertToDouble(not_fully_paid)
     };
 
-    // Append the row of data to your main data vector
-    data.push_back(rowData);
+    bool result = true;
+    QString labelText = "Data: ";
+    for (size_t i = 0; i < rowData.size(); ++i) {
+        labelText += QString::number(rowData[i]); // Convert double to QString
+        labelText += ", "; // Add a comma and a space after each data element
+    }
+    labelText += (result ? "Y" : "N");
+    if(result==false){
+    labelText += "\n";
 
-    // Call the function with the data vector
-    // FunctionName(data);
-    // processData(data);
 
-     // Show the result based on the processed data
-   /* bool result = processData(data);
-    ui->textLabel->setText(result ? "Y" : "N");*/
+    }
+
+
+    // Now rowData contains all the user input converted to doubles
+    } catch (const std::invalid_argument& e) {
+        // Handle the error (e.g., display an error message)
+        qDebug() << "Error: " << e.what();
+        }
+
+
 
     // Clear line edits for the next entry if needed
+    ui->lineEdit1_3->clear();
     ui->lineEdit1->clear();
     ui->lineEdit2->clear();
     ui->lineEdit3->clear();

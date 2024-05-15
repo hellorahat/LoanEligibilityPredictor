@@ -2,7 +2,6 @@
 #define SINGLEEVA_H
 
 #include <QDialog>
-#include <vector>
 
 
 namespace Ui {
@@ -22,7 +21,7 @@ private slots:
 
 private:
     Ui::Singleeva *ui;
-    std::vector<std::vector<std::string>> data;
+    //std::vector<std::vector<std::string>> data;
 };
 
 #endif // SINGLEEVA_H
