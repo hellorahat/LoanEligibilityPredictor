@@ -41,7 +41,7 @@ public:
     uniform_int_distribution<> dist_samples(0, num_samples - 1);
     
     for (int i = 0; i < num_trees_; i++){
-      cout << "Training Decision Tree " << (i + 1) << "with all feature using bootstrap samples..." << endl;
+      cout << "Training Decision Tree " << (i + 1) << " with all feature using bootstrap samples..." << endl;
       vector<vector<double>> sample_data_vec;
 
       for (size_t j = 0; j < num_samples; ++j){
@@ -133,7 +133,41 @@ double kFoldCrossValidation(const vector<vector<double>>& data, int k){
   }
   double averageScore = accumulate(scores.begin(), scores.end(), 0.0) / scores.size();
   return averageScore;
+};
+
+struct AccuracyMetrics
+{
+  int true_positives = 0;
+  int true_negatives = 0;
+  int false_positives = 0;
+  int false_negatives = 0;
+  double accuracy = 0.0;
+
+  void calculate_accuracy(){
+    int total = true_positives + true_negatives + false_positives + false_negatives;
+    accuracy = total == 0 ? 0 : 100.0 *(true_positives + true_negatives) / total;
+  }
+};
+
+AccuracyMetrics evaluate_accuracy(const vector<vector<double>>& test_data){
+  AccuracyMetrics metrics;
+  for (const auto& sample : test_data){
+    vector<double> features = sample;
+    int true_label = static_cast<int>(features.back());
+    features.pop_back();
+    int predicted_label = predict(features);
+    if (predicted_label == true_label){
+      if(predicted_label == 1) metrics.true_positives++;
+      else metrics.true_negatives++;
+    } else {
+      if(predicted_label == 1) metrics.false_positives++;
+      else metrics.false_negatives++;
+    }
+  }
+  metrics.calculate_accuracy();
+  return metrics;
 }
+
 
 
 private:
