@@ -34,31 +34,21 @@ public:
     *@param data_vec Data used for training the random forest. Each tree is train on a bootstrap sample of this data.
     */
   void train (const vector<vector<double>>& data_vec){
-    cout <<"Training "<<num_trees_ << " trees with bagging and feature sampling..." << endl;
+    cout <<"Training "<<num_trees_ << " trees with bagging..." << endl;
     int num_samples = data_vec.size();
     int num_features = data_vec[0].size();
-    int num_features_sampled = sqrt (num_features);
 
     uniform_int_distribution<> dist_samples(0, num_samples - 1);
-    uniform_int_distribution<> dist_features(0, num_features - 1);
-
-    for (auto& tree : trees_){
+    
+    for (int i = 0; i < num_trees_; i++){
+      cout << "Training Decision Tree " << (i + 1) << "with all feature using bootstrap samples..." << endl;
       vector<vector<double>> sample_data_vec;
-      unordered_set<int> sampled_features;
-      while(sampled_features.size() < num_features_sampled){
-        int features_idx = dist_features(rng);
-        sampled_features.insert(features_idx);
-      }
 
-      for (size_t i = 0; i < num_samples; ++i){
+      for (size_t j = 0; j < num_samples; ++j){
         size_t idx = dist_samples(rng);
-        vector<double> sampled_row;
-        for(int feature : sampled_features){
-          sampled_row.push_back(data_vec[idx][feature]);
-        }
-        sample_data_vec.push_back(sampled_row);
-    }
-    tree.train(sample_data_vec, sampled_features);
+        sample_data_vec.push_back(data_vec[idx]);
+      }
+    trees_[i].train(sample_data_vec);
   }
 }
 /**
@@ -73,9 +63,16 @@ int predict(const vector<double>& feature){
     int prediction = tree.predict(feature);
     vote_count[prediction]++;
   }
-  return max_element(vote_count.begin(), vote_count.end(),[](const pair<int, int>& a, const pair<int, int>& b){
-    return a.second < b.second;
-  })->first;        //return the class with the most votes
+  
+  int majorityVote = -1;
+  int maxCount = 0;
+  for (const auto& vote : vote_count){
+    if (vote.second > maxCount){
+      maxCount = vote.second;
+      majorityVote = vote.first;
+    }
+  }
+  return majorityVote;
 }
 
 /**
