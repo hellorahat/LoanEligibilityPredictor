@@ -6,6 +6,11 @@
 
 
 int main(int argc, char* argv[]) {
+    if (argc < 2){
+        std::cerr<< "Usage: " << argv[0] << " <training_data_file>" << std::endl;
+        return 1;
+    }
+
     DataHandler data_handler;
     std::vector<int> categorical_indexes = {0, 1};        //adjust based on your data
 
@@ -29,7 +34,6 @@ int main(int argc, char* argv[]) {
     
     //optionally, evaluate the model if you have a separate test set
     RandomForest::AccuracyMetrics metrics = forest.evaluate_accuracy(data);
-    std::cout<<"Model Accuracy: "<< metrics.accuracy <<"%" << std::endl;
     std::cout<<"True Positive: " << metrics.true_positives <<std::endl;
     std::cout << "True Negatives: " << metrics.true_negatives << std::endl;
     std::cout << "False Positives: " << metrics.false_positives << std::endl;
