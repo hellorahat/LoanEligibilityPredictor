@@ -18,7 +18,10 @@ int main(int argc, char* argv[]) {
 
     //Process the data
     DataFrame *df = data_handler.process_data (training_data, categorical_indexes);
-    std::vector<std::vector<double>> data = df -> get_data_vec();
+    std::vector<std::vector<double>> data = df->get_data_vec();
+    std::vector<std::vector<double>> train_data, test_data;
+
+    RandomForest::splitData(data, train_data, test_data, 0.2);
 
     //initialize RandomForest
     int num_trees = 3;         //Number of trees in the forest.
