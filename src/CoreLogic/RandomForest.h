@@ -172,17 +172,7 @@ AccuracyMetrics evaluate_accuracy(const vector<vector<double>>& test_data){
   return metrics;
 }
 
-
-
-private:
-  /// @brief Number of trees in the forest.
-  int num_trees_;
-  /// @brief Vector of decision trees.
-  vector<DecisionTree> trees_;
-
-  mt19937 rng;
-
-  void splitData(const vector<vector<double>>& data, vector<vector<double>>& train_data, vector<vector<double>>& test_data, double test_size){
+static void splitData(const vector<vector<double>>& data, vector<vector<double>>& train_data, vector<vector<double>>& test_data, double test_size){
     random_device rd;
     mt19937 g(rd());
     vector<int> indices(data.size());
@@ -197,6 +187,14 @@ private:
       test_data.push_back(data[indices[i]]);
     }
   }
+
+private:
+  /// @brief Number of trees in the forest.
+  int num_trees_;
+  /// @brief Vector of decision trees.
+  vector<DecisionTree> trees_;
+
+  mt19937 rng;
 
   vector<vector<double>> createBootstrapSample(const vector<vector<double>>& data){
     vector<vector<double>> samples;
