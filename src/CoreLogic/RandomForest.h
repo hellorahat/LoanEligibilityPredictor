@@ -1,9 +1,3 @@
-/**
-  *@file RandomForest.h
-  *@brief Header file the RandomForest class.
-  *Contain both declaration and implementation.
-  */
-
 #ifndef RANDOMFOREST_H
 #define RANDOMFOREST_H
 
@@ -12,15 +6,19 @@
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#include <numeric>
+#include <random>
 
 using namespace std;
 
 /**
-  *@class RandomForest
-  *@brief Manage the creation and operation of a random forest.
+  *@file RandomForest.h
+  *@brief Header file for the RandomForest class.
+  *Contian both declaration and implementation.
   *
   *This class encapsulates a collection of decision trees to form a random forest.
-  *It provides methods to train the forest using bagging and to predict class labels using majority voting among the tree.
+  *It provides methods to train the forest using bagging and to predict class labels using majority voting among the trees,
+  *and to perform k-fold cross validation.
   */
 
 class RandomForest{
@@ -40,8 +38,8 @@ public:
     for (auto& tree : trees_){
       vector<vector<double>> sample_data_vec;
       for (size_t i = 0; i < num_samples; ++i){
-      size_t idx = rand() % num_samples;
-      sample_data_vec.push_back(data_vec[idx]);
+        size_t idx = rand() % num_samples;
+        sample_data_vec.push_back(data_vec[idx]);
     }
     tree.train(sample_data_vec);
   }
@@ -79,6 +77,48 @@ double evaluate(const vector<vector<double>>& test_data) {
   }
   return static_cast<double>(correct_predictions) / test_data.size();
 }
+
+/**
+ * @brief Perform k-fold cross-validation on the dataset.
+ * @param data The dataset to be used in the corss-validation.
+ * @param k The number of folds to use for the cross-validation.
+ * @return The average evaluation score across all k folds.
+*/
+double kFoldCrossValidation(const vector<vector<double>>& data, int k){
+  int n = data.size();
+  vector<int> indices(n);
+  iota(indices.begin(), indices.end(), 0);            //Fill indices with 0, 1,..., n - 1
+
+  random_device rd;
+  mt19937 g(rd());
+  shuffle(indices.begin(), indices.end(), g);
+
+  int foldSize = n / k;
+  vector<double> scores;
+
+  for (int i = 0; i < k; ++i){
+    int start = i * foldSize;
+    int end = (i + 1) * foldSize;
+    if (i == k - 1) end = n;                //Ensure the last fold includes all remainning elements.
+
+    vector<vector<double>> trainSet, testSet;
+    for (int j = 0; j < n; j++){
+      if (j >= start && j < end){
+        testSet.push_back(data[indices[j]]);
+      } else {
+        trainSet.push_back(data[indices[j]]);
+      }
+    }
+
+    RandomForest model(num_trees_);
+    model.train(trainSet);
+    double score = model.evaluate(testSet);
+    scores.push_back(score);
+  }
+  double averageScore = accumulate(scores.begin(), scores.end(), 0.0) / scores.size();
+  return averageScore;
+}
+
 
 private:
   /// @brief Number of trees in the forest.
