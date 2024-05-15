@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <limits>
 #include <map>
+#include <unordered_set>
 
 using namespace std;
 
@@ -29,9 +30,15 @@ class DecisionTree {
 public:
   DecisionTree() : root (new Node()) {}                                    //< Constructor initializes the tree with a root node.
   
-  void train(vector<vector<double>>& data_vec){                    //< Trains the decision tree using the provided 
-    cout << "Training Decision Tree..." <<endl;
-    build_tree(root.get(), data_vec, 0, data_vec.size());
+  void train(vector<vector<double>>& data_vec, const unordered_set<int>& sampled_features){                    //< Trains the decision tree using the provided 
+    unordered_set<int> modifiable_sample_features = sampled_features;
+    cout << "Training Decision Tree with feature sampling..." <<endl;
+    if (modifiable_sample_features.empty()){
+      for(size_t i = 0; i < data_vec[0].size(); i++){
+        modifiable_sample_features.insert(i);
+      }
+    }
+    build_tree(root.get(), data_vec, 0, data_vec.size(), modifiable_sample_features);
   }
 int predict(const vector<double>& feature){                              //< predicts the class label for the given features.
   cout<<"Predicting with Decision Trees..." <<endl;
@@ -48,7 +55,7 @@ int predict(const vector<double>& feature){                              //< pre
 
 private:
   unique_ptr<Node> root;                                          //< Unique pointer to the root node of decision tree
-  void build_tree(Node* node, vector<vector<double>>& data_vec, size_t start, size_t end){      //< Recursive function to build the tree.
+  void build_tree(Node* node, vector<vector<double>>& data_vec, size_t start, size_t end, const unordered_set<int>& sampled_features){      //< Recursive function to build the tree.
     if(start >= end) return;
 
     //determine if this node should be a leaf
@@ -59,11 +66,10 @@ private:
     }
     
     //Find the best split
-    int best_feature;
+    int best_feature = -1;
     double best_threshold;
     double best_gini = numeric_limits<double>::max();
-    for (size_t feature_index = 0; feature_index < data_vec[0].size(); ++ feature_index){
-      std::cout << "feature_index:"<<feature_index<<std::endl;
+    for (int feature_index : sampled_features){
       auto result = find_best_split(data_vec, start, end, feature_index);
       if (result.gini < best_gini){
         best_gini = result.gini;
@@ -81,8 +87,8 @@ private:
     node->left.reset(new Node());
     node->right.reset(new Node());
     size_t split_index = partition_data (data_vec, start, end, best_feature, best_threshold);
-    build_tree(node->left.get(), data_vec, start, split_index);
-    build_tree(node->right.get(), data_vec, split_index, end);
+    build_tree(node->left.get(), data_vec, start, split_index, sampled_features);
+    build_tree(node->right.get(), data_vec, split_index, end, sampled_features);
   }
 
   bool should_be_leaf(const vector<vector<double>>& data_vec, size_t start, size_t end){            //< Determine if the current node should be a leaf.
@@ -171,6 +177,10 @@ double left_gini = 1.0, right_gini = 1.0;
 for (auto& pair : left_counts){
   double p = pair.second/(double)left_size;
   left_gini -= p * p;
+}
+for (auto& pair : right_counts){
+  double p = pair.second/(double)right_size;
+  right_gini -= p * p;
 }
 
 //weighted average of the Gini index
