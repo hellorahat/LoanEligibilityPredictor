@@ -28,7 +28,7 @@ using namespace std;
 
 class DecisionTree {
 public:
-  DecisionTree() : root (new Node()) {}                                    //< Constructor initializes the tree with a root node.
+  DecisionTree(int maxDepth = 10) : root (new Node()) {}                                    //< Constructor initializes the tree with a root node.
   
   void train(vector<vector<double>>& data_vec, const unordered_set<int>& sampled_features = {}){                    //< Trains the decision tree using the provided 
     unordered_set<int> modifiable_sample_features = sampled_features;
@@ -40,15 +40,20 @@ public:
     }
     build_tree(root.get(), data_vec, 0, data_vec.size(), modifiable_sample_features);
   }
-int predict(const vector<double>& feature){                              //< predicts the class label for the given features.
+int predict(const vector<double>& feature, bool verbose = false){                              //< predicts the class label for the given features.
   cout<<"Predicting with Decision Trees..." <<endl;
   Node* node = root.get();
+  if (verbose) cout << "Starting at root " <<endl;
   while (!node->is_leaf){
-    if(feature[node->feature_index] < node ->threshold){
-      node = node->left.get();
-    } else {
-      node = node->right.get();
+    if (verbose){
+      cout << "At Node: Feature index = " << node->feature_index
+      << ", Threshold = " << node->threshold
+      << ", Current Feature Value = " <<feature[node->feature_index] << endl;
     }
+    node = (feature[node->feature_index] < node->threshold) ? node->left.get() : node->right.get();
+  }
+  if (verbose) {
+    cout << "Reach leaf: Predicted Label = " << node->label << endl;
   }
   return node->label;
 }
@@ -147,7 +152,7 @@ SplitResult find_best_split(const vector<vector<double>>& data_vec, size_t start
       if (gini < best_gini){
       best_gini = gini;
       best_threshold = threshold;
-      }
+      } 
     }
   }
 
@@ -155,7 +160,7 @@ SplitResult find_best_split(const vector<vector<double>>& data_vec, size_t start
 }
 
 size_t partition_data (vector<vector<double>>& data_vec, size_t start, size_t end, int feature_index, double threshold){    //< Partitions the data into left and right based on the threshold.
-  size_t mid = start;
+  size_t mid = start;     
   for (size_t i = start; i < end; ++i){
     if(data_vec[i][feature_index] < threshold){
       swap (data_vec[mid], data_vec[i]);
