@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <numeric>
 #include <random>
+#include <unordered_set>
 
 using namespace std;
 
@@ -27,21 +28,37 @@ public:
     *@brief Constructor that initializes the forest with a specified number of trees.
     *@param num_trees Number of trees to include in the forest.
     */
-  RandomForest(int num_trees): num_trees_(num_trees), trees_(num_trees){}          //Constructor initializes the forest with a specified number of trees
+  RandomForest(int num_trees): num_trees_(num_trees), trees_(num_trees), rng(random_device{}()){}          //Constructor initializes the forest with a specified number of trees
   /**
     *@brief Trains the random forest using the provided dataset.
     *@param data_vec Data used for training the random forest. Each tree is train on a bootstrap sample of this data.
     */
   void train (const vector<vector<double>>& data_vec){
-    cout <<"Training "<<num_trees_ << " trees with bagging..." << endl;
+    cout <<"Training "<<num_trees_ << " trees with bagging and feature sampling..." << endl;
     int num_samples = data_vec.size();
+    int num_features = data_vec[0].size();
+    int num_features_sampled = sqrt (num_features);
+
+    uniform_int_distribution<> dist_samples(0, num_samples - 1);
+    uniform_int_distribution<> dist_features(0, num_features - 1);
+
     for (auto& tree : trees_){
       vector<vector<double>> sample_data_vec;
+      unordered_set<int> sampled_features;
+      while(sampled_features.size() < num_features_sampled){
+        int features_idx = dist_features(rng);
+        sampled_features.insert(features_idx);
+      }
+
       for (size_t i = 0; i < num_samples; ++i){
-        size_t idx = rand() % num_samples;
-        sample_data_vec.push_back(data_vec[idx]);
+        size_t idx = dist_samples(rng);
+        vector<double> sampled_row;
+        for(int feature : sampled_features){
+          sampled_row.push_back(data_vec[idx][feature]);
+        }
+        sample_data_vec.push_back(sampled_row);
     }
-    tree.train(sample_data_vec);
+    tree.train(sample_data_vec, sampled_features);
   }
 }
 /**
@@ -51,12 +68,14 @@ public:
   */
 
 int predict(const vector<double>& feature){
-  vector<int> votes(num_trees_,0);
+  map<int, int> vote_count;
   for (auto& tree : trees_){
     int prediction = tree.predict(feature);
-    votes[prediction]++;
+    vote_count[prediction]++;
   }
-  return distance(votes.begin(), max_element(votes.begin(), votes.end()));        //return the class with the most votes
+  return max_element(vote_count.begin(), vote_count.end(),[](const pair<int, int>& a, const pair<int, int>& b){
+    return a.second < b.second;
+  })->first;        //return the class with the most votes
 }
 
 /**
@@ -125,6 +144,8 @@ private:
   int num_trees_;
   /// @brief Vector of decision trees.
   vector<DecisionTree> trees_;
+
+  mt19937 rng;
 };
 
 #endif  //RANDOMFOREST_H
