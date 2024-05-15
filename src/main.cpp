@@ -31,13 +31,9 @@ int main(int argc, char* argv[]) {
     
     // closest vector: {0,1,0,1,0,0,0,0,0,0.1103,327.53,10.7389,13.04,702,8159.96,5394,53.4,1,0,0,0};
     std::vector<double> negative_point = double_vec[90];
-
-    // SuggestionGenerator sg = SuggestionGenerator();
-    // std::vector<double> closest_vec = sg.get_closest_positive_prediction(df->normalize(test_vec), df);
-
-
+    
     SuggestionGenerator sg = SuggestionGenerator();
-    std::vector<double> closest_positive_point = sg.get_closest_positive_prediction(df->normalize(negative_point), df);
+    std::vector<double> closest_positive_point = sg.get_closest_positive_prediction(negative_point, df);
 
     std::vector<std::vector<double>> merged_vec;
     merged_vec.push_back(negative_point);

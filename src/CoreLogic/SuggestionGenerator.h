@@ -25,6 +25,7 @@ class SuggestionGenerator {
     std::vector<double> get_closest_positive_prediction(std::vector<double> negative_point, DataFrame *df) {
         int curr_max_dist = -1;
         int curr_max_row_index = -1;
+        negative_point = df->normalize(negative_point);
         for(int row = 0; row < df->get_normalized_vector().size(); row++) {
             // if the borrower didnt pay back the loan, we skip it
             if(!(df->paid_back_loan(row))) continue;
