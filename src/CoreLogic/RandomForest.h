@@ -34,21 +34,25 @@ public:
     *@param data_vec Data used for training the random forest. Each tree is train on a bootstrap sample of this data.
     */
   void train (const vector<vector<double>>& data_vec){
+    vector<vector<double>> train_data, test_data;
+    splitData(data_vec, train_data, test_data, 0.2);
+
     cout <<"Training "<<num_trees_ << " trees with bagging..." << endl;
     int num_samples = data_vec.size();
     int num_features = data_vec[0].size();
 
-    uniform_int_distribution<> dist_samples(0, num_samples - 1);
-    
+    uniform_int_distribution<> dist(0, data_vec.size() - 1);
+    mt19937 rng(random_device{}());
+
     for (int i = 0; i < num_trees_; i++){
       cout << "Training Decision Tree " << (i + 1) << " with all feature using bootstrap samples..." << endl;
-      vector<vector<double>> sample_data_vec;
+      vector<vector<double>> bootstrap_sample;
 
-      for (size_t j = 0; j < num_samples; ++j){
-        size_t idx = dist_samples(rng);
-        sample_data_vec.push_back(data_vec[idx]);
+      for (size_t j = 0; j < data_vec.size(); ++j){
+        size_t idx = dist(rng);
+        bootstrap_sample.push_back(data_vec[idx]);
       }
-    trees_[i].train(sample_data_vec);
+    trees_[i].train(bootstrap_sample);
   }
 }
 /**
@@ -177,6 +181,32 @@ private:
   vector<DecisionTree> trees_;
 
   mt19937 rng;
+
+  void splitData(const vector<vector<double>>& data, vector<vector<double>>& train_data, vector<vector<double>>& test_data, double test_size){
+    random_device rd;
+    mt19937 g(rd());
+    vector<int> indices(data.size());
+    iota(indices.begin(), indices.end(), 0);
+    shuffle(indices.begin(), indices.end(), g);
+
+    int split_index = static_cast<int>(data.size() * (1 - test_size));
+    for (int i = 0; i < split_index; ++i){
+      train_data.push_back(data[indices[i]]);
+    }
+    for (int i = split_index; i < static_cast<int>(data.size()); ++i){
+      test_data.push_back(data[indices[i]]);
+    }
+  }
+
+  vector<vector<double>> createBootstrapSample(const vector<vector<double>>& data){
+    vector<vector<double>> samples;
+    uniform_int_distribution<> dist(0, data.size() - 1);
+    for (size_t j = 0; j < data.size(); ++j){
+      size_t idx = dist(rng);
+      samples.push_back(data[idx]);
+    }
+    return samples;
+  }
 };
 
 #endif  //RANDOMFOREST_H
