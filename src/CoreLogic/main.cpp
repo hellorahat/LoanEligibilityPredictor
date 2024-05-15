@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     forest.train(data);
     
     //perform k-fold cross validation
-    int k = 5;
+    int k = 2;
     double average_accuracy = forest.kFoldCrossValidation(data, k);
     std::cout << "Average Cross Validation Accuracy: " << average_accuracy * 100 <<"%" << std::endl;
     
