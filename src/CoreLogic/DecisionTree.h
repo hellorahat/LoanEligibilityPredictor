@@ -75,47 +75,41 @@ public:
     size_t feature_index;
   };
 
-  SplitResult find_best_split(const vector<vector<double>>& features, const vector<int>& labels, size_t start, size_t end, size_t feature_index) {
-    map<double, int> left_counts, right_counts;
-    for (size_t i = start; i < end; ++i){
-      right_counts[labels[i]]++;
+SplitResult find_best_split(const vector<vector<double>>& features, const vector<int>& labels, size_t start, size_t end, size_t feature_index) {
+    // Create a vector of pairs of features and labels to sort by features
+    vector<pair<double, int>> feature_label_pairs;
+    for (size_t i = start; i < end; ++i) {
+        feature_label_pairs.emplace_back(features[i][feature_index], labels[i]);
     }
 
-    int left_size = 0, right_size = end - start;
+    // Sort pairs by the feature values
+    sort(feature_label_pairs.begin(), feature_label_pairs.end());
+
+    map<double, int> left_counts, right_counts;
+    for (const auto& fl : feature_label_pairs) {
+        right_counts[fl.second]++;
+    }
+
+    int left_size = 0, right_size = feature_label_pairs.size();
     double best_gini = numeric_limits<double>::max();
     double best_threshold = 0;
     size_t best_feature_index = feature_index;
-    
-    for (size_t i = start; i < end - 1; ++i){
-      int label = labels[i];
-      left_counts[label]++;
-      right_counts[label]--;
-      left_size++;
-      right_size--;
 
-      if(features[i][feature_index] != features[i + 1][feature_index]){
-       // Evaluate split at current feature value
-            double current_threshold = features[i][feature_index];
-            double next_threshold = features[i + 1][feature_index];
-            double gini_current = calculate_gini_index(left_counts, right_counts, left_size, right_size);
+    for (size_t i = 0; i < feature_label_pairs.size() - 1; ++i) {
+        int label = feature_label_pairs[i].second;
+        left_counts[label]++;
+        right_counts[label]--;
+        left_size++;
+        right_size--;
 
-            // Temporarily adjust counts for next threshold evaluation
-            left_counts[labels[i + 1]]++;
-            right_counts[labels[i + 1]]--;
-            double gini_next = calculate_gini_index(left_counts, right_counts, left_size + 1, right_size - 1);
-            left_counts[labels[i + 1]]--;
-            right_counts[labels[i + 1]]++;
-
-            // Choose the better threshold based on Gini index
-            if (gini_current < best_gini) {
-                best_gini = gini_current;
-                best_threshold = current_threshold;
+        if (feature_label_pairs[i].first != feature_label_pairs[i + 1].first) {
+            double threshold = feature_label_pairs[i + 1].first;  // Use the next feature value as the threshold
+            double gini = calculate_gini_index(left_counts, right_counts, left_size, right_size);
+            if (gini < best_gini) {
+                best_gini = gini;
+                best_threshold = threshold;
             }
-            if (gini_next < best_gini) {
-                best_gini = gini_next;
-                best_threshold = next_threshold;
-            }
-        } 
+        }
     }
     return {best_gini, best_threshold, best_feature_index};
 }
@@ -136,19 +130,32 @@ public:
   return (left_gini* left_size + right_gini * right_size) / (left_size + right_size);
   }
 
-size_t partition_data (vector<vector<double>>& data_vec, size_t start, size_t end, int feature_index, double threshold){    //< Partitions the data into left and right based on the threshold.
-  size_t mid = start;     
-  for (size_t i = start; i < end; ++i){
-    if(data_vec[i][feature_index] < threshold){
-      swap (data_vec[mid], data_vec[i]);
-      mid++;
+size_t partition_data(vector<vector<double>>& data_vec, size_t start, size_t end, int feature_index, double threshold) {
+    if (data_vec.empty() || start >= end) {
+        throw std::invalid_argument("Empty dataset or invalid range.");
     }
-  }  
-    if(mid == start || mid == end){
-      mid = start + (end - start) / 2;
-    }                                                                                                                                                                                                                                                                                                                                     
+
+    size_t mid = start;
+    bool allSame = true;
+    double firstValue = data_vec[start][feature_index];
+
+    for (size_t i = start; i < end; ++i) {
+        if (data_vec[i][feature_index] < threshold) {
+            std::swap(data_vec[mid], data_vec[i]);
+            mid++;
+        }
+        if (data_vec[i][feature_index] != firstValue) {
+            allSame = false;
+        }
+    }
+
+    // If all values are the same and no meaningful split can be made, split in the middle
+    if (allSame) {
+        mid = start + (end - start) / 2;
+    }
+
     return mid;
-  }
+}
 
 private:
   unique_ptr<Node> root;                                          //< Unique pointer to the root node of decision tree
