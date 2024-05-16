@@ -34,25 +34,20 @@ public:
     *@param data_vec Data used for training the random forest. Each tree is train on a bootstrap sample of this data.
     */
   void train (const vector<vector<double>>& data_vec){
+    cout<<"Starting training process..." << endl;
     vector<vector<double>> train_data, test_data;
     splitData(data_vec, train_data, test_data, 0.2);
+    cout<< "Data split into " << train_data.size() <<" training sample and " << test_data.size() <<" test samples." << endl;
 
     cout <<"Training "<<num_trees_ << " trees with bagging..." << endl;
-    int num_samples = data_vec.size();
-    int num_features = data_vec[0].size();
-
     uniform_int_distribution<> dist(0, data_vec.size() - 1);
     mt19937 rng(random_device{}());
 
     for (int i = 0; i < num_trees_; i++){
-      cout << "Training Decision Tree " << (i + 1) << " with all feature using bootstrap samples..." << endl;
-      vector<vector<double>> bootstrap_sample;
-
-      for (size_t j = 0; j < data_vec.size(); ++j){
-        size_t idx = dist(rng);
-        bootstrap_sample.push_back(data_vec[idx]);
-      }
-    trees_[i].train(bootstrap_sample);
+      cout<<"Training Decision Tree " << (i + 1) << " with all feature using bootstrap samples..." << endl;
+      vector<vector<double>> bootstrap_sample = createBootstrapSample(train_data);
+      cout << "Bootstrap sample size: " << bootstrap_sample.size() << endl;
+      trees_[i].train(bootstrap_sample);
   }
 }
 /**
@@ -188,14 +183,6 @@ static void splitData(const vector<vector<double>>& data, vector<vector<double>>
     }
   }
 
-private:
-  /// @brief Number of trees in the forest.
-  int num_trees_;
-  /// @brief Vector of decision trees.
-  vector<DecisionTree> trees_;
-
-  mt19937 rng;
-
   vector<vector<double>> createBootstrapSample(const vector<vector<double>>& data){
     vector<vector<double>> samples;
     uniform_int_distribution<> dist(0, data.size() - 1);
@@ -205,6 +192,14 @@ private:
     }
     return samples;
   }
+
+private:
+  /// @brief Number of trees in the forest.
+  int num_trees_;
+  /// @brief Vector of decision trees.
+  vector<DecisionTree> trees_;
+
+  mt19937 rng;
 };
 
 #endif  //RANDOMFOREST_H
