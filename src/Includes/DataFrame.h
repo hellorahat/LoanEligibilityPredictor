@@ -42,7 +42,7 @@ public:
 
     /// @brief Returns vector<double> of impute values
     /// @return Impute value vector
-    static std::vector<double> get_impute_vec() { return impute_vec; }
+    std::vector<double> get_impute_vec() { return impute_vec; }
 
         /**
      * @brief Column names are mapped to all of the categories in that column,
