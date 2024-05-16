@@ -69,6 +69,86 @@ public:
     return node->label; 
   }
 
+  struct SplitResult {
+    double gini;                  //< Gini index of the split.
+    double threshold;             //< Threshold value of the split.
+    size_t feature_index;
+  };
+
+  SplitResult find_best_split(const vector<vector<double>>& features, const vector<int>& labels, size_t start, size_t end, size_t feature_index) {
+    map<double, int> left_counts, right_counts;
+    for (size_t i = start; i < end; ++i){
+      right_counts[labels[i]]++;
+    }
+
+    int left_size = 0, right_size = end - start;
+    double best_gini = numeric_limits<double>::max();
+    double best_threshold = 0;
+    size_t best_feature_index = feature_index;
+    
+    for (size_t i = start; i < end - 1; ++i){
+      int label = labels[i];
+      left_counts[label]++;
+      right_counts[label]--;
+      left_size++;
+      right_size--;
+
+      if(features[i][feature_index] != features[i + 1][feature_index]){
+       // Evaluate split at current feature value
+            double current_threshold = features[i][feature_index];
+            double next_threshold = features[i + 1][feature_index];
+            double gini_current = calculate_gini_index(left_counts, right_counts, left_size, right_size);
+
+            // Temporarily adjust counts for next threshold evaluation
+            left_counts[labels[i + 1]]++;
+            right_counts[labels[i + 1]]--;
+            double gini_next = calculate_gini_index(left_counts, right_counts, left_size + 1, right_size - 1);
+            left_counts[labels[i + 1]]--;
+            right_counts[labels[i + 1]]++;
+
+            // Choose the better threshold based on Gini index
+            if (gini_current < best_gini) {
+                best_gini = gini_current;
+                best_threshold = current_threshold;
+            }
+            if (gini_next < best_gini) {
+                best_gini = gini_next;
+                best_threshold = next_threshold;
+            }
+        } 
+    }
+    return {best_gini, best_threshold, best_feature_index};
+}
+
+  double calculate_gini_index(const map<double, int>& left_counts,const map<double, int>& right_counts, int left_size, int right_size){     //< Calculates the Gini index for a given split.
+    double left_gini = 1.0, right_gini = 1.0;
+
+    for (const auto& pair : left_counts){
+      double p = pair.second / (double)left_size;
+      left_gini -= p * p;
+    }
+    for (const auto& pair : right_counts){
+      double p = pair.second / (double)right_size;
+      right_gini -= p * p;
+    }
+
+  //weighted average of the Gini index
+  return (left_gini* left_size + right_gini * right_size) / (left_size + right_size);
+  }
+
+size_t partition_data (vector<vector<double>>& data_vec, size_t start, size_t end, int feature_index, double threshold){    //< Partitions the data into left and right based on the threshold.
+  size_t mid = start;     
+  for (size_t i = start; i < end; ++i){
+    if(data_vec[i][feature_index] < threshold){
+      swap (data_vec[mid], data_vec[i]);
+      mid++;
+    }
+  }  
+    if(mid == start || mid == end){
+      mid = start + (end - start) / 2;
+    }                                                                                                                                                                                                                                                                                                                                     
+    return mid;
+  }
 
 private:
   unique_ptr<Node> root;                                          //< Unique pointer to the root node of decision tree
@@ -140,69 +220,6 @@ void build_tree(Node* node, vector<vector<double>>& features, const vector<int>&
     return majority_label;
   }
 
-  struct SplitResult {
-    double gini;                  //< Gini index of the split.
-    double threshold;             //< Threshold value of the split.
-  };
-
-  SplitResult find_best_split(const vector<vector<double>>& features,const vector<int>& labels, size_t start, size_t end, size_t feature_index){              //< Finds the best split based on Gini index.
-    map<double, int> left_counts, right_counts;
-    for (size_t i = start; i < end; ++i){
-      right_counts[labels[i]]++;
-    }
-
-int left_size = 0, right_size = end - start;
-    double best_gini = numeric_limits<double>::max();
-    double best_threshold = 0;
-    
-    for (size_t i = start; i < end - 1; ++i){
-      int label = labels[i];
-      left_counts[label]++;
-      right_counts[label]--;
-      left_size++;
-      right_size--;
-
-      if(features[i][feature_index] != features[i + 1][feature_index]){
-        double threshold = (features[i][feature_index] + features[i + 1][feature_index]) / 2;
-        double gini = calculate_gini_index(left_counts, right_counts, left_size, right_size);
-        if (gini < best_gini){
-          best_gini = gini;
-          best_threshold = threshold;
-        } 
-      }
-    }
-    return {best_gini, best_threshold};
-  }
-
-size_t partition_data (vector<vector<double>>& data_vec, size_t start, size_t end, int feature_index, double threshold){    //< Partitions the data into left and right based on the threshold.
-  size_t mid = start;     
-  for (size_t i = start; i < end; ++i){
-    if(data_vec[i][feature_index] < threshold){
-      swap (data_vec[mid], data_vec[i]);
-      mid++;
-    }
-  }  
-   if(mid == start || mid == end){
-      mid = start + (end - start) / 2;
-    }                                                                                                                                                                                                                                                                                                                                     
-  return mid;
-}
-
-  double calculate_gini_index(const map<double, int>& left_counts,const map<double, int>& right_counts, int left_size, int right_size){     //< Calculates the Gini index for a given split.
-    double left_gini = 1.0, right_gini = 1.0;
-
-    for (const auto& pair : left_counts){
-      double p = pair.second / (double)left_size;
-      left_gini -= p * p;
-    }
-    for (const auto& pair : right_counts){
-      double p = pair.second / (double)right_size;
-      right_gini -= p * p;
-    }
-
-  //weighted average of the Gini index
-  return (left_gini* left_size + right_gini * right_size) / (left_size + right_size);
-  }
 };
 
 #endif  //DECISIONTREE_H
