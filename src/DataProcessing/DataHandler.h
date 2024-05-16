@@ -311,7 +311,8 @@ class DataHandler {
                     double val = std::stod(data_vec[row][col]); // this variable will hold the converted value
                     doubleRow.push_back(val);
                 } catch(...) {
-                    doubleRow.push_back(0.0); // if conversion failed, place 0.0 instead
+                    // doubleRow.push_back(0.0); //
+                    doubleRow.push_back(DataFrame::get_impute_vec()[col]); //  if conversion failed, place impute value instead
                     std::cout << "Conversion error: " << data_vec[row][col] << std::endl;
                 }
             }
@@ -330,7 +331,8 @@ class DataHandler {
                 double val = std::stod(data_vec[col]);
                 double_vec.push_back(val);
             } catch(...) {
-                double_vec.push_back(0.0);
+                // double_vec.push_back(0.0);
+                double_vec.push_back(DataFrame::get_impute_vec()[col]);
                 std::cout << "Conversion error: " << data_vec[col] << std::endl;
             }
         }
