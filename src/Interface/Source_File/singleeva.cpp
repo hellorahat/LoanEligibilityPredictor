@@ -1,8 +1,16 @@
 #include "../Header_File/singleeva.h"
 #include "../ui_singleeva.h"
+#include "../../Includes/DataFrame.h"
+#include "../../DataProcessing/DataHandler.h"
 #include "../../CoreLogic/SuggestionGenerator.h"
+#include "../../CoreLogic/RandomForest.h"
+#include "../../CoreLogic/DecisionTree.h"
+#include "../../CoreLogic/Node.h"
+#include "Node.h"
 #include <QDebug>
 #include <QTemporaryFile>
+#include <QFileDialog>
+#include <QFile>
 //#include "DataProcessing/DataHandler.h"
 
 
@@ -83,13 +91,13 @@ void Singleeva::on_pushButton_clicked()
 
         //output the data input by user into a file to call SuggenstionGenerator
     //qDebug() << "Make temFile: ";
-        QTemporaryFile sinFile;
+       /* QTemporaryFile sinFile;
         sinFile.open(); // Open the temporary file
         QDataStream out(&sinFile);
         out << static_cast<quint32>(rowData.size());
         for (const double& value : rowData) {
             out << value;
-        }
+        }*/
     //qDebug() << "temFile Finished";
 
 
@@ -98,7 +106,7 @@ void Singleeva::on_pushButton_clicked()
         //call RandomForest
         //RandomForest forest(3);
         //int result = forest.predict(rowData);
-    int result = 0; // dummy function to test
+    int result = 1; // dummy function to test
     QString ResultLabel = "Data: ";
     for (size_t i = 0; i < rowData.size(); ++i) {
         ResultLabel += QString::number(rowData[i]); // Convert double to QString
@@ -109,8 +117,42 @@ void Singleeva::on_pushButton_clicked()
     } else {
         ResultLabel.append("N"); // Append the result to the row
         ResultLabel.append("\n");
+
+
+        QString data_fileName = QFileDialog::getOpenFileName(this,
+                                                        tr("Open CSV File"),
+                                                        "",
+                                                        tr("CSV Files (*.csv);;All Files (*)"));
+
+        if (!data_fileName.isEmpty()) {
+            qDebug() << "Selected CSV file: " << data_fileName;
+        }
+        QFile dataset_data(data_fileName);
+        if (!dataset_data.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qDebug() << "Failed to open file: " << data_fileName;
+        }
+
+        QTemporaryFile sinFile;
+        sinFile.setAutoRemove(true); // This ensures that the temporary file is deleted automatically when it's no longer needed
+        if (sinFile.open()) {
+            // Write the contents of the QFile to the temporary file
+            sinFile.write(dataset_data.readAll());
+            // Seek back to the beginning of the file
+            sinFile.seek(0);
+        }
+        std::ifstream datasetStream(sinFile.fileName().toStdString());
+        DataHandler data_handler;
+        std::vector<int> categorical_indexes = {0,1};
+        source_dataframe = data_handler.process_data(datasetStream, categorical_indexes);
+        std::vector<std::string> feature_name_vec = source_dataframe->get_feature_name_vec();// the header row: this contains the column names
+        std::vector<std::vector<double>> double_vec = source_dataframe->get_data_vec(); // the raw data content
+
+
+
+
+
         SuggestionGenerator sg = SuggestionGenerator();
-        std::vector<double>closest_vec=sg.get_closest_positive_prediction(rowData,fd);
+        std::vector<double>closest_vec=sg.get_closest_positive_prediction(rowData,source_dataframe);
         ResultLabel.append("Closest vector: ");
         for (size_t i = 0; i < closest_vec.size(); ++i) {
             ResultLabel.append(QString::number(closest_vec[i]));
@@ -155,6 +197,3 @@ void Singleeva::on_pushButton_clicked()
         ui->lineEdit_20->clear();
         ui->lineEdit_21->clear();
 }
-
-
-
