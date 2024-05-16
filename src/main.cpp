@@ -1,6 +1,7 @@
 #include "DataProcessing/DataHandler.h"
 #include "Includes/DataFrame.h"
 #include "CoreLogic/SuggestionGenerator.h"
+#include "CoreLogic/RandomForest.h"
 #include <fstream>
 #include <iostream>
 
@@ -32,15 +33,19 @@ int main(int argc, char* argv[]) {
     // closest vector: {0,1,0,1,0,0,0,0,0,0.1103,327.53,10.7389,13.04,702,8159.96,5394,53.4,1,0,0,0};
     std::vector<double> negative_point = double_vec[90];
     
-    SuggestionGenerator sg = SuggestionGenerator();
-    std::vector<double> closest_positive_point = sg.get_closest_positive_prediction(negative_point, df);
+    // SuggestionGenerator sg = SuggestionGenerator();
+    // std::vector<double> closest_positive_point = sg.get_closest_positive_prediction(negative_point, df);
 
-    std::vector<std::vector<double>> merged_vec;
-    merged_vec.push_back(negative_point);
-    merged_vec.push_back(closest_positive_point);
+    // std::vector<std::vector<double>> merged_vec;
+    // merged_vec.push_back(negative_point);
+    // merged_vec.push_back(closest_positive_point);
 
-    data_handler.vector_to_csv(df->get_feature_name_vec(), merged_vec, "closest-point");
+    // data_handler.vector_to_csv(df->get_feature_name_vec(), merged_vec, "closest-point");
     
+    RandomForest *rf = new RandomForest(3);
+    rf->train(double_vec);
+    // std::vector<double> test_point = {0,1,0,0,0,0,0,0,1,0.1347,360.43,10.4341,22.09,677,6713.04,13846,71,2,0,1};
+    // rf->predict(test_point);
 
     return 0;
 }
