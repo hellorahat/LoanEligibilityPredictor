@@ -32,7 +32,7 @@ class DataHandler {
     /// @param input_csv ifstream file of a CSV.
     /// @param categorical_indexes A vector of int indexes that contain categorical data (as opposed to numerical data)
     /// @return DataFrame object that contains feature_name_vector (vector<string>), data_vector (vector<vector<double>>), impute_vector (vector<double>), categorical_groups (unordered_map<string,unordered_map<string,int>>) -- Refer to DataFrame.h for more information.
-    DataFrame* process_data(std::ifstream& input_csv, std::vector<int> categorical_indexes) {
+    DataFrame* process_data(std::ifstream& input_csv, std::vector<int> categorical_indexes = {}) {
         // declare and initialize data_vec
         std::vector<std::vector<std::string>> data_vec;
         data_vec = csv_to_vector(input_csv);
