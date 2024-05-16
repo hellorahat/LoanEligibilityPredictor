@@ -49,29 +49,28 @@ void test_split_empty_dataset(void) {
 void test_split_single_feature(void) {
     DecisionTree tree;
     vector<vector<double>> data = {{1}, {2}, {3}, {4}, {5}};
-    size_t split_index = tree.partition_data(data, 0, data.size(), 0, 3);
-    TEST_CHECK(split_index == 3);
-    TEST_CHECK(data[0][0] < 3 && data[1][0] < 3 && data[2][0] < 3);
-    TEST_CHECK(data[3][0] >= 3 && data[4][0] >= 3);
+    size_t split_index = tree.partition_data(data, 0, data.size(), 0, 3);  // Threshold is 3
+    TEST_CHECK(split_index == 3);  // Expecting the split index to be 3
+    TEST_CHECK(data[0][0] < 3 && data[1][0] < 3 && data[2][0] < 3);  // Check that the first three are less than 3
+    TEST_CHECK(data[3][0] >= 3 && data[4][0] >= 3);  // Check that the remaining are not less than 3
 }
 
 void test_split_binary_feature(void) {
     DecisionTree tree;
     vector<vector<double>> data = {{1}, {0}, {1}, {1}, {1}, {0}};
-    size_t split_index = tree.partition_data(data, 0, data.size(), 0, 0);
-    TEST_CHECK(split_index == 2);
-    TEST_CHECK(data[0][0] == 0 && data[1][0] == 0);
-    TEST_CHECK(data[2][0] == 1 && data[3][0] == 1 && data[4][0] == 1 && data[5][0] == 1);
+    size_t split_index = tree.partition_data(data, 0, data.size(), 0, 1);  // Threshold is 1 to split between 0 and 1
+    TEST_CHECK(split_index == 2);  // Expecting two '0's before the split index
+    TEST_CHECK(data[0][0] == 0 && data[1][0] == 0);  // Check that the first two are zeros
+    TEST_CHECK(data[2][0] == 1 && data[3][0] == 1 && data[4][0] == 1 && data[5][0] == 1);  // Check that the rest are ones
 }
 
 void test_split_not_possible(void) {
     DecisionTree tree;
     vector<vector<double>> data = {{1}, {1}, {1}, {1}, {1}, {1}};
-    size_t split_index = tree.partition_data(data, 0, data.size(), 0, 0);
-    TEST_CHECK(split_index == 3);
-    TEST_CHECK(data[0][0] == 1 && data[1][0] == 1 && data[2][0] == 1);
-    TEST_CHECK(data[3][0] == 1 && data[4][0] == 1 && data[5][0] == 1);
+    size_t split_index = tree.partition_data(data, 0, data.size(), 0, 0);  // Threshold is 0, but all values are the same
+    TEST_CHECK(split_index == 3);  // Expecting the split index to be in the middle
 }
+
 
 TEST_LIST = {
     {"test_split_basic", test_split_basic},
