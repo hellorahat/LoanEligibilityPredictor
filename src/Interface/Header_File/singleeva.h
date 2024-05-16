@@ -2,6 +2,7 @@
 #define SINGLEEVA_H
 
 #include <QDialog>
+"../../Includes/DataFrame.h"
 
 
 namespace Ui {
@@ -21,6 +22,7 @@ private slots:
 
 private:
     Ui::Singleeva *ui;
+    DataFrame *fd;
     //std::vector<std::vector<std::string>> data;
 };
 

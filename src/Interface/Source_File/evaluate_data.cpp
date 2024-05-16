@@ -1,5 +1,7 @@
 #include "../Header_File/evaluate_data.h"
 #include "ui_evaluate_data.h"
+#include "../Header_File/singleeva.h"
+#include "../Header_File/bulkeva.h"
 
 Evaluate_Data::Evaluate_Data(QWidget *parent)
     : QDialog(parent)
