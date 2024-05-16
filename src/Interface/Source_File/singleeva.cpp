@@ -1,6 +1,8 @@
 #include "../Header_File/singleeva.h"
 #include "../ui_singleeva.h"
+#include "../../CoreLogic/SuggestionGenerator.h"
 #include <QDebug>
+#include <QTemporaryFile>
 //#include "DataProcessing/DataHandler.h"
 
 
@@ -27,31 +29,44 @@ double convertToDouble(const QString& str) {
     }
     return value;
 }
-
 // single evaluate page evaluate button
 void Singleeva::on_pushButton_clicked()
 {
     try {
     // Collect data from QLineEdit widgets
-    QString credit_policy = ui->lineEdit1_3->text();
-    QString purpose = ui->lineEdit1->text();
-    QString interest_rate = ui->lineEdit2->text();
-    QString installment = ui->lineEdit3->text();
-    QString log_annual_income = ui->lineEdit4->text();
-    QString debt_to_income = ui->lineEdit5->text();
-    QString fico_score = ui->lineEdit6->text();
-    QString days_with_credit_line = ui->lineEdit7->text();
-    QString revolving_balance = ui->lineEdit8->text();
-    QString revolving_utilization_rate = ui->lineEdit9->text();
-    QString inquiries_last_6_months = ui->lineEdit10->text();
-    QString past_due_last_2_years = ui->lineEdit11->text();
-    QString derogatory_public_records = ui->lineEdit12->text();
-    QString not_fully_paid = ui->lineEdit13->text();
+    QString credit_policy_0 = ui->lineEdit->text();
+    QString credit_policy_1 = ui->lineEdit_2->text();
+    QString purpose_educational = ui->lineEdit_3->text();
+    QString purpose_major_purchase = ui->lineEdit_4->text();
+    QString purpose_small_business = ui->lineEdit_5->text();
+    QString purpose_home_improvement = ui->lineEdit_6->text();
+    QString purpose_all_other = ui->lineEdit_7->text();
+    QString purpose_credit_card = ui->lineEdit_8->text();
+    QString purpose_debt_consolidation = ui->lineEdit_9->text();
+    QString interest_rate = ui->lineEdit_10->text();
+    QString installment = ui->lineEdit_11->text();
+    QString log_annual_income = ui->lineEdit_12->text();
+    QString debt_to_income = ui->lineEdit_13->text();
+    QString fico_score = ui->lineEdit_14->text();
+    QString days_with_credit_line = ui->lineEdit_15->text();
+    QString revolving_balance = ui->lineEdit_16->text();
+    QString revolving_utilization_rate = ui->lineEdit_17->text();
+    QString inquiries_last_6_months = ui->lineEdit_18->text();
+    QString past_due_last_2_years = ui->lineEdit_19->text();
+    QString derogatory_public_records = ui->lineEdit_20->text();
+    QString not_fully_paid = ui->lineEdit_21->text();
 
     // Convert QString values to doubles and store in vector<double>
     std::vector<double> rowData = {
-        convertToDouble(credit_policy),
-        convertToDouble(purpose),
+        convertToDouble(credit_policy_0),
+        convertToDouble(credit_policy_1),
+        convertToDouble(purpose_educational),
+        convertToDouble(purpose_major_purchase),
+        convertToDouble(purpose_small_business),
+        convertToDouble(purpose_home_improvement),
+        convertToDouble(purpose_all_other),
+        convertToDouble(purpose_credit_card),
+        convertToDouble(purpose_debt_consolidation),
         convertToDouble(interest_rate),
         convertToDouble(installment),
         convertToDouble(log_annual_income),
@@ -66,18 +81,46 @@ void Singleeva::on_pushButton_clicked()
         convertToDouble(not_fully_paid)
     };
 
-    bool result = true;
+        //output the data input by user into a file to call SuggenstionGenerator
+    //qDebug() << "Make temFile: ";
+        QTemporaryFile sinFile;
+        sinFile.open(); // Open the temporary file
+        QDataStream out(&sinFile);
+        out << static_cast<quint32>(rowData.size());
+        for (const double& value : rowData) {
+            out << value;
+        }
+    //qDebug() << "temFile Finished";
+
+
+
+    //qDebug() << "Call RandomForest: ";
+        //call RandomForest
+        //RandomForest forest(3);
+        //int result = forest.predict(rowData);
+        int result = 0; // dummy function to test
     QString labelText = "Data: ";
     for (size_t i = 0; i < rowData.size(); ++i) {
         labelText += QString::number(rowData[i]); // Convert double to QString
         labelText += ", "; // Add a comma and a space after each data element
     }
-    labelText += (result ? "Y" : "N");
-    if(result==false){
-    labelText += "\n";
-
-
+    if (result == 0) {
+        labelText.append("Y"); // Append the result to the row
+    } else {
+        labelText.append("N"); // Append the result to the row
+        labelText.append("\n");
+        SuggestionGenerator sg = SuggestionGenerator();
+        std::vector<double>closest_vec=sg.get_closest_positive_prediction(rowData,fd);
+        labelText.append("Closest vector: ");
+        for (size_t i = 0; i < closest_vec.size(); ++i) {
+            labelText.append(QString::number(closest_vec[i]));
+            if (i < closest_vec.size() - 1)
+                labelText.append(", "); // Add comma and space between elements
+        }
     }
+
+
+
 
 
     // Now rowData contains all the user input converted to doubles
@@ -89,24 +132,28 @@ void Singleeva::on_pushButton_clicked()
 
 
     // Clear line edits for the next entry if needed
-    ui->lineEdit1_3->clear();
-    ui->lineEdit1->clear();
-    ui->lineEdit2->clear();
-    ui->lineEdit3->clear();
-    ui->lineEdit4->clear();
-    ui->lineEdit5->clear();
-    ui->lineEdit6->clear();
-    ui->lineEdit7->clear();
-    ui->lineEdit8->clear();
-    ui->lineEdit9->clear();
-    ui->lineEdit10->clear();
-    ui->lineEdit11->clear();
-    ui->lineEdit12->clear();
-    ui->lineEdit13->clear();
+        ui->lineEdit->clear();
+        ui->lineEdit_2->clear();
+        ui->lineEdit_3->clear();
+        ui->lineEdit_4->clear();
+        ui->lineEdit_5->clear();
+        ui->lineEdit_6->clear();
+        ui->lineEdit_7->clear();
+        ui->lineEdit_8->clear();
+        ui->lineEdit_9->clear();
+        ui->lineEdit_10->clear();
+        ui->lineEdit_11->clear();
+        ui->lineEdit_12->clear();
+        ui->lineEdit_13->clear();
+        ui->lineEdit_14->clear();
+        ui->lineEdit_15->clear();
+        ui->lineEdit_16->clear();
+        ui->lineEdit_17->clear();
+        ui->lineEdit_18->clear();
+        ui->lineEdit_19->clear();
+        ui->lineEdit_20->clear();
+        ui->lineEdit_21->clear();
 }
-
-
-
 
 
 

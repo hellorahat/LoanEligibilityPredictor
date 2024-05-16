@@ -69,9 +69,18 @@ void Load_Data::on_Open_CSV_clicked()
         qDebug() << "Selected CSV file: " << fileName;
     }
 
+    int totalRows = csvDataa.size();
+    int processedRows = 0;
+    int lineNumber = 1; // Counter for line numbers
+
         // Process the CSV data
         for (const auto& row : csvDataa) {
             // Process the current row (placeholder)
+            // Update progress bar
+            // call the random forest here with row
+            processedRows++;
+            int progress = static_cast<int>((processedRows / static_cast<double>(totalRows)) * 100);
+            ui->progressBar->setValue(progress);
 
 
 
@@ -79,4 +88,3 @@ void Load_Data::on_Open_CSV_clicked()
             QCoreApplication::processEvents();
         }
 }
-

@@ -3,11 +3,15 @@
 #include "../../Includes/DataFrame.h"
 #include "../../DataProcessing/DataHandler.h"
 #include "../../CoreLogic/SuggestionGenerator.h"
+#include "../../CoreLogic/RandomForest.h"
+#include "../../CoreLogic/DecisionTree.h"
+#include "../../CoreLogic/Node.h"
 #include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
 #include <QTemporaryFile>
+#include <QMessageBox>
 
 Bulkeva::Bulkeva(QWidget *parent)
     : QDialog(parent)
@@ -51,8 +55,6 @@ std::vector<std::vector<double>>Bulkeva::readCSV(const QString& fileName)
     std::vector<std::vector<double>> double_vec = df->get_data_vec(); // the raw data content
     csvData = double_vec;
 
-
-    tempFile.close();
     return csvData;
 }
 
@@ -75,7 +77,7 @@ void Bulkeva::on_pushButton_OPENCSV_clicked()
 void Bulkeva::on_pushButton_bulkeva_clicked()
 {
     if (csvData.empty()) {
-        qDebug() << "No CSV data loaded. Please open a CSV file first.";
+        QMessageBox::warning(this, "No CSV Data", "No CSV data loaded. Please open a CSV file first.");
         return;
     }
 
@@ -87,20 +89,26 @@ void Bulkeva::on_pushButton_bulkeva_clicked()
     int lineNumber = 1; // Counter for line numbers
 
 
-
+    RandomForest forest(3);
 
     // Process the CSV data and update progress bar and result in real-time
     for (const auto& row : csvData) {
-        // Process the current row (placeholder)
-        int result = 1;
+        // Convert the row data to vector<double> to pass to the predict function
+        std::vector<double> features;
+        for (const auto& field : row) {
+            features.push_back(field);
+        }
 
+        // Call the predict function with the features
+        //int result = forest.predict(features);
+        int result = 0;
         // Append the CSV data row to the text edit widget along with the result
         QString rowText = QString::number(lineNumber++) + ","; // Add line number
         for (const auto& field : row) {
             rowText.append(QString::number(field)); // Convert double to QString
             rowText.append(","); // Add tab between fields
         }
-        if (result) {
+        if (result == 0) {
             rowText.append("Y"); // Append the result to the row
         } else {
             rowText.append("N"); // Append the result to the row
@@ -129,7 +137,7 @@ void Bulkeva::on_pushButton_bulkeva_clicked()
     }
 }
 
-
+//Export Evaluation
 void Bulkeva::on_pushButton_export_clicked()
 {
     {
