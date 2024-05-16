@@ -6,26 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
+    <width>448</width>
     <height>549</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="pushButton_2">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>300</y>
-     <width>181</width>
-     <height>81</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Bulk Evaluation</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -44,18 +31,31 @@
     <string>Evaluate Data</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="Singleeva">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>190</y>
-     <width>181</width>
-     <height>81</height>
+     <x>110</x>
+     <y>150</y>
+     <width>221</width>
+     <height>251</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Single Evaluation</string>
-   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="Singleeva">
+      <property name="text">
+       <string>Single Evaluation</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="text">
+       <string>Bulk Evaluation</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
