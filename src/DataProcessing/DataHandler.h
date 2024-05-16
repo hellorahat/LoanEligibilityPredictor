@@ -254,17 +254,6 @@ class DataHandler {
         }
         return data_vec;
     }
-    
-    /// @brief Drops a row from a vector.
-    /// @param data_vec The 2D vector from which to drop the column. Each inner vector represents a row of data, and each element of the inner vectors represents a field (e.g., a comma-separated value).
-    /// @param row_index The index of the row to drop from the vector.
-    /// @return A modified 2D vector with the specified row removed.
-    std::vector<std::vector<double>> vector_drop_row(std::vector<std::vector<double>> data_vec, int row_index) {
-        if (row_index >= 0 && row_index < data_vec.size()) {
-            data_vec.erase(data_vec.begin() + row_index); // Erase row at the specified index
-        }
-        return data_vec;
-    }
 
     /// @brief Cleans the dataset by removing strings from majority integer datasets and by removing integers from majority string datasets. This is intended to remove data entry mistakes.
     /// @return The cleaned 2D vector.

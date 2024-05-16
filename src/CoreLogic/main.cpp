@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
     RandomForest forest(num_trees);
 
     //Train the RandomForest
-    forest.train(train_data);
+    forest.train(data);
     
     //perform k-fold cross validation
     int k = 2;
