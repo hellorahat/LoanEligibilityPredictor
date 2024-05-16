@@ -300,7 +300,6 @@ class DataHandler {
     /// @param data_vec A vector of vector of strings
     /// @return The converted vector with data type double.
     std::vector<std::vector<double>> vector_convert_to_double(std::vector<std::vector<std::string>> data_vec) {
-        DataFrame df = DataFrame();
         // declare variable to hold the converted vector
         std::vector<std::vector<double>> double_vec;
 
@@ -312,8 +311,7 @@ class DataHandler {
                     double val = std::stod(data_vec[row][col]); // this variable will hold the converted value
                     doubleRow.push_back(val);
                 } catch(...) {
-                    // doubleRow.push_back(0.0); //
-                    doubleRow.push_back(df.get_impute_vec()[col]); //  if conversion failed, place impute value instead
+                    doubleRow.push_back(-1.0); //  if conversion failed, place -1 instead
                     std::cout << "Conversion error: " << data_vec[row][col] << std::endl;
                 }
             }

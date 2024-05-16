@@ -22,7 +22,7 @@ private slots:
 
 private:
     Ui::Singleeva *ui;
-    DataFrame *fd;
+    DataFrame *source_dataframe;
     //std::vector<std::vector<std::string>> data;
 };
 

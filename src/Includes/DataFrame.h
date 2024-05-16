@@ -44,6 +44,14 @@ public:
     /// @return Impute value vector
     std::vector<double> get_impute_vec() { return impute_vec; }
 
+    void impute_data() {
+        for(size_t row = 0; row < this->data_vec.size(); row++) {
+            for(size_t col = 0; col < this->data_vec[0].size(); col++) {
+                if(this->data_vec[row][col] == -1) this->data_vec[row][col] = this->impute_vec[col];
+            }
+        }
+    }
+
         /**
      * @brief Column names are mapped to all of the categories in that column,
      *        all the categories are mapped to their index in the dataset vector.
