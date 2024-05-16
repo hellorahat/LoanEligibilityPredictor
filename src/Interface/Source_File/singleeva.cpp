@@ -98,26 +98,27 @@ void Singleeva::on_pushButton_clicked()
         //call RandomForest
         //RandomForest forest(3);
         //int result = forest.predict(rowData);
-        int result = 0; // dummy function to test
-    QString labelText = "Data: ";
+    int result = 0; // dummy function to test
+    QString ResultLabel = "Data: ";
     for (size_t i = 0; i < rowData.size(); ++i) {
-        labelText += QString::number(rowData[i]); // Convert double to QString
-        labelText += ", "; // Add a comma and a space after each data element
+        ResultLabel += QString::number(rowData[i]); // Convert double to QString
+        ResultLabel += ", "; // Add a comma and a space after each data element
     }
     if (result == 0) {
-        labelText.append("Y"); // Append the result to the row
+        ResultLabel.append("Y"); // Append the result to the row
     } else {
-        labelText.append("N"); // Append the result to the row
-        labelText.append("\n");
+        ResultLabel.append("N"); // Append the result to the row
+        ResultLabel.append("\n");
         SuggestionGenerator sg = SuggestionGenerator();
         std::vector<double>closest_vec=sg.get_closest_positive_prediction(rowData,fd);
-        labelText.append("Closest vector: ");
+        ResultLabel.append("Closest vector: ");
         for (size_t i = 0; i < closest_vec.size(); ++i) {
-            labelText.append(QString::number(closest_vec[i]));
+            ResultLabel.append(QString::number(closest_vec[i]));
             if (i < closest_vec.size() - 1)
-                labelText.append(", "); // Add comma and space between elements
+                ResultLabel.append(", "); // Add comma and space between elements
         }
     }
+    ui->ResultLabel->setText(ResultLabel);
 
 
 
