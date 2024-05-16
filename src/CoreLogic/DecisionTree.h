@@ -77,7 +77,6 @@ private:
   unique_ptr<Node> root;                                          //< Unique pointer to the root node of decision tree
   
   void build_tree(Node* node, vector<vector<double>>& features, const vector<int>& labels, size_t start, size_t end, const unordered_set<int>& sampled_features){      //< Recursive function to build the tree.
-    cout<< "Building tree from index " << start << " to " << end << endl;
     if(start >= end){ 
       cout << "No data in range. Turning into a leaf." << endl;
       return;
@@ -188,7 +187,6 @@ private:
       }
     }   
     if(mid == start || mid == end){
-      cout << "Adjusting partition index to avoid empty partitions." << endl;
       mid = start + (end - start) / 2;
     }                                                                                                                                                                                                                                                                                                                           
     return mid;
